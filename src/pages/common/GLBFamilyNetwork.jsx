@@ -74,7 +74,7 @@ export default function GLBFamilyNetwork() {
         </p>
 
         <p className="text-slate-300 text-xs sm:text-base max-w-2xl mx-auto leading-relaxed">
-          More than an alumni directory � a living inter-generational circle connecting College Leadership, industry-veteran Alumni, active Mentors, and aspiring Students.
+          More than an alumni directory � a living inter-generational circle connecting College Leadership, industry-veteran Alumni, active Mentors, and aspiring Students.
         </p>
       </div>
 
@@ -82,7 +82,7 @@ export default function GLBFamilyNetwork() {
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-teal-100 shadow-sm space-y-6">
         <div className="text-center max-w-xl mx-auto">
           <span className="text-xs font-bold uppercase text-glgold tracking-widest">The Circle of Lifelong Growth</span>
-          <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">College ? Alumni ? Mentors ? Students</h3>
+          <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">College • Alumni • Mentors • Students</h3>
           <p className="text-xs text-slate-500 mt-1">
             How our shared GL Bajaj foundation empowers each generation to elevate the next.
           </p>

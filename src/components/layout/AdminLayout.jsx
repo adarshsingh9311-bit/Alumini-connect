@@ -11,7 +11,8 @@ import {
   Briefcase, 
   FileSpreadsheet, 
   BarChart3, 
-  Settings 
+  Settings,
+  Sun
 } from "lucide-react";
 
 export default function AdminLayout({ onOpenNotifications }) {
@@ -21,6 +22,7 @@ export default function AdminLayout({ onOpenNotifications }) {
     { label: "Alumni", to: "/admin/alumni", icon: Users },
     { label: "Mentorship", to: "/admin/mentorship", icon: MessageSquare },
     { label: "Notices & Wishes", to: "/admin/notices-wishes", icon: BellRing },
+    { label: "Daily Thoughts", to: "/admin/daily-thoughts", icon: Sun },
     { label: "Events", to: "/admin/events", icon: Calendar },
     { label: "Achievements", to: "/admin/achievements", icon: Award },
     { label: "Opportunities", to: "/admin/opportunities", icon: Briefcase },

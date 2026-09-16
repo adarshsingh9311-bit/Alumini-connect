@@ -52,7 +52,7 @@ export default function AdminDashboard() {
         <div className="space-y-1">
           <div className="inline-flex items-center space-x-2 bg-teal-500/20 text-teal-200 text-xs px-3 py-1 rounded-full font-bold border border-teal-400/30">
             <ShieldCheck className="w-3.5 h-3.5 text-glgold" />
-            <span>Admin Portal • G.L. Bajaj Central Administration</span>
+            <span>Admin Portal ï¿½ G.L. Bajaj Central Administration</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
             Alumni Relations & Ecosystem Overview
@@ -193,7 +193,7 @@ export default function AdminDashboard() {
                 <div>
                   <div className="text-xs font-bold text-slate-900">
                     {req.student_name} <span className="text-slate-400 font-normal">({req.student_branch})</span>
-                    <span className="text-glgold mx-1.5 font-bold">?</span>
+                    <span className="text-glgold mx-1.5 font-bold">â†’</span>
                     {req.alumni_name}
                   </div>
                   <p className="text-[11px] text-slate-500 mt-0.5">{req.topic}</p>
@@ -222,7 +222,7 @@ export default function AdminDashboard() {
               <span>Pending Verifications</span>
             </h3>
             <Link to="/admin/verification" className="text-xs font-bold text-glblue-750 hover:underline">
-              Open Verification Desk ?
+              Open Verification Desk â†’
             </Link>
           </div>
 
@@ -237,7 +237,7 @@ export default function AdminDashboard() {
                   <div>
                     <h5 className="font-bold text-xs text-slate-900">{alum.full_name}</h5>
                     <p className="text-[11px] text-slate-600">
-                      Roll No: <strong>{alum.roll_number}</strong> • {alum.branch} ({alum.batch_year})
+                      Roll No: <strong>{alum.roll_number}</strong> ï¿½ {alum.branch} ({alum.batch_year})
                     </p>
                     <p className="text-[11px] text-slate-500">{alum.current_designation} at {alum.current_company}</p>
                   </div>

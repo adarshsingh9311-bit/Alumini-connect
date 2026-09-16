@@ -52,7 +52,7 @@ export const ALUMNI_STORIES = [
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80",
     headline: "Pioneering Swappable Battery Architecture for Commercial Fleets",
     quote: "We started building our first chassis right behind the GLB Mechanical Workshop with used angle irons. Today we operate 800+ fleet vehicles.",
-    impactStat: "$4.5M Seed Raised ? 800+ EVs",
+    impactStat: "$4.5M Seed Raised • 800+ EVs",
     story: "Bootstrapped from the GL Bajaj E-Cell incubator, Abhishek and his batchmates engineered a low-cost swappable thermal management battery. Today VoltPulse employs over 70 engineers?including 12 GLB alumni.",
     advice: "GL Bajaj's workshop facilities are world-class. Spend time on the lathe and 3D printers rather than just simulation software."
   },
@@ -236,7 +236,7 @@ export default function StoriesSection() {
               <div>
                 <h3 className="text-xl font-black text-white">{activeStory.name}</h3>
                 <p className="text-teal-300 font-bold text-xs sm:text-sm">{activeStory.currentTitle} @ {activeStory.company}</p>
-                <p className="text-xs text-slate-400">{activeStory.batch} ? {activeStory.branch}</p>
+                <p className="text-xs text-slate-400">{activeStory.batch} • {activeStory.branch}</p>
               </div>
             </div>
 

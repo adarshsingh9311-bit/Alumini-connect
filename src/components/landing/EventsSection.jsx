@@ -19,7 +19,7 @@ export const UPCOMING_EVENTS = [
     year: "2026",
     badge: "Annual Homecoming",
     title: "SANSMRITI 2026: Grand Silver Alumni Meet",
-    time: "10:00 AM ? 6:00 PM IST",
+    time: "10:00 AM – 6:00 PM IST",
     location: "Main Auditorium, GL Bajaj Campus, Greater Noida",
     type: "In-Person",
     attendees: "1,200+ Alumni Registered",
@@ -33,7 +33,7 @@ export const UPCOMING_EVENTS = [
     year: "2026",
     badge: "Founders Circle",
     title: "GLB Tech Founders: From Zero to Product-Market Fit",
-    time: "6:30 PM ? 8:00 PM IST",
+    time: "6:30 PM – 8:00 PM IST",
     location: "Virtual Global Stream (Zoom & YouTube Live)",
     type: "Virtual",
     attendees: "480+ RSVP'd",
@@ -47,7 +47,7 @@ export const UPCOMING_EVENTS = [
     year: "2026",
     badge: "Global Studies",
     title: "Targeting Top US & European Masters: The GLB Playbook",
-    time: "7:00 PM ? 8:30 PM IST",
+    time: "7:00 PM – 8:30 PM IST",
     location: "Interactive Webinar & Breakout Rooms",
     type: "Virtual",
     attendees: "340+ Students Signed Up",
@@ -61,7 +61,7 @@ export const UPCOMING_EVENTS = [
     year: "2026",
     badge: "Career Mentorship",
     title: "Winter SDE Mock Interview & System Design Sprint",
-    time: "11:00 AM ? 3:00 PM IST",
+    time: "11:00 AM – 3:00 PM IST",
     location: "Virtual 1-on-1 Rooms + GLB Lab 4",
     type: "Hybrid",
     attendees: "150 Mentee Slots",
@@ -150,7 +150,7 @@ export default function EventsSection() {
                               <span>On-Campus</span>
                             </span>
                           )}
-                          <span>?</span>
+                          <span>•</span>
                           <span className="text-slate-400">{item.year}</span>
                         </div>
                       </div>

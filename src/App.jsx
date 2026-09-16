@@ -52,10 +52,18 @@ import AdminOpportunitiesPage from "./pages/admin/AdminOpportunitiesPage";
 import AdminImportPage from "./pages/admin/AdminImportPage";
 import AdminAnalyticsPage from "./pages/admin/AdminAnalyticsPage";
 import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
+import AdminDailyThoughtsPage from "./pages/admin/AdminDailyThoughtsPage";
 
 function AppContent() {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [notifications, setNotifications] = useState([
+    {
+      id: "daily-thought-notif",
+      title: "🌅 Your Daily GLB Thought is here",
+      text: "Take a moment for today's thought from the GLB Alumni Family.",
+      time: "Today",
+      read: false
+    },
     {
       id: 1,
       title: "Convocation 2026 Invitation",
@@ -145,6 +153,7 @@ function AppContent() {
           <Route path="alumni" element={<AdminAlumniPage />} />
           <Route path="mentorship" element={<AdminMentorshipPage />} />
           <Route path="notices-wishes" element={<AdminNoticesWishesPage />} />
+          <Route path="daily-thoughts" element={<AdminDailyThoughtsPage />} />
           <Route path="notices" element={<AdminNoticesWishesPage />} />
           <Route path="events" element={<AdminEventsPage />} />
           <Route path="achievements" element={<AdminAchievementsPage />} />

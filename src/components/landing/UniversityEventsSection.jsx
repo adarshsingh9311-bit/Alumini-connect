@@ -9,7 +9,7 @@ export const UNIVERSITY_EVENTS = [
     year: "2026",
     category: "Reunion",
     title: "SANSMRITI 2026: Grand Silver Alumni Meet",
-    time: "10:00 AM ? 5:30 PM IST",
+    time: "10:00 AM – 5:30 PM IST",
     location: "Main Auditorium, GL Bajaj Campus, Greater Noida",
     description: "The annual institutional homecoming bringing together batches across 20 years for department panels, faculty interactions, and campus nostalgic tours.",
     attendees: "1,200+ Alumni"
@@ -21,7 +21,7 @@ export const UNIVERSITY_EVENTS = [
     year: "2026",
     category: "Career Talk",
     title: "GLB Founders: Scaling from Zero to \$5M ARR",
-    time: "6:30 PM ? 8:00 PM IST",
+    time: "6:30 PM – 8:00 PM IST",
     location: "Virtual Global Webinar (Zoom & YouTube Live)",
     description: "Alumni tech founders share candid lessons on early customer traction, technical architecture choices, and raising venture capital.",
     attendees: "450+ Registered"
@@ -33,7 +33,7 @@ export const UNIVERSITY_EVENTS = [
     year: "2026",
     category: "Mentorship Session",
     title: "International Masters & Research Pathways",
-    time: "7:00 PM ? 8:30 PM IST",
+    time: "7:00 PM – 8:30 PM IST",
     location: "Interactive Online Seminar",
     description: "Alumni currently pursuing or graduated with MS/PhD degrees at Oxford, CMU, and TU Munich guide students on GRE, SOPs, and scholarships.",
     attendees: "320+ Students"

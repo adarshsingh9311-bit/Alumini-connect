@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { USER_ROLES } from "../lib/constants";
+import { formatEducation } from "../lib/formatters";
 import { 
   X, 
   GraduationCap, 
@@ -211,7 +212,7 @@ export default function LandingPage() {
               />
               <div className="flex-1">
                 <div className="text-[10px] font-semibold text-[#8C7138] uppercase tracking-wider font-serif">
-                  {selectedAlumnus.batch} ? {selectedAlumnus.branch}
+                  {formatEducation(selectedAlumnus.branch, selectedAlumnus.batch)}
                 </div>
                 <h3 className="text-xl font-bold text-[#0C1929] leading-tight font-serif">
                   {selectedAlumnus.name}

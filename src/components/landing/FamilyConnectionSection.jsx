@@ -109,11 +109,11 @@ export default function FamilyConnectionSection() {
             <span className="px-3 py-1.5 rounded-lg bg-white border border-[#E7E1D4]">
               Connect
             </span>
-            <span>?</span>
+            <span>•</span>
             <span className="px-3 py-1.5 rounded-lg bg-white border border-[#E7E1D4]">
               Mentor
             </span>
-            <span>?</span>
+            <span>•</span>
             <span className="px-3 py-1.5 rounded-lg bg-white border border-[#E7E1D4]">
               Give Back
             </span>

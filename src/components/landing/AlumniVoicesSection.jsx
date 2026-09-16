@@ -85,7 +85,7 @@ export default function AlumniVoicesSection() {
                     {item.batch}
                   </p>
                   <p className="text-[11px] text-[#718096] font-medium leading-tight mt-0.5">
-                    {item.designation} ? {item.organization}
+                    {item.designation} • {item.organization}
                   </p>
                 </div>
               </div>

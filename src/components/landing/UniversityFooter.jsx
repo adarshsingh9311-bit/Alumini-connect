@@ -154,7 +154,7 @@ export default function UniversityFooter({ onOpenAuthModal }) {
           </div>
 
           <div>
-            ? {new Date().getFullYear()} G.L. Bajaj Institute of Technology & Management. All rights reserved.
+            © {new Date().getFullYear()} G.L. Bajaj Institute of Technology & Management. All rights reserved.
           </div>
         </div>
 

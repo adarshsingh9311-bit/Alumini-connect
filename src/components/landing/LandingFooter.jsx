@@ -41,7 +41,7 @@ export default function LandingFooter() {
               </div>
               <div className="flex items-center space-x-2.5">
                 <Mail className="w-4 h-4 text-glgold shrink-0" />
-                <span>alumni@glbajaj.org ? contact@glbajaj.org</span>
+                <span>alumni@glbajaj.org • contact@glbajaj.org</span>
               </div>
             </div>
           </div>
@@ -159,12 +159,12 @@ export default function LandingFooter() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
           <div className="flex items-center space-x-2 text-center md:text-left">
             <span className="text-glgold font-bold">"Once GLB, Always GLB."</span>
-            <span>?</span>
+            <span>•</span>
             <span>Approved by AICTE, Affiliated to Dr. A.P.J. Abdul Kalam Technical University (AKTU)</span>
           </div>
 
           <div className="text-center md:text-right">
-            ? {new Date().getFullYear()} G.L. Bajaj Institute of Technology & Management. All rights reserved.
+            © {new Date().getFullYear()} G.L. Bajaj Institute of Technology & Management. All rights reserved.
           </div>
         </div>
       </div>

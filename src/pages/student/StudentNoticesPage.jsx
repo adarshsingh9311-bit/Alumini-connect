@@ -65,7 +65,7 @@ export default function StudentNoticesPage() {
               <span className="font-medium text-glblue-750">
                 Issued by: <strong>{notice.published_by}</strong>
               </span>
-              <span className="text-glgold font-bold hover:underline">Read Complete Notice ?</span>
+              <span className="text-glgold font-bold hover:underline">Read Complete Notice →</span>
             </div>
           </div>
         ))}

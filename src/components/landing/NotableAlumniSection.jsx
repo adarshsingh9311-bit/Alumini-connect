@@ -13,7 +13,7 @@ export const NOTABLE_GLB_ALUMNI = [
   {
     id: "notable-1",
     name: "Saurabh Sarkar",
-    batch: "B.Tech CSE ? 2014",
+    batch: "B.Tech CSE • 2014",
     branch: "Computer Science & Engineering",
     designation: "Software Engineer",
     organization: "Apple",
@@ -25,7 +25,7 @@ export const NOTABLE_GLB_ALUMNI = [
   {
     id: "notable-2",
     name: "Ankur Varshney",
-    batch: "B.Tech CSE ? 2011",
+    batch: "B.Tech CSE • 2011",
     branch: "Computer Science & Engineering",
     designation: "Software Engineer",
     organization: "Enfas GmbH, Munich (Ex-BMW)",
@@ -37,7 +37,7 @@ export const NOTABLE_GLB_ALUMNI = [
   {
     id: "notable-3",
     name: "Shikha Chaudhary",
-    batch: "B.Tech ECE ? Alumna",
+    batch: "B.Tech ECE • Alumna",
     branch: "Electronics & Communication",
     designation: "Squadron Leader",
     organization: "Indian Air Force",
@@ -49,7 +49,7 @@ export const NOTABLE_GLB_ALUMNI = [
   {
     id: "notable-4",
     name: "Anshul Shukla",
-    batch: "B.Tech CSE ? 2012",
+    batch: "B.Tech CSE • 2012",
     branch: "Computer Science & Engineering",
     designation: "UI Engineer",
     organization: "Flipkart",
@@ -60,20 +60,44 @@ export const NOTABLE_GLB_ALUMNI = [
   },
   {
     id: "notable-5",
-    name: "Shami Agrawal",
-    batch: "B.Tech CSE ? 2013",
+    name: "Vibhor Varshney",
+    batch: "B.Tech CSE • 2013",
     branch: "Computer Science & Engineering",
-    designation: "Software Engineer",
-    organization: "Solnet, New Zealand",
-    quote: "Building enterprise cloud architecture and distributed software platforms in New Zealand.",
-    image: "https://www.glbitm.org/Uploads/image/CS-Alumni-ShamiAgrawal-20.jpg",
+    designation: "Frontend Architect",
+    organization: "Paytm",
+    quote: "GL Bajaj provided the exact coding culture and competitive ecosystem needed to architect high-performance web systems.",
+    image: "https://www.glbitm.org/Uploads/image/828imguf_vibhor.jpg",
     fallbackImage: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80",
     availableForMentorship: true
   },
   {
     id: "notable-6",
-    name: "Gaurav Joshi",
-    batch: "B.Tech CSE ? 2013",
+    name: "Rishi Kant",
+    batch: "B.Tech CSE • 2013",
+    branch: "Computer Science & Engineering",
+    designation: "DevOps Specialist",
+    organization: "Adobe",
+    quote: "Building cloud deployment pipelines and enterprise microservices at Adobe. Grateful to the GLB alumni network.",
+    image: "https://www.glbitm.org/Uploads/image/829imguf_rishi.jpg",
+    fallbackImage: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80",
+    availableForMentorship: true
+  },
+  {
+    id: "notable-7",
+    name: "Nikhil Gupta",
+    batch: "B.Tech CSE • 2014",
+    branch: "Computer Science & Engineering",
+    designation: "Engineering Lead",
+    organization: "Cisco Systems",
+    quote: "Leading network protocol engineering and enterprise infrastructure teams globally.",
+    image: "https://www.glbitm.org/Uploads/image/752imguf_nikhil.jpg",
+    fallbackImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80",
+    availableForMentorship: true
+  },
+  {
+    id: "notable-8",
+    name: "Garvit Sharma",
+    batch: "B.Tech CSE • 2015",
     branch: "Computer Science & Engineering",
     designation: "Sr. Technical Advisor",
     organization: "Concentric New Zealand",
@@ -85,7 +109,7 @@ export const NOTABLE_GLB_ALUMNI = [
   {
     id: "notable-7",
     name: "Ashish Pandey",
-    batch: "B.Tech CSE ? 2014",
+    batch: "B.Tech CSE • 2014",
     branch: "Computer Science & Engineering",
     designation: "Analyst Programmer",
     organization: "MediaTech",
@@ -97,7 +121,7 @@ export const NOTABLE_GLB_ALUMNI = [
   {
     id: "notable-8",
     name: "Ankit Pratap Singh",
-    batch: "B.Tech CSE ? 2015",
+    batch: "B.Tech CSE • 2015",
     branch: "Computer Science & Engineering",
     designation: "M.Tech Scholar",
     organization: "NIT Hamirpur",
@@ -271,7 +295,7 @@ export default function NotableAlumniSection({ onSelectAlumnus }) {
           to="/student/alumni"
           className="inline-flex items-center space-x-1.5 text-xs sm:text-sm font-semibold text-[#0C1929] hover:text-[#B58A38] border-b border-[#0C1929] hover:border-[#B58A38] pb-0.5 transition"
         >
-          <span>View All Alumni ?</span>
+          <span>View All Alumni →</span>
         </Link>
       </div>
 

@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import { INITIAL_ALUMNI, INITIAL_MENTORSHIPS, INITIAL_EVENTS, INITIAL_NOTICES } from "../../lib/mockData";
 import AchievementSubmitModal from "../../components/alumni/AchievementSubmitModal";
+import DailyThoughtCard from "../../components/alumni/DailyThoughtCard";
 import { 
   Briefcase, 
   MessageSquare, 
@@ -114,13 +115,13 @@ export default function AlumniDashboard() {
           <div className="space-y-1">
             <div className="inline-flex items-center space-x-2 bg-glgold text-slate-950 text-[11px] px-3 py-0.5 rounded-full font-bold">
               <Briefcase className="w-3 h-3" />
-              <span>Alumni Portal ? Roll No: {currentAlumni.roll_number || "220192010001"}</span>
+              <span>Alumni Portal • Roll No: {currentAlumni.roll_number || "220192010001"}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Welcome Back, {currentAlumni.full_name || "Alumnus"} ??
+              Welcome Back, {currentAlumni.full_name || "Alumnus"}
             </h1>
             <p className="text-teal-100 text-xs sm:text-sm">
-              Batch {currentAlumni.batch_year || "2022"} ({currentAlumni.branch || "CSE"}) ? <span className="text-white font-semibold">{currentAlumni.current_designation || "Senior Software Engineer"}</span> at <span className="text-white font-semibold">{currentAlumni.current_company || "Google"}</span>
+              Batch {currentAlumni.batch_year || "2022"} ({currentAlumni.branch || "CSE"}) • <span className="text-white font-semibold">{currentAlumni.current_designation || "Senior Software Engineer"}</span> at <span className="text-white font-semibold">{currentAlumni.current_company || "Google"}</span>
             </p>
           </div>
         </div>
@@ -228,7 +229,7 @@ export default function AlumniDashboard() {
                     <div className="flex items-start justify-between">
                       <div>
                         <h4 className="font-bold text-sm text-slate-900">{req.student_name}</h4>
-                        <p className="text-xs text-slate-500">Roll: {req.student_roll} ? {req.student_branch}</p>
+                        <p className="text-xs text-slate-500">Roll: {req.student_roll} • {req.student_branch}</p>
                       </div>
                       <span className="text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-glgold px-2.5 py-0.5 rounded-full border border-glgold/30">
                         {req.topic}
@@ -316,7 +317,7 @@ export default function AlumniDashboard() {
                   <h4 className="text-base font-extrabold text-slate-900">{inv.programTitle}</h4>
                   <p className="text-xs text-slate-600 leading-relaxed italic">"{inv.description}"</p>
                   <div className="text-xs text-slate-500">
-                    <strong>Date & Venue:</strong> {inv.date}, {inv.time} ? {inv.venue}
+                    <strong>Date & Venue:</strong> {inv.date}, {inv.time} • {inv.venue}
                   </div>
 
                   <div className="flex items-center justify-end space-x-2 pt-2">
@@ -342,6 +343,8 @@ export default function AlumniDashboard() {
 
         {/* Sidebar: My GLB Impact & Quick Links */}
         <div className="space-y-6">
+          {/* Daily GLB Positivity & Motivation Card */}
+          <DailyThoughtCard />
           
           {/* My GLB Impact Summary Widget */}
           <div className="bg-gradient-to-br from-glblue-750 to-teal-950 text-white rounded-3xl p-6 shadow-xl space-y-4">

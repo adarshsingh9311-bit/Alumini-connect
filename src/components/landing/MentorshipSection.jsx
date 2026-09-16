@@ -339,7 +339,7 @@ export default function MentorshipSection() {
               <div>
                 <h3 className="text-xl font-black text-white">{selectedMentor.name}</h3>
                 <p className="text-teal-300 font-bold text-sm">{selectedMentor.role} @ {selectedMentor.company}</p>
-                <p className="text-xs text-slate-400">Class of {selectedMentor.batch} ? {selectedMentor.branch}</p>
+                <p className="text-xs text-slate-400">Class of {selectedMentor.batch} • {selectedMentor.branch}</p>
               </div>
             </div>
 

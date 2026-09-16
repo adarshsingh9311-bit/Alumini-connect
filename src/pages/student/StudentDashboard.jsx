@@ -109,10 +109,10 @@ export default function StudentDashboard() {
           <div className="space-y-2">
             <div className="inline-flex items-center space-x-2 bg-glgold/30 border border-glgold/50 text-amber-200 text-xs px-3 py-1 rounded-full font-bold">
               <GraduationCap className="w-3.5 h-3.5 text-glgold" />
-              <span>Student Portal ? Roll No: {profile?.roll_number || "230192010055"}</span>
+              <span>Student Portal • Roll No: {profile?.roll_number || "230192010055"}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              {greeting}, {profile?.full_name?.split(" ")[0] || "Scholar"} ??
+              {greeting}, {profile?.full_name?.split(" ")[0] || "Scholar"}
             </h1>
             <p className="text-teal-100 text-xs sm:text-sm max-w-xl leading-relaxed">
               Connect with alumni from Google, Microsoft, Amazon and 500+ top firms. Get 1-on-1 career guidance, mock interviews, and placement referrals.
@@ -318,7 +318,7 @@ export default function StudentDashboard() {
                       <span className="text-[11px] text-glgold font-bold">{ev.date}</span>
                     </div>
                     <h4 className="font-bold text-xs text-slate-900">{ev.title}</h4>
-                    <p className="text-[11px] text-slate-500">{ev.venue} ? {ev.time}</p>
+                    <p className="text-[11px] text-slate-500">{ev.venue} • {ev.time}</p>
                     <button
                       onClick={() => handleRsvp(ev.id)}
                       className={`w-full py-1.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1 ${
