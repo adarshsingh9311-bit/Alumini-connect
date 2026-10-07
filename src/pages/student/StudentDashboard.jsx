@@ -1,17 +1,12 @@
-import React, { useState } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
-import { 
-  INITIAL_ALUMNI, 
-  INITIAL_NOTICES, 
-  INITIAL_EVENTS, 
-  INITIAL_ACHIEVEMENTS,
-  INITIAL_MENTORSHIPS 
-} from "../../lib/mockData";
+import { supabase, isSupabaseConfigured } from "../../lib/supabase";
 import AlumniCard from "../../components/student/AlumniCard";
 import AlumniProfileModal from "../../components/student/AlumniProfileModal";
 import MentorshipRequestModal from "../../components/student/MentorshipRequestModal";
+import EmptyState from "../../components/common/EmptyState";
 import { 
   Users, 
   MessageSquare, 
@@ -22,19 +17,19 @@ import {
   Sparkles, 
   CheckCircle2,
   GraduationCap,
-  Heart,
-  Briefcase
+  Loader2
 } from "lucide-react";
 
 export default function StudentDashboard() {
   const { profile, user } = useAuth();
   const { addToast } = useToast();
 
-  const [alumniList] = useState(INITIAL_ALUMNI);
-  const [notices] = useState(INITIAL_NOTICES);
-  const [events, setEvents] = useState(INITIAL_EVENTS);
-  const [achievements] = useState(INITIAL_ACHIEVEMENTS);
-  const [mentorships, setMentorships] = useState(INITIAL_MENTORSHIPS);
+  const [alumniList, setAlumniList] = useState([]);
+  const [notices, setNotices] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [achievements, setAchievements] = useState([]);
+  const [mentorships, setMentorships] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [selectedAlumni, setSelectedAlumni] = useState(null);
   const [requestTargetAlumni, setRequestTargetAlumni] = useState(null);
@@ -43,86 +38,143 @@ export default function StudentDashboard() {
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good Morning" : hour < 17 ? "Good Afternoon" : "Good Evening";
 
-  // Family moments for student community widget
-  const studentFamilyMoments = [
-    {
-      id: "sfm-1",
-      author: "Rahul Gupta",
-      batch: "CSE '21",
-      company: "Microsoft",
-      text: "Promoted to Senior SDE at Microsoft! Happy to mentor GLB 3rd/4th years on System Design.",
-      time: "3h ago"
-    },
-    {
-      id: "sfm-2",
-      author: "Neha Mishra",
-      batch: "IT '22",
-      company: "CMU Scholar",
-      text: "Admitted into Carnegie Mellon University MS CS. Open to reviewing US graduate SOPs for GLBians!",
-      time: "1d ago"
-    }
-  ];
+  useEffect(() => {
+    async function loadDashboardData() {
+      if (!isSupabaseConfigured || !supabase) {
+        setLoading(false);
+        return;
+      }
 
-  function handleRsvp(eventId) {
-    setEvents((prev) =>
-      prev.map((ev) => {
-        if (ev.id === eventId) {
-          const hasRsvp = ev.rsvps?.includes(user?.id || "user-stu-1");
-          const nextRsvps = hasRsvp
-            ? ev.rsvps.filter((id) => id !== (user?.id || "user-stu-1"))
-            : [...(ev.rsvps || []), user?.id || "user-stu-1"];
-          addToast(hasRsvp ? `RSVP cancelled for ${ev.title}` : `RSVP confirmed for ${ev.title}!`, "success");
-          return { ...ev, rsvps: nextRsvps };
+      try {
+        setLoading(true);
+
+        // 1. Fetch Verified Alumni
+        const { data: alumData } = await supabase
+          .from("alumni")
+          .select("*, profiles(*)")
+          .eq("is_verified", true)
+          .limit(8);
+
+        if (alumData) {
+          setAlumniList(alumData.map(a => ({
+            id: a.id,
+            user_id: a.user_id,
+            full_name: a.profiles?.full_name || "GLB Alumnus",
+            email: a.profiles?.email || "",
+            avatar_url: a.profiles?.avatar_url || "",
+            branch: a.branch,
+            batch_year: a.graduation_year || a.batch_year,
+            current_company: a.current_company,
+            current_designation: a.current_designation,
+            industry: a.industry,
+            location: a.location,
+            skills: Array.isArray(a.skills) ? a.skills : [],
+            bio: a.bio,
+            is_available_for_mentorship: a.is_available_for_mentorship,
+            is_verified: a.is_verified
+          })));
         }
-        return ev;
-      })
-    );
+
+        // 2. Fetch Notices
+        const { data: noticeData } = await supabase
+          .from("notices")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(5);
+
+        if (noticeData) setNotices(noticeData);
+
+        // 3. Fetch Events
+        const { data: eventData } = await supabase
+          .from("events")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(4);
+
+        if (eventData) setEvents(eventData);
+
+        // 4. Fetch Approved Achievements
+        const { data: achData } = await supabase
+          .from("achievements")
+          .select("*, alumni(*, profiles(*))")
+          .eq("is_approved", true)
+          .limit(4);
+
+        if (achData) setAchievements(achData);
+
+        // 5. Fetch Student's Mentorship Requests
+        if (user?.id) {
+          const { data: mentorData } = await supabase
+            .from("mentorship_requests")
+            .select("*")
+            .eq("student_id", user.id);
+
+          if (mentorData) setMentorships(mentorData);
+        }
+      } catch (err) {
+        console.warn("Error fetching dashboard data:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadDashboardData();
+  }, [user?.id]);
+
+  async function handleSubmitMentorship(requestData) {
+    if (!user?.id || !isSupabaseConfigured || !supabase) {
+      addToast("Mentorship submission requires a connected database session.", "error");
+      return;
+    }
+
+    try {
+      const targetAlumniUserId = requestData.alumni_user_id || requestData.user_id || requestData.alumni_id;
+      const { data, error } = await supabase.from("mentorship_requests").insert({
+        student_id: user.id,
+        alumni_id: targetAlumniUserId,
+        topic: requestData.topic || "Career Guidance",
+        message: requestData.message,
+        preferred_time: requestData.preferred_time || "Flexible",
+        status: "pending"
+      }).select().single();
+
+      if (error) throw error;
+
+      if (data) {
+        setMentorships((prev) => [data, ...prev]);
+      }
+      addToast(`Mentorship request successfully sent to ${requestData.alumni_name || "mentor"}!`, "success");
+      setRequestTargetAlumni(null);
+    } catch (err) {
+      addToast(err.message || "Failed to submit request.", "error");
+    }
   }
 
-  function handleSubmitMentorship(requestData) {
-    const newReq = {
-      id: "mr-" + Date.now(),
-      student_id: profile?.id || "stu-1",
-      student_name: profile?.full_name || "Tanmay Singhal",
-      student_roll: profile?.roll_number || "230192010055",
-      student_branch: profile?.branch || "CSE",
-      alumni_id: requestData.alumni_id,
-      alumni_name: requestData.alumni_name,
-      topic: requestData.topic,
-      message: requestData.message,
-      status: "pending",
-      response_note: null,
-      created_at: new Date().toISOString()
-    };
-    setMentorships((prev) => [newReq, ...prev]);
-    addToast(`Mentorship request successfully sent to ${requestData.alumni_name}!`, "success");
-  }
-
-  const myRequestsCount = mentorships.filter((m) => m.student_id === (profile?.id || "stu-1")).length;
+  const myRequestsCount = mentorships.length;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 font-sans">
       
       {/* Student Welcome Banner */}
-      <div className="bg-gradient-to-r from-glblue-750 via-teal-800 to-glblue-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+      <div className="bg-gradient-to-r from-[#0C1929] via-[#1A2C42] to-[#0C1929] rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden border border-[#E7E1D4]/20">
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-2">
-            <div className="inline-flex items-center space-x-2 bg-glgold/30 border border-glgold/50 text-amber-200 text-xs px-3 py-1 rounded-full font-bold">
-              <GraduationCap className="w-3.5 h-3.5 text-glgold" />
-              <span>Student Portal • Roll No: {profile?.roll_number || "230192010055"}</span>
+            <div className="inline-flex items-center space-x-2 bg-[#C29B38]/30 border border-[#C29B38]/50 text-amber-200 text-xs px-3 py-1 rounded-full font-bold">
+              <GraduationCap className="w-3.5 h-3.5 text-[#E5C378]" />
+              <span>Student Portal • {profile?.roll_number ? `Roll No: ${profile.roll_number}` : (profile?.branch || "GL Bajaj")}</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-serif">
               {greeting}, {profile?.full_name?.split(" ")[0] || "Scholar"}
             </h1>
-            <p className="text-teal-100 text-xs sm:text-sm max-w-xl leading-relaxed">
-              Connect with alumni from Google, Microsoft, Amazon and 500+ top firms. Get 1-on-1 career guidance, mock interviews, and placement referrals.
+            <p className="text-slate-300 text-xs sm:text-sm max-w-xl leading-relaxed">
+              Connect with verified GL Bajaj alumni across leading global organizations. Request 1-on-1 mentorship, placement insights, and career guidance.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
             <Link
               to="/student/alumni"
-              className="bg-glgold hover:bg-glgold-dark text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition shadow-lg flex items-center space-x-1.5"
+              className="bg-[#C29B38] hover:bg-[#B57C34] text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition shadow-lg flex items-center space-x-1.5"
             >
               <Users className="w-4 h-4" />
               <span>Find Alumni Mentors</span>
@@ -140,8 +192,8 @@ export default function StudentDashboard() {
 
       {/* Metrics Row: 4 Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-teal-100 shadow-sm flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-50 text-glgold flex items-center justify-center">
+        <div className="bg-white p-5 rounded-2xl border border-[#E7E1D4] shadow-xs flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-xl bg-amber-50 text-[#8C7138] flex items-center justify-center">
             <Users className="w-6 h-6" />
           </div>
           <div>
@@ -150,8 +202,8 @@ export default function StudentDashboard() {
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-teal-100 shadow-sm flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-xl bg-teal-50 text-glblue-750 flex items-center justify-center">
+        <div className="bg-white p-5 rounded-2xl border border-[#E7E1D4] shadow-xs flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-xl bg-slate-100 text-[#0C1929] flex items-center justify-center">
             <MessageSquare className="w-6 h-6" />
           </div>
           <div>
@@ -160,7 +212,7 @@ export default function StudentDashboard() {
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-teal-100 shadow-sm flex items-center space-x-4">
+        <div className="bg-white p-5 rounded-2xl border border-[#E7E1D4] shadow-xs flex items-center space-x-4">
           <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
             <Bell className="w-6 h-6" />
           </div>
@@ -170,7 +222,7 @@ export default function StudentDashboard() {
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-teal-100 shadow-sm flex items-center space-x-4">
+        <div className="bg-white p-5 rounded-2xl border border-[#E7E1D4] shadow-xs flex items-center space-x-4">
           <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
             <Calendar className="w-6 h-6" />
           </div>
@@ -189,157 +241,151 @@ export default function StudentDashboard() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-glgold" />
-                  <span>Recommended Mentors for You</span>
+                <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2 font-serif">
+                  <Sparkles className="w-5 h-5 text-[#C29B38]" />
+                  <span>Recommended Alumni Mentors</span>
                 </h2>
-                <p className="text-xs text-slate-500">Verified seniors aligned with your branch and career goals</p>
+                <p className="text-xs text-slate-500">Verified seniors aligned with your career goals</p>
               </div>
               <Link
                 to="/student/alumni"
-                className="text-xs font-bold text-glblue-750 hover:text-teal-900 flex items-center gap-1"
+                className="text-xs font-bold text-[#8C7138] hover:underline flex items-center gap-1"
               >
                 <span>Explore All</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {alumniList.slice(0, 4).map((alumni) => (
-                <AlumniCard
-                  key={alumni.id}
-                  alumni={alumni}
-                  onOpenProfile={setSelectedAlumni}
-                  onRequestMentorship={setRequestTargetAlumni}
-                />
-              ))}
-            </div>
+            {loading ? (
+              <div className="py-12 text-center text-slate-400">
+                <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#C29B38] mb-2" />
+                <p className="text-xs">Loading alumni mentors...</p>
+              </div>
+            ) : alumniList.length === 0 ? (
+              <EmptyState
+                title="No alumni profiles available yet"
+                message="Verified alumni mentors will appear here as they join the GLB network."
+                actionLabel="Explore Portal"
+                actionLink="/student"
+              />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {alumniList.slice(0, 4).map((alumni) => (
+                  <AlumniCard
+                    key={alumni.id}
+                    alumni={alumni}
+                    onOpenProfile={setSelectedAlumni}
+                    onRequestMentorship={setRequestTargetAlumni}
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Alumni Achievements Highlight */}
-          <div className="bg-white rounded-2xl p-6 border border-teal-100 shadow-sm space-y-4">
+          <div className="bg-white rounded-2xl p-6 border border-[#E7E1D4] shadow-xs space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                <Award className="w-4 h-4 text-glgold" />
+              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2 font-serif">
+                <Award className="w-4 h-4 text-[#C29B38]" />
                 <span>Alumni Accolades & Milestones</span>
               </h3>
               <span className="text-[11px] text-slate-400 font-medium">Verified by College Admin</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {achievements.map((ach) => (
-                <div key={ach.id} className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
-                  <div className="flex items-center justify-between text-xs font-bold text-glblue-750">
-                    <span>{ach.alumni_name}</span>
-                    <span className="text-[10px] text-slate-400 font-normal">{ach.alumni_batch}</span>
+            {achievements.length === 0 ? (
+              <p className="text-xs text-slate-400 text-center py-4">No alumni achievements published yet.</p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {achievements.map((ach) => (
+                  <div key={ach.id} className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E7E1D4] space-y-2">
+                    <div className="flex items-center justify-between text-xs font-bold text-[#0C1929]">
+                      <span>{ach.alumni?.profiles?.full_name || "GLB Alumnus"}</span>
+                      <span className="text-[10px] text-slate-400 font-normal">{ach.date || ""}</span>
+                    </div>
+                    <h4 className="text-xs font-bold text-slate-900 leading-snug">{ach.title}</h4>
+                    <p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">{ach.description}</p>
                   </div>
-                  <h4 className="text-xs font-bold text-slate-900 leading-snug">{ach.title}</h4>
-                  <p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">{ach.description}</p>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Sidebar: Moments, Notices & Events */}
+        {/* Sidebar: Notices & Events */}
         <div className="space-y-6">
           
-          {/* GLB Family Moments Feed Widget */}
-          <div className="bg-gradient-to-br from-amber-50/60 to-teal-50/60 rounded-2xl p-5 border border-amber-200/60 shadow-sm space-y-3">
-            <div className="flex items-center justify-between border-b border-amber-200/40 pb-2">
-              <h3 className="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
-                <Heart className="w-3.5 h-3.5 fill-glgold text-glgold" />
-                <span>GLB Family Moments</span>
-              </h3>
-              <span className="text-[10px] text-glgold font-bold">Community</span>
-            </div>
-            <div className="space-y-2.5">
-              {studentFamilyMoments.map(m => (
-                <div key={m.id} className="bg-white/90 p-3 rounded-xl border border-amber-100 text-xs space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-slate-900">{m.author} ({m.batch})</span>
-                    <span className="text-[10px] text-slate-400">{m.time}</span>
-                  </div>
-                  <p className="text-slate-600 text-[11px] leading-relaxed">{m.text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
           {/* College Notices Card */}
-          <div className="bg-white rounded-2xl p-6 border border-teal-100 shadow-sm space-y-4">
+          <div className="bg-white rounded-2xl p-6 border border-[#E7E1D4] shadow-xs space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                <Bell className="w-4 h-4 text-glgold" />
+              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2 font-serif">
+                <Bell className="w-4 h-4 text-[#C29B38]" />
                 <span>College Notices</span>
               </h3>
-              <Link to="/student/notices" className="text-xs font-semibold text-glblue-750 hover:underline">
+              <Link to="/student/notices" className="text-xs font-semibold text-[#8C7138] hover:underline">
                 View All
               </Link>
             </div>
 
-            <div className="space-y-3">
-              {notices.map((notice) => (
-                <div key={notice.id} className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1 hover:bg-teal-50/50 transition">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-glblue-750 bg-teal-100/60 px-2 py-0.5 rounded">
-                      {notice.category}
-                    </span>
-                    <span className="text-[10px] text-slate-400">
-                      {new Date(notice.created_at).toLocaleDateString()}
-                    </span>
+            {notices.length === 0 ? (
+              <p className="text-xs text-slate-400 text-center py-4">No notices available.</p>
+            ) : (
+              <div className="space-y-3">
+                {notices.map((notice) => (
+                  <div key={notice.id} className="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E7E1D4] space-y-1 hover:border-[#C29B38]/50 transition">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C7138] bg-amber-50 px-2 py-0.5 rounded border border-[#E7E1D4]">
+                        {notice.category || "General"}
+                      </span>
+                      <span className="text-[10px] text-slate-400">
+                        {notice.created_at ? new Date(notice.created_at).toLocaleDateString() : ""}
+                      </span>
+                    </div>
+                    <h4 className="font-bold text-xs text-slate-900 leading-snug">{notice.title}</h4>
+                    <p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">{notice.content}</p>
                   </div>
-                  <h4 className="font-bold text-xs text-slate-900 leading-snug">{notice.title}</h4>
-                  <p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">{notice.content}</p>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Upcoming Events Card */}
-          <div className="bg-white rounded-2xl p-6 border border-teal-100 shadow-sm space-y-4">
+          <div className="bg-white rounded-2xl p-6 border border-[#E7E1D4] shadow-xs space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-glgold" />
+              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2 font-serif">
+                <Calendar className="w-4 h-4 text-[#C29B38]" />
                 <span>Upcoming Events</span>
               </h3>
-              <Link to="/student/events" className="text-xs font-semibold text-glblue-750 hover:underline">
+              <Link to="/student/events" className="text-xs font-semibold text-[#8C7138] hover:underline">
                 View All
               </Link>
             </div>
 
-            <div className="space-y-3">
-              {events.map((ev) => {
-                const isRsvp = ev.rsvps?.includes(user?.id || "user-stu-1");
-                return (
-                  <div key={ev.id} className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-2">
+            {events.length === 0 ? (
+              <p className="text-xs text-slate-400 text-center py-4">No events available.</p>
+            ) : (
+              <div className="space-y-3">
+                {events.map((ev) => (
+                  <div key={ev.id} className="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E7E1D4] space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-slate-500 uppercase">{ev.category}</span>
-                      <span className="text-[11px] text-glgold font-bold">{ev.date}</span>
+                      <span className="text-[10px] font-bold text-slate-500 uppercase">{ev.event_type || "Event"}</span>
+                      <span className="text-[11px] text-[#8C7138] font-bold">{ev.date}</span>
                     </div>
                     <h4 className="font-bold text-xs text-slate-900">{ev.title}</h4>
-                    <p className="text-[11px] text-slate-500">{ev.venue} • {ev.time}</p>
-                    <button
-                      onClick={() => handleRsvp(ev.id)}
-                      className={`w-full py-1.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1 ${
-                        isRsvp
-                          ? "bg-emerald-600 text-white"
-                          : "bg-slate-100 text-slate-700 hover:bg-glblue-750 hover:text-white"
-                      }`}
-                    >
-                      {isRsvp ? (
-                        <>
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          <span>RSVP Confirmed</span>
-                        </>
-                      ) : (
-                        <span>RSVP to Attend</span>
-                      )}
-                    </button>
+                    <p className="text-[11px] text-slate-500">{ev.location ? `${ev.location} • ` : ""}{ev.time || ""}</p>
+                    {ev.registration_link && (
+                      <a
+                        href={ev.registration_link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-full py-1.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1 bg-[#0C1929] text-white hover:bg-[#1A2C42]"
+                      >
+                        <span>Register to Attend</span>
+                      </a>
+                    )}
                   </div>
-                );
-              })}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
 
         </div>

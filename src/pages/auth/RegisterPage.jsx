@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
@@ -87,7 +87,7 @@ export default function RegisterPage() {
             "Once GLB, Always GLB."
           </p>
           <p className="text-xs text-slate-500">
-            {COLLEGE_NAME} � Roll-Number-Based Identity Architecture
+            {COLLEGE_NAME} • Roll-Number-Based Identity Architecture
           </p>
         </div>
 
@@ -365,3 +365,4 @@ export default function RegisterPage() {
     </div>
   );
 }
+

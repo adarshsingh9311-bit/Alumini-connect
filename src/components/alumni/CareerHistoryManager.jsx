@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { Plus, Trash2, Briefcase, Calendar } from "lucide-react";
 
 export default function CareerHistoryManager({ careerHistory = [], onUpdate }) {
@@ -157,7 +157,7 @@ export default function CareerHistoryManager({ careerHistory = [], onUpdate }) {
                 <h4 className="font-bold text-slate-900 text-xs sm:text-sm">{job.designation}</h4>
                 <p className="text-xs font-semibold text-glblue-750">{job.company}</p>
                 <p className="text-[11px] text-slate-400 mt-0.5">
-                  {job.start_date || "N/A"} � {job.is_current ? "Present" : job.end_date || "N/A"}
+                  {job.start_date || "N/A"} — {job.is_current ? "Present" : job.end_date || "N/A"}
                 </p>
                 {job.description && (
                   <p className="text-xs text-slate-600 mt-1 leading-relaxed">{job.description}</p>
@@ -178,3 +178,4 @@ export default function CareerHistoryManager({ careerHistory = [], onUpdate }) {
     </div>
   );
 }
+

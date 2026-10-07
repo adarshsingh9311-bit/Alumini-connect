@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import Modal from "../../components/common/Modal";
@@ -117,7 +117,7 @@ export default function AlumniOpportunitiesPage() {
               <h3 className="font-extrabold text-slate-900 text-lg leading-snug">{opp.title}</h3>
               <div className="text-xs font-bold text-glblue-750 flex items-center gap-2">
                 <span>{opp.company}</span>
-                <span>�</span>
+                <span>•</span>
                 <span className="text-slate-500 font-normal flex items-center gap-1">
                   <MapPin className="w-3 h-3 text-red-500" />
                   {opp.location}
@@ -268,3 +268,4 @@ export default function AlumniOpportunitiesPage() {
     </div>
   );
 }
+

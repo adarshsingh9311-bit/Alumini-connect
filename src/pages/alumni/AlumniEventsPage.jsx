@@ -1,100 +1,121 @@
-import React, { useState } from "react";
-import { INITIAL_EVENTS } from "../../lib/mockData";
+ï»¿import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
-import { Calendar, MapPin, Clock, CheckCircle2 } from "lucide-react";
+import { supabase, isSupabaseConfigured } from "../../lib/supabase";
+import EmptyState from "../../components/common/EmptyState";
+import { Calendar, MapPin, Clock, Loader2, ExternalLink } from "lucide-react";
 
 export default function AlumniEventsPage() {
   const { user } = useAuth();
   const { addToast } = useToast();
-  const [events, setEvents] = useState(INITIAL_EVENTS);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  function handleRsvp(eventId) {
-    setEvents((prev) =>
-      prev.map((ev) => {
-        if (ev.id === eventId) {
-          const userId = user?.id || "user-alum-1";
-          const hasRsvp = ev.rsvps?.includes(userId);
-          const nextRsvps = hasRsvp
-            ? ev.rsvps.filter((id) => id !== userId)
-            : [...(ev.rsvps || []), userId];
-          addToast(hasRsvp ? `RSVP cancelled for ${ev.title}` : `RSVP confirmed for ${ev.title}! Alumni pass generated.`, "success");
-          return { ...ev, rsvps: nextRsvps };
+  useEffect(() => {
+    async function fetchEvents() {
+      if (!isSupabaseConfigured || !supabase) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const { data, error } = await supabase
+          .from("events")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (!error && data) {
+          setEvents(data);
         }
-        return ev;
-      })
-    );
-  }
+      } catch (err) {
+        console.warn("Error fetching events:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchEvents();
+  }, []);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 font-sans">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Alumni Reunions & Campus Meets</h1>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0C1929] font-serif">Alumni Reunions & Campus Meets</h1>
+        <p className="text-xs sm:text-sm text-[#718096] mt-1">
           Join institutional convocations, reunions, panel discussions, and student interactive webinars.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {events.map((ev) => {
-          const userId = user?.id || "user-alum-1";
-          const isRsvp = ev.rsvps?.includes(userId);
-
-          return (
+      {loading ? (
+        <div className="py-20 text-center text-slate-400">
+          <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#C29B38] mb-3" />
+          <p className="text-sm">Loading events...</p>
+        </div>
+      ) : events.length === 0 ? (
+        <EmptyState
+          title="No events available"
+          message="No upcoming alumni reunions or campus events are currently scheduled."
+        />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {events.map((ev) => (
             <div
               key={ev.id}
-              className="bg-white rounded-2xl p-6 border border-teal-100 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4"
+              className="bg-white rounded-2xl p-6 border border-[#E7E1D4] shadow-xs hover:border-[#C29B38]/50 transition flex flex-col justify-between space-y-4"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700 px-2.5 py-1 rounded">
-                    {ev.category}
+                  <span className="text-[10px] font-bold uppercase tracking-wider bg-[#FAF8F5] text-[#8C7138] px-2.5 py-1 rounded border border-[#E7E1D4]">
+                    {ev.event_type || "Reunion"}
                   </span>
-                  <span className="text-xs font-bold text-glgold">
-                    {ev.rsvps?.length || 0} Attending
+                  <span className="text-xs font-bold text-[#8C7138]">
+                    {ev.date}
                   </span>
                 </div>
 
-                <h3 className="font-extrabold text-slate-900 text-lg leading-snug">{ev.title}</h3>
+                <h3 className="font-extrabold text-[#0C1929] text-lg leading-snug font-serif">{ev.title}</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">{ev.description}</p>
 
-                <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-1.5">
+                <div className="bg-[#FAF8F5] p-3 rounded-xl border border-[#E7E1D4] text-xs text-slate-600 space-y-1.5">
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-3.5 h-3.5 text-glgold shrink-0" />
+                    <Calendar className="w-3.5 h-3.5 text-[#C29B38] shrink-0" />
                     <strong>{ev.date}</strong>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-3.5 h-3.5 text-glblue-750 shrink-0" />
-                    <span>{ev.time}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-3.5 h-3.5 text-red-500 shrink-0" />
-                    <span>{ev.venue}</span>
-                  </div>
+                  {ev.time && (
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-3.5 h-3.5 text-[#0C1929] shrink-0" />
+                      <span>{ev.time}</span>
+                    </div>
+                  )}
+                  {ev.location && (
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-3.5 h-3.5 text-red-500 shrink-0" />
+                      <span>{ev.location}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
-              <button
-                onClick={() => handleRsvp(ev.id)}
-                className={`w-full py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 shadow-sm ${
-                  isRsvp
-                    ? "bg-emerald-600 text-white"
-                    : "bg-glblue-750 hover:bg-teal-900 text-white"
-                }`}
-              >
-                {isRsvp ? (
-                  <>
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>RSVP Confirmed • Digital Pass Active</span>
-                  </>
-                ) : (
-                  <span>RSVP to Attend Reunion</span>
-                )}
-              </button>
+              {ev.registration_link ? (
+                <a
+                  href={ev.registration_link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 shadow-xs bg-[#0C1929] hover:bg-[#1A2C42] text-white"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  <span>Register & RSVP</span>
+                </a>
+              ) : (
+                <div className="w-full py-2 rounded-xl text-xs text-center text-slate-400 bg-slate-50 border border-slate-100">
+                  Open to all GL Bajaj Alumni
+                </div>
+              )}
             </div>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

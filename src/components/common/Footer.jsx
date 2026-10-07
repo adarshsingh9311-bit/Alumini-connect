@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { COLLEGE_NAME, COLLEGE_LOCATION } from "../../lib/constants";
 
 export default function Footer() {
@@ -9,7 +9,7 @@ export default function Footer() {
           <span className="bg-glgold text-white text-xs px-2 py-1 rounded-md font-bold shadow-sm">GLB</span>
           <div>
             <p className="text-slate-300 font-semibold">{COLLEGE_NAME}</p>
-            <p className="text-slate-500 text-xs">{COLLEGE_LOCATION} � Dedicated Alumni & Student Network</p>
+            <p className="text-slate-500 text-xs">{COLLEGE_LOCATION} • Dedicated Alumni & Student Network</p>
           </div>
         </div>
         <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400">
@@ -22,3 +22,4 @@ export default function Footer() {
     </footer>
   );
 }
+

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { useToast } from "../../context/ToastContext";
 import { Briefcase, Trash2, CheckCircle2, MapPin, ExternalLink } from "lucide-react";
 
@@ -62,7 +62,7 @@ export default function AdminOpportunitiesPage() {
               {opportunities.map((opp) => (
                 <tr key={opp.id} className="hover:bg-slate-50 transition">
                   <td className="px-6 py-4 font-bold text-slate-900">{opp.title}</td>
-                  <td className="px-6 py-4 text-slate-700">{opp.company} � {opp.location}</td>
+                  <td className="px-6 py-4 text-slate-700">{opp.company} • {opp.location}</td>
                   <td className="px-6 py-4">
                     <span className="bg-teal-50 text-glblue-750 font-bold text-[10px] px-2 py-0.5 rounded-full border border-teal-200">
                       {opp.type}
@@ -87,3 +87,4 @@ export default function AdminOpportunitiesPage() {
     </div>
   );
 }
+

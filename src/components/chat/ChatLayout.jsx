@@ -1,17 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+ï»¿import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import { supabase, isSupabaseConfigured } from "../../lib/supabase";
-import { INITIAL_MENTORSHIPS, INITIAL_MESSAGES } from "../../lib/mockData";
+import EmptyState from "../common/EmptyState";
 import { 
   Send, 
   Search, 
-  CheckCircle2, 
-  Circle, 
   MessageSquare, 
   Clock, 
   User, 
-  AlertCircle,
   Loader2 
 } from "lucide-react";
 
@@ -19,14 +16,12 @@ export default function ChatLayout({ currentUserRole }) {
   const { user, profile } = useAuth();
   const { addToast } = useToast();
 
-  const [mentorships, setMentorships] = useState(
-    INITIAL_MENTORSHIPS.filter((m) => m.status === "accepted")
-  );
-  const [activeConversation, setActiveConversation] = useState(mentorships[0] || null);
-  const [messages, setMessages] = useState(INITIAL_MESSAGES);
+  const [mentorships, setMentorships] = useState([]);
+  const [activeConversation, setActiveConversation] = useState(null);
+  const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const messagesEndRef = useRef(null);
@@ -36,22 +31,105 @@ export default function ChatLayout({ currentUserRole }) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, activeConversation]);
 
-  // Supabase Realtime Subscription (when configured)
+  // Fetch accepted mentorship conversations
   useEffect(() => {
-    if (!isSupabaseConfigured || !supabase || !activeConversation) return;
+    async function fetchConversations() {
+      if (!user?.id || !isSupabaseConfigured || !supabase) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const { data, error: fetchErr } = await supabase
+          .from("mentorship_requests")
+          .select("*, student:profiles!student_id(id, full_name, avatar_url, email), alumni:profiles!alumni_id(id, full_name, avatar_url, email)")
+          .or(`student_id.eq.${user.id},alumni_id.eq.${user.id}`)
+          .eq("status", "accepted")
+          .order("updated_at", { ascending: false });
+
+        if (!fetchErr && data) {
+          const formatted = data.map((item) => ({
+            id: item.id,
+            student_id: item.student_id,
+            alumni_id: item.alumni_id,
+            student_name: item.student?.full_name || "GLB Student",
+            alumni_name: item.alumni?.full_name || "GLB Mentor",
+            partner_id: item.student_id === user.id ? item.alumni_id : item.student_id,
+            partner_name: item.student_id === user.id ? (item.alumni?.full_name || "GLB Mentor") : (item.student?.full_name || "GLB Student"),
+            partner_avatar: item.student_id === user.id ? item.alumni?.avatar_url : item.student?.avatar_url,
+            topic: item.topic || "Career Guidance",
+            created_at: item.created_at
+          }));
+          setMentorships(formatted);
+          if (formatted.length > 0 && !activeConversation) {
+            setActiveConversation(formatted[0]);
+          }
+        }
+      } catch (err) {
+        console.warn("Failed to fetch mentorship conversations:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchConversations();
+  }, [user?.id]);
+
+  // Fetch messages for active conversation
+  useEffect(() => {
+    async function fetchMessages() {
+      if (!activeConversation || !user?.id || !isSupabaseConfigured || !supabase) {
+        return;
+      }
+
+      const partnerId = activeConversation.partner_id;
+      if (!partnerId) return;
+
+      try {
+        const { data, error: msgErr } = await supabase
+          .from("messages")
+          .select("*")
+          .or(`and(sender_id.eq.${user.id},receiver_id.eq.${partnerId}),and(sender_id.eq.${partnerId},receiver_id.eq.${user.id})`)
+          .order("created_at", { ascending: true });
+
+        if (!msgErr && data) {
+          setMessages(data);
+        }
+      } catch (err) {
+        console.warn("Failed to fetch messages:", err);
+      }
+    }
+
+    fetchMessages();
+  }, [activeConversation, user?.id]);
+
+  // Supabase Realtime Subscription
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase || !activeConversation || !user?.id) return;
+
+    const partnerId = activeConversation.partner_id;
 
     const channel = supabase
-      .channel(`chat_${activeConversation.id}`)
+      .channel(`chat_${user.id}_${partnerId}`)
       .on(
         "postgres_changes",
         {
           event: "INSERT",
           schema: "public",
-          table: "messages",
-          filter: `mentorship_id=eq.${activeConversation.id}`
+          table: "messages"
         },
         (payload) => {
-          setMessages((prev) => [...prev, payload.new]);
+          const newMsg = payload.new;
+          if (
+            (newMsg.sender_id === user.id && newMsg.receiver_id === partnerId) ||
+            (newMsg.sender_id === partnerId && newMsg.receiver_id === user.id)
+          ) {
+            setMessages((prev) => {
+              if (prev.some((m) => m.id === newMsg.id)) return prev;
+              return [...prev, newMsg];
+            });
+          }
         }
       )
       .subscribe();
@@ -59,32 +137,32 @@ export default function ChatLayout({ currentUserRole }) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [activeConversation]);
+  }, [activeConversation, user?.id]);
 
   // Send message
   async function handleSendMessage(e) {
     e.preventDefault();
-    if (!inputText.trim() || !activeConversation) return;
+    if (!inputText.trim() || !activeConversation || !user?.id) return;
 
     const textToSend = inputText.trim();
+    const partnerId = activeConversation.partner_id;
     setInputText("");
 
-    const newMsg = {
+    const localMsg = {
       id: "msg-" + Date.now(),
-      mentorship_id: activeConversation.id,
-      sender_id: user?.id || (currentUserRole === "student" ? "user-stu-1" : "user-alum-1"),
-      sender_name: profile?.full_name || (currentUserRole === "student" ? "Student" : "Alumnus"),
+      sender_id: user.id,
+      receiver_id: partnerId,
       content: textToSend,
       created_at: new Date().toISOString()
     };
 
-    setMessages((prev) => [...prev, newMsg]);
+    setMessages((prev) => [...prev, localMsg]);
 
     if (isSupabaseConfigured && supabase) {
       try {
         const { error: insertErr } = await supabase.from("messages").insert({
-          mentorship_id: activeConversation.id,
-          sender_id: user?.id,
+          sender_id: user.id,
+          receiver_id: partnerId,
           content: textToSend
         });
         if (insertErr) throw insertErr;
@@ -96,29 +174,25 @@ export default function ChatLayout({ currentUserRole }) {
   }
 
   // Filter conversations
-  const filteredConversations = mentorships.filter((m) => {
-    const targetName = currentUserRole === "student" ? m.alumni_name : m.student_name;
-    return targetName?.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredConversations = mentorships.filter((c) => {
+    return c.partner_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+           c.topic?.toLowerCase().includes(searchQuery.toLowerCase());
   });
-
-  const activeMessages = messages.filter(
-    (msg) => msg.mentorship_id === activeConversation?.id
-  );
 
   return (
     <div className="h-[calc(100vh-4rem)] flex flex-col md:flex-row bg-white overflow-hidden">
       
-      {/* Left Pane: Conversations List (340px) */}
+      {/* Left Pane: Conversations List */}
       <div className="w-full md:w-80 lg:w-96 border-r border-slate-200 flex flex-col bg-slate-50/50">
         
         {/* Header & Search */}
         <div className="p-4 border-b border-slate-200 space-y-3 bg-white">
           <div className="flex items-center justify-between">
             <h3 className="font-extrabold text-slate-900 text-base flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-glgold" />
+              <MessageSquare className="w-5 h-5 text-[#C29B38]" />
               <span>Mentorship Messages</span>
             </h3>
-            <span className="text-xs bg-teal-50 text-glblue-750 font-bold px-2 py-0.5 rounded-full border border-teal-200">
+            <span className="text-xs bg-[#FAF8F5] text-[#0C1929] font-bold px-2 py-0.5 rounded-full border border-[#E7E1D4]">
               {mentorships.length} Active
             </span>
           </div>
@@ -130,25 +204,30 @@ export default function ChatLayout({ currentUserRole }) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search conversations..."
-              className="w-full pl-9 pr-3 py-1.5 bg-slate-100 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-glblue-750"
+              className="w-full pl-9 pr-3 py-1.5 bg-slate-100 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#0C1929]"
             />
           </div>
         </div>
 
         {/* Conversation List */}
         <div className="flex-1 overflow-y-auto divide-y divide-slate-100">
-          {filteredConversations.length === 0 ? (
+          {loading ? (
+            <div className="p-8 text-center text-slate-400">
+              <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#C29B38] mb-2" />
+              <p className="text-xs">Loading conversations...</p>
+            </div>
+          ) : filteredConversations.length === 0 ? (
             <div className="p-8 text-center text-slate-400 text-xs">
-              <p className="font-semibold text-slate-600">No conversations found</p>
-              <p className="mt-1">
+              <MessageSquare className="w-8 h-8 mx-auto text-slate-300 mb-2" />
+              <p className="font-semibold text-slate-600">No active conversations</p>
+              <p className="mt-1 leading-relaxed">
                 {currentUserRole === "student"
-                  ? "Send mentorship requests to alumni to unlock chat channels."
-                  : "Accept pending mentorship requests to begin chatting with students."}
+                  ? "When an alumnus accepts your mentorship request, 1-on-1 messaging unlocks here."
+                  : "Accept pending mentorship requests from students to begin 1-on-1 guidance."}
               </p>
             </div>
           ) : (
             filteredConversations.map((c) => {
-              const partnerName = currentUserRole === "student" ? c.alumni_name : c.student_name;
               const isSelected = activeConversation?.id === c.id;
 
               return (
@@ -157,13 +236,13 @@ export default function ChatLayout({ currentUserRole }) {
                   onClick={() => { setActiveConversation(c); setError(null); }}
                   className={`p-4 flex items-start space-x-3 cursor-pointer transition ${
                     isSelected
-                      ? "bg-teal-50/70 border-l-4 border-glblue-750"
+                      ? "bg-amber-50/70 border-l-4 border-[#C29B38]"
                       : "hover:bg-slate-100/70 bg-white"
                   }`}
                 >
                   <div className="relative shrink-0">
-                    <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-glblue-750 to-teal-800 text-white font-bold text-sm flex items-center justify-center shadow-sm">
-                      {partnerName ? partnerName[0] : "U"}
+                    <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#0C1929] to-[#1A2C42] text-[#E5C378] font-bold text-sm flex items-center justify-center shadow-xs">
+                      {c.partner_name ? c.partner_name[0] : "U"}
                     </div>
                     <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white ring-1 ring-emerald-300"></span>
                   </div>
@@ -171,19 +250,19 @@ export default function ChatLayout({ currentUserRole }) {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
                       <h4 className="font-bold text-xs sm:text-sm text-slate-900 truncate">
-                        {partnerName}
+                        {c.partner_name}
                       </h4>
                       <span className="text-[10px] text-slate-400">
-                        {new Date(c.created_at).toLocaleDateString([], { month: "short", day: "numeric" })}
+                        {c.created_at ? new Date(c.created_at).toLocaleDateString([], { month: "short", day: "numeric" }) : "Active"}
                       </span>
                     </div>
-                    <p className="text-xs text-glblue-750 font-semibold truncate mt-0.5">
+                    <p className="text-xs text-[#8C7138] font-semibold truncate mt-0.5">
                       {c.topic}
                     </p>
                     <p className="text-[11px] text-slate-500 truncate mt-0.5">
                       {currentUserRole === "student"
-                        ? "Connected Alumnus Mentor"
-                        : `${c.student_branch || "Student"} • Roll: ${c.student_roll || "N/A"}`}
+                        ? "GLB Alumni Mentor"
+                        : "GLB Student Mentee"}
                     </p>
                   </div>
                 </div>
@@ -198,82 +277,65 @@ export default function ChatLayout({ currentUserRole }) {
         {activeConversation ? (
           <>
             {/* Chat Top Bar */}
-            <div className="h-16 px-6 border-b border-slate-200 flex items-center justify-between bg-white shadow-sm shrink-0">
-              <div className="flex items-center space-x-3 truncate">
-                <div className="w-10 h-10 rounded-2xl bg-glgold text-white font-bold flex items-center justify-center text-sm shadow-sm">
-                  {(currentUserRole === "student" ? activeConversation.alumni_name : activeConversation.student_name)[0]}
+            <div className="p-4 border-b border-slate-200 bg-white flex items-center justify-between shadow-xs z-10">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-2xl bg-[#0C1929] text-[#E5C378] font-bold text-sm flex items-center justify-center shadow-xs">
+                  {activeConversation.partner_name ? activeConversation.partner_name[0] : "U"}
                 </div>
-                <div className="truncate">
-                  <h3 className="font-extrabold text-sm text-slate-900 flex items-center gap-1.5 truncate">
-                    <span>{currentUserRole === "student" ? activeConversation.alumni_name : activeConversation.student_name}</span>
-                    <CheckCircle2 className="w-3.5 h-3.5 text-glgold shrink-0" />
+                <div>
+                  <h3 className="font-extrabold text-sm text-slate-900 leading-tight">
+                    {activeConversation.partner_name}
                   </h3>
-                  <p className="text-xs text-glblue-750 font-medium truncate flex items-center gap-2">
-                    <span>Topic: {activeConversation.topic}</span>
-                    <span className="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
-                      <Circle className="w-2 h-2 fill-emerald-500 text-emerald-500" />
-                      <span>Active Now</span>
+                  <div className="flex items-center space-x-2 text-[11px] text-slate-500 mt-0.5">
+                    <span className="font-medium text-[#8C7138]">
+                      {activeConversation.topic}
                     </span>
-                  </p>
+                    <span>â€¢</span>
+                    <span className="inline-flex items-center text-emerald-600 font-semibold">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1 animate-pulse"></span>
+                      Mentorship Active
+                    </span>
+                  </div>
                 </div>
-              </div>
-
-              <div className="text-right text-[11px] text-slate-400 hidden sm:block">
-                <span>Mentorship Connection</span>
-                <div className="font-semibold text-slate-600">GLB 1-on-1 Chat</div>
               </div>
             </div>
 
-            {/* Error Notification banner if any */}
-            {error && (
-              <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-xs text-amber-800 flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
-                <span>{error}</span>
-              </div>
-            )}
-
             {/* Messages Scroll Area */}
-            <div className="flex-1 p-6 overflow-y-auto space-y-4 bg-slate-50/50">
-              {activeMessages.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-slate-400 text-xs text-center p-6">
-                  <div className="w-12 h-12 rounded-2xl bg-teal-50 text-glblue-750 flex items-center justify-center mb-2">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 bg-[#FAF8F5]/50">
+              {messages.length === 0 ? (
+                <div className="h-full flex flex-col items-center justify-center text-center p-8 text-slate-400">
+                  <div className="w-12 h-12 rounded-2xl bg-white border border-[#E7E1D4] flex items-center justify-center text-[#8C7138] mb-3 shadow-xs">
                     <MessageSquare className="w-6 h-6" />
                   </div>
-                  <p className="font-bold text-slate-700 text-sm">Conversation Initiated</p>
-                  <p className="max-w-sm text-slate-500 mt-1">
-                    Send a greeting to break the ice! Ask questions about interview prep, tech stacks, or guidance for upcoming campus drives.
+                  <h4 className="font-bold text-slate-700 text-sm">No messages exchanged yet</h4>
+                  <p className="text-xs text-slate-500 max-w-sm mt-1">
+                    Begin the mentorship conversation by introducing yourself and discussing your guidance goals.
                   </p>
                 </div>
               ) : (
-                activeMessages.map((msg) => {
-                  const isMe =
-                    msg.sender_id === user?.id ||
-                    (currentUserRole === "student" && msg.sender_id === "user-stu-1") ||
-                    (currentUserRole === "alumni" && msg.sender_id === "user-alum-1");
+                messages.map((m) => {
+                  const isMine = m.sender_id === user?.id;
 
                   return (
                     <div
-                      key={msg.id}
-                      className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}
+                      key={m.id}
+                      className={`flex flex-col ${isMine ? "items-end" : "items-start"}`}
                     >
-                      <div className="flex items-end space-x-1.5 max-w-[80%] sm:max-w-[70%]">
-                        <div
-                          className={`p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm ${
-                            isMe
-                              ? "bg-glblue-750 text-white rounded-br-none"
-                              : "bg-white text-slate-800 border border-slate-200 rounded-bl-none"
-                          }`}
-                        >
-                          {msg.content}
-                        </div>
+                      <div
+                        className={`max-w-[85%] sm:max-w-md rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed shadow-xs ${
+                          isMine
+                            ? "bg-[#0C1929] text-[#FAF8F5] rounded-br-xs"
+                            : "bg-white text-slate-800 border border-[#E7E1D4] rounded-bl-xs"
+                        }`}
+                      >
+                        {m.content}
                       </div>
-                      <span className="text-[10px] text-slate-400 mt-1 px-1 flex items-center gap-1">
-                        <span>{msg.sender_name || (isMe ? "You" : "Partner")}</span>
-                        <span>•</span>
+                      <div className="flex items-center space-x-1 text-[10px] text-slate-400 mt-1 px-1">
+                        <Clock className="w-3 h-3" />
                         <span>
-                          {new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                          {m.created_at ? new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "Just now"}
                         </span>
-                      </span>
+                      </div>
                     </div>
                   );
                 })
@@ -281,34 +343,33 @@ export default function ChatLayout({ currentUserRole }) {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Message Input Footer */}
-            <form
-              onSubmit={handleSendMessage}
-              className="p-4 bg-white border-t border-slate-200 flex items-center space-x-3 shrink-0"
-            >
+            {/* Chat Input Bar */}
+            <form onSubmit={handleSendMessage} className="p-3 sm:p-4 border-t border-slate-200 bg-white flex items-center space-x-2">
               <input
                 type="text"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                placeholder="Type your message here... (Press Enter to send)"
-                className="flex-1 bg-slate-50 border border-slate-300 rounded-2xl px-4 py-3 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-glblue-750"
+                placeholder="Type your message..."
+                className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0C1929] focus:bg-white transition"
               />
               <button
                 type="submit"
                 disabled={!inputText.trim()}
-                className="bg-glgold hover:bg-glgold-dark text-white p-3 rounded-2xl transition shadow-md disabled:opacity-40 flex items-center justify-center shrink-0"
+                className="bg-[#0C1929] hover:bg-[#1A2C42] text-[#FAF8F5] p-2.5 sm:px-4 sm:py-2.5 rounded-xl font-bold text-xs flex items-center space-x-1.5 transition disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
               >
                 <Send className="w-4 h-4" />
+                <span className="hidden sm:inline">Send</span>
               </button>
             </form>
           </>
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center text-slate-400 p-8 text-center">
-            <MessageSquare className="w-14 h-14 mb-3 text-slate-300" />
-            <h3 className="font-bold text-slate-700 text-base">Select a conversation</h3>
-            <p className="text-xs text-slate-400 mt-1 max-w-sm">
-              Choose an accepted mentorship from the left menu to start direct messaging.
-            </p>
+          <div className="h-full flex items-center justify-center p-8 bg-[#FAF8F5]/30">
+            <EmptyState
+              title="No Conversation Selected"
+              message="Choose a mentorship connection from the list on the left to start chatting."
+              actionLabel="Explore Alumni Directory"
+              actionLink="/student/alumni"
+            />
           </div>
         )}
       </div>

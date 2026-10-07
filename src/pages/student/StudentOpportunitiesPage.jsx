@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+ï»¿import React, { useState } from "react";
 import { useToast } from "../../context/ToastContext";
 import { Briefcase, MapPin, ExternalLink, Search, CheckCircle2 } from "lucide-react";
 
@@ -114,7 +114,7 @@ export default function StudentOpportunitiesPage() {
               <h3 className="font-extrabold text-slate-900 text-lg leading-snug">{opp.title}</h3>
               <div className="text-xs font-bold text-glblue-750 flex items-center gap-2">
                 <span>{opp.company}</span>
-                <span>•</span>
+                <span>â€¢</span>
                 <span className="text-slate-500 font-normal flex items-center gap-1">
                   <MapPin className="w-3 h-3 text-red-500" />
                   {opp.location}
@@ -126,7 +126,7 @@ export default function StudentOpportunitiesPage() {
               </p>
 
               <div className="text-[11px] text-slate-500">
-                Target: <strong className="text-slate-800">{opp.batch_target}</strong> • Shared by <strong className="text-glblue-750">{opp.posted_by}</strong>
+                Target: <strong className="text-slate-800">{opp.batch_target}</strong> â€¢ Shared by <strong className="text-glblue-750">{opp.posted_by}</strong>
               </div>
             </div>
 
@@ -155,3 +155,4 @@ export default function StudentOpportunitiesPage() {
     </div>
   );
 }
+

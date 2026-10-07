@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+﻿import React, { useState, useEffect, useRef } from "react";
 import { Send, User, MessageSquare } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
@@ -76,7 +76,7 @@ export default function ChatWindow({ mentorship, messages = [], onSendMessage })
                   </div>
                 </div>
                 <span className="text-[10px] text-slate-400 mt-1 px-1">
-                  {msg.sender_name || (isMe ? "You" : "Mentor")} � {new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  {msg.sender_name || (isMe ? "You" : "Mentor")} • {new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                 </span>
               </div>
             );
@@ -105,3 +105,4 @@ export default function ChatWindow({ mentorship, messages = [], onSendMessage })
     </div>
   );
 }
+

@@ -1,13 +1,15 @@
-import React, { useState } from "react";
-import { INITIAL_NOTICES } from "../../lib/mockData";
+﻿import React, { useState, useEffect } from "react";
 import { NOTICE_TARGETS } from "../../lib/constants";
+import { supabase, isSupabaseConfigured } from "../../lib/supabase";
 import { useToast } from "../../context/ToastContext";
 import Modal from "../../components/common/Modal";
 import BroadcastModal from "../../components/admin/BroadcastModal";
-import { Bell, Plus, Trash2, Heart, Send, Sparkles } from "lucide-react";
+import EmptyState from "../../components/common/EmptyState";
+import { Bell, Plus, Trash2, Send, Loader2 } from "lucide-react";
 
 export default function AdminNoticesWishesPage() {
-  const [notices, setNotices] = useState(INITIAL_NOTICES);
+  const [notices, setNotices] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { addToast } = useToast();
 
   const [isNoticeModalOpen, setIsNoticeModalOpen] = useState(false);
@@ -17,196 +19,267 @@ export default function AdminNoticesWishesPage() {
     title: "",
     content: "",
     category: "Reunion",
-    published_by: "Dean Alumni Relations",
     target_audience: "all"
   });
 
-  function handleCreateNotice(e) {
+  useEffect(() => {
+    async function fetchNotices() {
+      if (!isSupabaseConfigured || !supabase) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const { data, error } = await supabase
+          .from("notices")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (!error && data) {
+          setNotices(data);
+        }
+      } catch (err) {
+        console.warn("Failed to load notices:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchNotices();
+  }, []);
+
+  async function handleCreateNotice(e) {
     e.preventDefault();
     if (!newNotice.title || !newNotice.content) return;
-    const item = {
-      id: "not-" + Date.now(),
-      ...newNotice,
-      created_at: new Date().toISOString()
-    };
-    setNotices([item, ...notices]);
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { data, error } = await supabase
+          .from("notices")
+          .insert({
+            title: newNotice.title,
+            content: newNotice.content,
+            category: newNotice.category,
+            target_audience: newNotice.target_audience
+          })
+          .select()
+          .single();
+
+        if (error) throw error;
+        if (data) setNotices([data, ...notices]);
+      } catch (err) {
+        addToast(err.message || "Failed to create notice.", "error");
+        return;
+      }
+    } else {
+      const item = {
+        id: "not-" + Date.now(),
+        ...newNotice,
+        created_at: new Date().toISOString()
+      };
+      setNotices([item, ...notices]);
+    }
+
     addToast("College notice officially published!", "success");
     setIsNoticeModalOpen(false);
     setNewNotice({
       title: "",
       content: "",
       category: "Reunion",
-      published_by: "Dean Alumni Relations",
       target_audience: "all"
     });
   }
 
-  function handleSendBroadcast(data) {
-    addToast(`Wishes broadcast "${data.title}" successfully delivered to Alumni Family Moments!`, "success");
+  async function handleSendBroadcast(data) {
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { data: inserted, error } = await supabase.from("notices").insert({
+          title: data.title,
+          content: data.message,
+          category: data.category || "Broadcast",
+          priority: "high",
+          target_audience: data.targetAudience || "all"
+        }).select().single();
+
+        if (!error && inserted) {
+          setNotices([inserted, ...notices]);
+        }
+      } catch (err) {
+        console.warn("Broadcast insert error:", err);
+      }
+    }
+    addToast(`Wishes broadcast "${data.title}" successfully published!`, "success");
+    setIsBroadcastModalOpen(false);
   }
 
-  function handleDeleteNotice(id) {
+  async function handleDeleteNotice(id) {
+    if (isSupabaseConfigured && supabase) {
+      try {
+        await supabase.from("notices").delete().eq("id", id);
+      } catch (err) {
+        console.warn("Error deleting notice:", err);
+      }
+    }
     setNotices(notices.filter((n) => n.id !== id));
     addToast("Notice deleted.", "info");
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 font-sans">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Notices, Wishes & Family Moments</h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            "Once GLB, Always GLB." Publish administrative college notices and broadcast congratulations or birthday wishes directly to alumni.
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0C1929] font-serif">College Notices & Broadcasts</h1>
+          <p className="text-xs sm:text-sm text-[#718096] mt-1">
+            Issue official institutional notices to students and alumni, or broadcast congratulations to the alumni stream.
           </p>
         </div>
 
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setIsBroadcastModalOpen(true)}
-            className="bg-glgold hover:bg-glgold-dark text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5"
+            className="bg-[#C29B38] hover:bg-[#B57C34] text-white text-xs font-bold px-3.5 py-2.5 rounded-xl transition shadow-xs flex items-center space-x-1.5"
           >
-            <Heart className="w-4 h-4" />
+            <Send className="w-4 h-4" />
             <span>Broadcast Wishes</span>
           </button>
           <button
             onClick={() => setIsNoticeModalOpen(true)}
-            className="bg-glblue-750 hover:bg-teal-900 text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5"
+            className="bg-[#0C1929] hover:bg-[#1A2C42] text-white text-xs font-bold px-3.5 py-2.5 rounded-xl transition shadow-xs flex items-center space-x-1.5"
           >
             <Plus className="w-4 h-4" />
-            <span>Create Notice</span>
+            <span>New Official Notice</span>
           </button>
         </div>
       </div>
 
-      {/* Notices List */}
-      <div className="space-y-4">
-        {notices.map((n) => (
-          <div
-            key={n.id}
-            className="bg-white rounded-3xl p-6 border border-teal-100 shadow-sm flex flex-col justify-between space-y-3"
-          >
-            <div className="flex items-start justify-between">
-              <div className="flex items-center space-x-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-teal-50 text-glblue-750 px-2.5 py-1 rounded">
-                  {n.category}
-                </span>
-                <span className="text-[10px] font-bold bg-amber-50 text-glgold px-2 py-0.5 rounded border border-glgold/30">
-                  Target: {n.target_audience.toUpperCase()}
-                </span>
+      {loading ? (
+        <div className="py-20 text-center text-slate-400">
+          <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#C29B38] mb-3" />
+          <p className="text-sm">Loading notices...</p>
+        </div>
+      ) : notices.length === 0 ? (
+        <EmptyState
+          title="No notices published"
+          message="Create your first official announcement or broadcast to inform GL Bajaj students and alumni."
+          actionLabel="Create Notice"
+          onAction={() => setIsNoticeModalOpen(true)}
+        />
+      ) : (
+        <div className="space-y-4">
+          {notices.map((n) => (
+            <div
+              key={n.id}
+              className="bg-white rounded-2xl p-5 border border-[#E7E1D4] shadow-xs flex items-start justify-between gap-4"
+            >
+              <div className="space-y-1.5 flex-1">
+                <div className="flex items-center space-x-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider bg-[#FAF8F5] text-[#8C7138] px-2 py-0.5 rounded border border-[#E7E1D4]">
+                    {n.category}
+                  </span>
+                  <span className="text-[10px] font-bold uppercase text-slate-400">
+                    Audience: {n.target_audience || "All"}
+                  </span>
+                  <span className="text-xs text-slate-400">
+                    {n.created_at ? new Date(n.created_at).toLocaleDateString() : ""}
+                  </span>
+                </div>
+                <h3 className="font-bold text-base text-[#0C1929] font-serif">{n.title}</h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{n.content}</p>
               </div>
+
               <button
                 onClick={() => handleDeleteNotice(n.id)}
-                className="text-slate-400 hover:text-red-600 p-1"
-                title="Delete notice"
+                className="text-slate-400 hover:text-red-600 p-2 rounded-lg hover:bg-slate-50 transition"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>
+          ))}
+        </div>
+      )}
 
-            <h3 className="font-extrabold text-slate-900 text-base">{n.title}</h3>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{n.content}</p>
-
-            <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
-              <span>Published by: <strong className="text-slate-700">{n.published_by}</strong></span>
-              <span>{new Date(n.created_at).toLocaleDateString()}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Draft Notice Modal */}
+      {/* New Notice Modal */}
       <Modal
         isOpen={isNoticeModalOpen}
         onClose={() => setIsNoticeModalOpen(false)}
         title="Publish Official College Notice"
-        maxWidth="max-w-xl"
+        maxWidth="max-w-lg"
       >
-        <form onSubmit={handleCreateNotice} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">Notice Category</label>
-              <select
-                value={newNotice.category}
-                onChange={(e) => setNewNotice({ ...newNotice, category: e.target.value })}
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
-              >
-                <option value="Reunion">Reunion & Alumni Meet</option>
-                <option value="Mentorship">Mentorship Drive</option>
-                <option value="Academic">Academic & Guest Lecture</option>
-                <option value="Placements">Placements & Referrals</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">Target Audience</label>
-              <select
-                value={newNotice.target_audience}
-                onChange={(e) => setNewNotice({ ...newNotice, target_audience: e.target.value })}
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
-              >
-                {NOTICE_TARGETS.map((t) => (
-                  <option key={t.value} value={t.value}>{t.label}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-
+        <form onSubmit={handleCreateNotice} className="space-y-4 font-sans">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">Authorized Issuer</label>
-            <input
-              type="text"
-              required
-              value={newNotice.published_by}
-              onChange={(e) => setNewNotice({ ...newNotice, published_by: e.target.value })}
-              placeholder="e.g. Dean Alumni Relations / HOD"
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">Notice Headline *</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Notice Title</label>
             <input
               type="text"
               required
               value={newNotice.title}
               onChange={(e) => setNewNotice({ ...newNotice, title: e.target.value })}
-              placeholder="e.g. Registration Open for Annual Alumni Meet 2026"
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+              placeholder="e.g. Silver Jubilee Convocation Registration Open"
+              className="w-full bg-[#FAF8F5] border border-[#E7E1D4] rounded-xl px-4 py-2 text-xs sm:text-sm text-[#0C1929] focus:outline-none focus:ring-2 focus:ring-[#C29B38]"
             />
           </div>
 
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Category</label>
+              <select
+                value={newNotice.category}
+                onChange={(e) => setNewNotice({ ...newNotice, category: e.target.value })}
+                className="w-full bg-[#FAF8F5] border border-[#E7E1D4] rounded-xl px-3 py-2 text-xs text-[#0C1929] focus:outline-none focus:ring-2 focus:ring-[#C29B38]"
+              >
+                <option value="Reunion">Reunion / Alumni</option>
+                <option value="Placement">Placement / Training</option>
+                <option value="Convocation">Convocation</option>
+                <option value="Academic">Academic Notice</option>
+                <option value="General">General</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Target Audience</label>
+              <select
+                value={newNotice.target_audience}
+                onChange={(e) => setNewNotice({ ...newNotice, target_audience: e.target.value })}
+                className="w-full bg-[#FAF8F5] border border-[#E7E1D4] rounded-xl px-3 py-2 text-xs text-[#0C1929] focus:outline-none focus:ring-2 focus:ring-[#C29B38]"
+              >
+                <option value="all">All Portals</option>
+                <option value="students">Students Only</option>
+                <option value="alumni">Alumni Only</option>
+              </select>
+            </div>
+          </div>
+
           <div>
-            <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">Notice Content *</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Notice Content</label>
             <textarea
-              rows="4"
+              rows={4}
               required
               value={newNotice.content}
               onChange={(e) => setNewNotice({ ...newNotice, content: e.target.value })}
-              placeholder="Write the complete announcement..."
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs leading-relaxed focus:ring-2 focus:ring-glblue-750 focus:outline-none"
-            ></textarea>
+              placeholder="Draft the complete official notice details..."
+              className="w-full bg-[#FAF8F5] border border-[#E7E1D4] rounded-xl p-3 text-xs sm:text-sm text-[#0C1929] focus:outline-none focus:ring-2 focus:ring-[#C29B38]"
+            />
           </div>
 
-          <div className="flex justify-end space-x-3 pt-2">
+          <div className="flex justify-end space-x-2 pt-2 border-t border-slate-100">
             <button
               type="button"
               onClick={() => setIsNoticeModalOpen(false)}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100"
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-[#718096] hover:bg-[#FAF8F5]"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-glgold hover:bg-glgold-dark text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1"
+              className="bg-[#0C1929] hover:bg-[#1A2C42] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-xs"
             >
-              <Send className="w-3.5 h-3.5" />
-              <span>Publish Notice</span>
+              Publish Notice
             </button>
           </div>
         </form>
       </Modal>
 
-      {/* Broadcast Wishes Modal */}
+      {/* Broadcast Modal */}
       <BroadcastModal
         isOpen={isBroadcastModalOpen}
         onClose={() => setIsBroadcastModalOpen(false)}

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ToastProvider } from "./context/ToastContext";
 import { USER_ROLES } from "./lib/constants";
+import { supabase, isSupabaseConfigured } from "./lib/supabase";
 
 // Common & Layouts
 import ProtectedRoute from "./components/common/ProtectedRoute";
@@ -55,33 +56,53 @@ import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
 import AdminDailyThoughtsPage from "./pages/admin/AdminDailyThoughtsPage";
 
 function AppContent() {
+  const { user } = useAuth();
   const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const [notifications, setNotifications] = useState([
-    {
-      id: "daily-thought-notif",
-      title: "🌅 Your Daily GLB Thought is here",
-      text: "Take a moment for today's thought from the GLB Alumni Family.",
-      time: "Today",
-      read: false
-    },
-    {
-      id: 1,
-      title: "Convocation 2026 Invitation",
-      text: "You have been officially invited to the Silver Jubilee Annual Convocation.",
-      time: "10 mins ago",
-      read: false
-    },
-    {
-      id: 2,
-      title: "Mentorship Application Update",
-      text: "A new guidance query has arrived from Tanmay Singhal (CSE, Batch 2025).",
-      time: "1 hour ago",
-      read: false
-    }
-  ]);
+  const [notifications, setNotifications] = useState([]);
 
-  function markAllRead() {
+  useEffect(() => {
+    async function fetchNotifications() {
+      if (!user?.id || !isSupabaseConfigured || !supabase) {
+        setNotifications([]);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from("notifications")
+          .select("*")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false });
+
+        if (!error && data) {
+          setNotifications(data.map(n => ({
+            id: n.id,
+            title: n.title,
+            text: n.message,
+            time: n.created_at ? new Date(n.created_at).toLocaleDateString() : "Recent",
+            read: n.is_read
+          })));
+        }
+      } catch (err) {
+        console.warn("Failed to fetch notifications:", err);
+      }
+    }
+
+    fetchNotifications();
+  }, [user?.id]);
+
+  async function markAllRead() {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    if (user?.id && isSupabaseConfigured && supabase) {
+      try {
+        await supabase
+          .from("notifications")
+          .update({ is_read: true })
+          .eq("user_id", user.id);
+      } catch (err) {
+        console.warn("Error updating notifications read status:", err);
+      }
+    }
   }
 
   return (
@@ -176,30 +197,38 @@ function AppContent() {
         title="GL Bajaj Ecosystem Notifications"
         maxWidth="max-w-md"
       >
-        <div className="space-y-3">
-          {notifications.map((n) => (
-            <div
-              key={n.id}
-              className={`p-3.5 rounded-xl border text-xs space-y-1 ${
-                n.read ? "bg-slate-50 border-slate-200" : "bg-amber-50/50 border-glgold/40"
-              }`}
-            >
-              <div className="flex items-center justify-between font-bold text-slate-900">
-                <span>{n.title}</span>
-                <span className="text-[10px] text-slate-400 font-normal">{n.time}</span>
-              </div>
-              <p className="text-slate-600 leading-relaxed">{n.text}</p>
+        <div className="space-y-3 font-sans">
+          {notifications.length === 0 ? (
+            <div className="text-center py-8 text-slate-400 text-xs">
+              No notifications yet.
             </div>
-          ))}
+          ) : (
+            notifications.map((n) => (
+              <div
+                key={n.id}
+                className={`p-3.5 rounded-xl border text-xs space-y-1 ${
+                  n.read ? "bg-slate-50 border-slate-200" : "bg-amber-50/50 border-[#C29B38]/40"
+                }`}
+              >
+                <div className="flex items-center justify-between font-bold text-slate-900">
+                  <span>{n.title}</span>
+                  <span className="text-[10px] text-slate-400 font-normal">{n.time}</span>
+                </div>
+                <p className="text-slate-600 leading-relaxed">{n.text}</p>
+              </div>
+            ))
+          )}
 
-          <div className="pt-2 flex justify-end">
-            <button
-              onClick={markAllRead}
-              className="text-xs text-glblue-750 font-bold hover:underline"
-            >
-              Mark all as read
-            </button>
-          </div>
+          {notifications.length > 0 && (
+            <div className="pt-2 flex justify-end">
+              <button
+                onClick={markAllRead}
+                className="text-xs text-[#8C7138] font-bold hover:underline"
+              >
+                Mark all as read
+              </button>
+            </div>
+          )}
         </div>
       </Modal>
     </>

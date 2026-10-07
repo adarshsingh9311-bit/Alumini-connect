@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { USER_ROLES } from "../lib/constants";
@@ -9,9 +9,7 @@ import {
   Briefcase, 
   ShieldCheck, 
   ArrowRight, 
-  CheckCircle2, 
-  Mail, 
-  ExternalLink 
+  CheckCircle2
 } from "lucide-react";
 
 // Clean, authentic university landing components
@@ -30,7 +28,7 @@ import UniversityFinalCta from "../components/landing/UniversityFinalCta";
 import UniversityFooter from "../components/landing/UniversityFooter";
 
 export default function LandingPage() {
-  const { setDemoPortal } = useAuth();
+  const { user, role } = useAuth();
   const navigate = useNavigate();
 
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -38,10 +36,15 @@ export default function LandingPage() {
   const [connectSuccess, setConnectSuccess] = useState(false);
   const [connectMessage, setConnectMessage] = useState("");
 
-  function handleDirectPortal(role, path) {
-    setDemoPortal(role);
+  function handleSelectPortal(targetRole) {
     setAuthModalOpen(false);
-    navigate(path);
+    if (user && role === targetRole) {
+      if (role === USER_ROLES.STUDENT) navigate("/student/dashboard");
+      else if (role === USER_ROLES.ALUMNI) navigate("/alumni/dashboard");
+      else if (role === USER_ROLES.ADMIN) navigate("/admin/dashboard");
+    } else {
+      navigate(`/login?role=${targetRole}`);
+    }
   }
 
   function handleSendConnect(e) {
@@ -96,7 +99,6 @@ export default function LandingPage() {
       {/* 13. Institutional University Footer */}
       <UniversityFooter onOpenAuthModal={() => setAuthModalOpen(true)} />
 
-
       {/* ============================================================
           SIGN IN / THREE PORTALS SELECTOR MODAL
       ============================================================ */}
@@ -115,7 +117,7 @@ export default function LandingPage() {
                 GL
               </div>
               <h3 className="text-lg font-bold text-[#0C1929] font-serif">
-                Select Your Portal
+                Sign In to Portal
               </h3>
               <p className="text-xs text-[#718096] mt-0.5">
                 GL Bajaj Alumni Connect Platform
@@ -124,7 +126,7 @@ export default function LandingPage() {
 
             <div className="space-y-3">
               <button
-                onClick={() => handleDirectPortal(USER_ROLES.STUDENT, "/student/dashboard")}
+                onClick={() => handleSelectPortal(USER_ROLES.STUDENT)}
                 className="w-full text-left p-3.5 rounded-xl border border-[#E7E1D4] hover:border-[#C29B38] hover:bg-[#FAF8F5] transition flex items-center justify-between group"
               >
                 <div className="flex items-center space-x-3">
@@ -140,7 +142,7 @@ export default function LandingPage() {
               </button>
 
               <button
-                onClick={() => handleDirectPortal(USER_ROLES.ALUMNI, "/alumni/dashboard")}
+                onClick={() => handleSelectPortal(USER_ROLES.ALUMNI)}
                 className="w-full text-left p-3.5 rounded-xl border border-[#E7E1D4] hover:border-[#C29B38] hover:bg-[#FAF8F5] transition flex items-center justify-between group"
               >
                 <div className="flex items-center space-x-3">
@@ -156,7 +158,7 @@ export default function LandingPage() {
               </button>
 
               <button
-                onClick={() => handleDirectPortal(USER_ROLES.ADMIN, "/admin/dashboard")}
+                onClick={() => handleSelectPortal(USER_ROLES.ADMIN)}
                 className="w-full text-left p-3.5 rounded-xl border border-[#E7E1D4] hover:border-[#C29B38] hover:bg-[#FAF8F5] transition flex items-center justify-between group"
               >
                 <div className="flex items-center space-x-3">
@@ -185,7 +187,6 @@ export default function LandingPage() {
         </div>
       )}
 
-
       {/* ============================================================
           ALUMNUS PROFILE & CONNECT MODAL
       ============================================================ */}
@@ -202,43 +203,45 @@ export default function LandingPage() {
             {/* Profile Header */}
             <div className="flex items-start space-x-4 mb-5">
               <img
-                src={selectedAlumnus.image}
-                alt={selectedAlumnus.name}
+                src={selectedAlumnus.image || selectedAlumnus.avatar_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80"}
+                alt={selectedAlumnus.name || selectedAlumnus.full_name}
                 onError={(e) => {
                   e.currentTarget.onerror = null;
-                  e.currentTarget.src = selectedAlumnus.fallbackImage;
+                  e.currentTarget.src = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80";
                 }}
                 className="w-16 h-16 rounded-xl object-cover object-top border border-[#E7E1D4] shadow-xs"
               />
               <div className="flex-1">
                 <div className="text-[10px] font-semibold text-[#8C7138] uppercase tracking-wider font-serif">
-                  {formatEducation(selectedAlumnus.branch, selectedAlumnus.batch)}
+                  {formatEducation(selectedAlumnus.branch, selectedAlumnus.batch || selectedAlumnus.graduation_year)}
                 </div>
                 <h3 className="text-xl font-bold text-[#0C1929] leading-tight font-serif">
-                  {selectedAlumnus.name}
+                  {selectedAlumnus.name || selectedAlumnus.full_name}
                 </h3>
                 <p className="text-xs font-semibold text-[#2B3442] mt-0.5">
-                  {selectedAlumnus.designation || selectedAlumnus.role}
+                  {selectedAlumnus.designation || selectedAlumnus.current_designation || selectedAlumnus.role}
                 </p>
                 <p className="text-xs text-[#718096] font-medium">
-                  {selectedAlumnus.organization || selectedAlumnus.company}
+                  {selectedAlumnus.organization || selectedAlumnus.current_company || selectedAlumnus.company}
                 </p>
               </div>
             </div>
 
             {/* Journey Note */}
-            <div className="bg-[#FAF8F5] p-4 rounded-xl border border-[#E7E1D4] text-xs leading-relaxed text-[#4A5568] mb-5">
-              <span className="font-semibold text-[#0C1929] block mb-1">
-                Academic & Professional Journey
-              </span>
-              {selectedAlumnus.journey}
-            </div>
+            {selectedAlumnus.journey || selectedAlumnus.bio ? (
+              <div className="bg-[#FAF8F5] p-4 rounded-xl border border-[#E7E1D4] text-xs leading-relaxed text-[#4A5568] mb-5">
+                <span className="font-semibold text-[#0C1929] block mb-1">
+                  Academic & Professional Journey
+                </span>
+                {selectedAlumnus.journey || selectedAlumnus.bio}
+              </div>
+            ) : null}
 
             {/* Connect Form */}
             {connectSuccess ? (
               <div className="bg-emerald-50 border border-emerald-300 text-emerald-800 p-4 rounded-xl text-center text-xs font-semibold flex items-center justify-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>Connection request dispatched to {selectedAlumnus.name}!</span>
+                <span>Connection request dispatched to {selectedAlumnus.name || selectedAlumnus.full_name}!</span>
               </div>
             ) : (
               <form onSubmit={handleSendConnect} className="space-y-3">
@@ -267,8 +270,11 @@ export default function LandingPage() {
                   <button
                     type="button"
                     onClick={() => {
-                      setDemoPortal(USER_ROLES.STUDENT);
-                      navigate("/student/messages");
+                      if (user) {
+                        navigate("/student/messages");
+                      } else {
+                        navigate("/login?role=student");
+                      }
                     }}
                     className="bg-[#FAF8F5] hover:bg-white text-[#0C1929] border border-[#E7E1D4] text-xs font-semibold py-2.5 px-3 rounded-lg transition"
                   >

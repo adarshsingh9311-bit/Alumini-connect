@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { 
   ChevronLeft, 
@@ -8,6 +8,8 @@ import {
   GraduationCap, 
   CheckCircle2
 } from "lucide-react";
+import { supabase, isSupabaseConfigured } from "../../lib/supabase";
+import { formatEducation, cleanEncodingArtifacts } from "../../lib/formatters";
 
 export const NOTABLE_GLB_ALUMNI = [
   {
@@ -105,38 +107,49 @@ export const NOTABLE_GLB_ALUMNI = [
     image: "https://www.glbitm.org/Uploads/image/CS-Alumni-GauravJoshil-20.jpg",
     fallbackImage: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80",
     availableForMentorship: true
-  },
-  {
-    id: "notable-7",
-    name: "Ashish Pandey",
-    batch: "B.Tech CSE • 2014",
-    branch: "Computer Science & Engineering",
-    designation: "Analyst Programmer",
-    organization: "MediaTech",
-    quote: "Developing media analytics software and high-availability digital publishing tools.",
-    image: "https://www.glbitm.org/Uploads/image/CS-Alumni-AshishPandey-20.jpg",
-    fallbackImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80",
-    availableForMentorship: false
-  },
-  {
-    id: "notable-8",
-    name: "Ankit Pratap Singh",
-    batch: "B.Tech CSE • 2015",
-    branch: "Computer Science & Engineering",
-    designation: "M.Tech Scholar",
-    organization: "NIT Hamirpur",
-    quote: "Pursuing advanced research in computing architectures and systems at NIT Hamirpur.",
-    image: "https://www.glbitm.org/Uploads/image/795imguf_ankitpratap.jpg",
-    fallbackImage: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=400&q=80",
-    availableForMentorship: true
   }
 ];
 
 export default function NotableAlumniSection({ onSelectAlumnus }) {
+  const [alumniData, setAlumniData] = useState(NOTABLE_GLB_ALUMNI);
   const [startIndex, setStartIndex] = useState(0);
   const itemsPerPage = 4;
-  const totalItems = NOTABLE_GLB_ALUMNI.length;
 
+  useEffect(() => {
+    async function fetchVerifiedAlumni() {
+      if (isSupabaseConfigured && supabase) {
+        try {
+          const { data, error } = await supabase
+            .from("alumni")
+            .select("*, profiles(*)")
+            .eq("is_verified", true)
+            .limit(12);
+
+          if (!error && data && data.length > 0) {
+            const formatted = data.map((a) => ({
+              id: a.id,
+              name: a.profiles?.full_name || "GLB Alumnus",
+              batch: formatEducation(a.branch, a.graduation_year),
+              branch: a.branch,
+              designation: a.current_designation || "Alumnus",
+              organization: a.current_company || "GL Bajaj Alumnus",
+              quote: a.bio || "Proud member of the GL Bajaj Alumni Network.",
+              image: a.profiles?.avatar_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+              fallbackImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+              availableForMentorship: a.is_available_for_mentorship
+            }));
+            setAlumniData(formatted);
+          }
+        } catch (err) {
+          console.warn("Could not fetch verified alumni:", err);
+        }
+      }
+    }
+
+    fetchVerifiedAlumni();
+  }, []);
+
+  const totalItems = alumniData.length;
   const canPrev = startIndex > 0;
   const canNext = startIndex + itemsPerPage < totalItems;
 
@@ -152,7 +165,7 @@ export default function NotableAlumniSection({ onSelectAlumnus }) {
     }
   }
 
-  const visibleAlumni = NOTABLE_GLB_ALUMNI.slice(startIndex, startIndex + itemsPerPage);
+  const visibleAlumni = alumniData.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <section id="notable-alumni" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full font-sans">
@@ -172,40 +185,42 @@ export default function NotableAlumniSection({ onSelectAlumnus }) {
         </div>
 
         {/* Carousel Desktop Controls */}
-        <div className="hidden sm:flex items-center space-x-3 shrink-0">
-          <button
-            onClick={handlePrev}
-            disabled={!canPrev}
-            aria-label="Previous Alumni"
-            className={`w-10 h-10 rounded-lg border flex items-center justify-center transition shadow-xs ${
-              canPrev
-                ? "bg-white border-[#E7E1D4] text-[#0C1929] hover:border-[#B58A38] hover:text-[#B58A38]"
-                : "bg-[#FAF8F5] border-[#E7E1D4]/60 text-[#A0AEC0] cursor-not-allowed"
-            }`}
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
+        {totalItems > itemsPerPage && (
+          <div className="hidden sm:flex items-center space-x-3 shrink-0">
+            <button
+              onClick={handlePrev}
+              disabled={!canPrev}
+              aria-label="Previous Alumni"
+              className={`w-10 h-10 rounded-lg border flex items-center justify-center transition shadow-xs ${
+                canPrev
+                  ? "bg-white border-[#E7E1D4] text-[#0C1929] hover:border-[#B58A38] hover:text-[#B58A38]"
+                  : "bg-[#FAF8F5] border-[#E7E1D4]/60 text-[#A0AEC0] cursor-not-allowed"
+              }`}
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
 
-          <span className="text-xs font-medium text-[#718096] px-1 font-mono">
-            {startIndex + 1}?{Math.min(startIndex + itemsPerPage, totalItems)} of {totalItems}
-          </span>
+            <span className="text-xs font-medium text-[#718096] px-1 font-mono">
+              {startIndex + 1} - {Math.min(startIndex + itemsPerPage, totalItems)} of {totalItems}
+            </span>
 
-          <button
-            onClick={handleNext}
-            disabled={!canNext}
-            aria-label="Next Alumni"
-            className={`w-10 h-10 rounded-lg border flex items-center justify-center transition shadow-xs ${
-              canNext
-                ? "bg-white border-[#E7E1D4] text-[#0C1929] hover:border-[#B58A38] hover:text-[#B58A38]"
-                : "bg-[#FAF8F5] border-[#E7E1D4]/60 text-[#A0AEC0] cursor-not-allowed"
-            }`}
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
+            <button
+              onClick={handleNext}
+              disabled={!canNext}
+              aria-label="Next Alumni"
+              className={`w-10 h-10 rounded-lg border flex items-center justify-center transition shadow-xs ${
+                canNext
+                  ? "bg-white border-[#E7E1D4] text-[#0C1929] hover:border-[#B58A38] hover:text-[#B58A38]"
+                  : "bg-[#FAF8F5] border-[#E7E1D4]/60 text-[#A0AEC0] cursor-not-allowed"
+              }`}
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Alumni Card Grid (Matching Exact Requested Structure) */}
+      {/* Alumni Card Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {visibleAlumni.map((alumnus) => (
           <div
@@ -213,7 +228,7 @@ export default function NotableAlumniSection({ onSelectAlumnus }) {
             className="bg-white rounded-xl border border-[#E7E1D4] overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-[#B58A38]/60 hover:shadow-[0_8px_20px_rgba(0,0,0,0.05)] transition duration-200 flex flex-col justify-between group"
           >
             <div>
-              {/* [PHOTO] */}
+              {/* Photo */}
               <div className="relative aspect-[4/3] w-full bg-[#F3EFE6] overflow-hidden border-b border-[#E7E1D4]">
                 <img
                   src={alumnus.image}
@@ -242,7 +257,7 @@ export default function NotableAlumniSection({ onSelectAlumnus }) {
 
                 {/* Batch / Branch */}
                 <div className="text-xs font-semibold text-[#8C7138] uppercase tracking-wider">
-                  {alumnus.batch}
+                  {cleanEncodingArtifacts(alumnus.batch)}
                 </div>
 
                 {/* Current Designation & Company */}
@@ -280,22 +295,18 @@ export default function NotableAlumniSection({ onSelectAlumnus }) {
                 </button>
               </div>
             </div>
-
           </div>
         ))}
       </div>
 
-      {/* Footer Navigation of Section */}
-      <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-[#E7E1D4]">
-        <div className="text-xs text-[#718096]">
-          Information verified from the official GL Bajaj Institute of Technology & Management notable alumni archive.
-        </div>
-
+      {/* Explore Full Directory CTA */}
+      <div className="mt-12 text-center">
         <Link
           to="/student/alumni"
-          className="inline-flex items-center space-x-1.5 text-xs sm:text-sm font-semibold text-[#0C1929] hover:text-[#B58A38] border-b border-[#0C1929] hover:border-[#B58A38] pb-0.5 transition"
+          className="inline-flex items-center space-x-2 text-sm font-semibold text-[#0C1929] hover:text-[#8C7138] border-b border-[#C29B38] pb-1 transition group"
         >
-          <span>View All Alumni →</span>
+          <span>Explore Complete Verified Alumni Directory</span>
+          <ArrowRight className="w-4 h-4 text-[#8C7138] group-hover:translate-x-1 transition" />
         </Link>
       </div>
 

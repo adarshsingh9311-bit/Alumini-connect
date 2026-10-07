@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import Modal from "../common/Modal";
 import { MENTORSHIP_TOPICS } from "../../lib/constants";
 import { MessageSquare, Send, Loader2 } from "lucide-react";
@@ -41,7 +41,7 @@ export default function MentorshipRequestModal({ isOpen, onClose, alumni, onSubm
           <div>
             <h4 className="font-bold text-slate-900 text-sm">{alumni.full_name}</h4>
             <p className="text-xs text-glblue-750 font-semibold">{alumni.current_designation}</p>
-            <p className="text-[11px] text-slate-500">at {alumni.current_company} � {alumni.branch} ({alumni.batch_year})</p>
+            <p className="text-[11px] text-slate-500">at {alumni.current_company} • {alumni.branch} ({alumni.batch_year})</p>
           </div>
         </div>
 
@@ -103,3 +103,4 @@ export default function MentorshipRequestModal({ isOpen, onClose, alumni, onSubm
     </Modal>
   );
 }
+
