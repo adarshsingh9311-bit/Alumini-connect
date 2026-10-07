@@ -10,13 +10,11 @@ import {
   Menu, 
   X, 
   User, 
-  Bell, 
-  Sparkles,
-  ChevronDown
+  Bell 
 } from "lucide-react";
 
 export default function Navbar({ onOpenNotifications }) {
-  const { user, profile, role, logout, setDemoPortal, isConfigured } = useAuth();
+  const { user, profile, role, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -25,15 +23,6 @@ export default function Navbar({ onOpenNotifications }) {
   function handleLogout() {
     logout();
     navigate("/");
-    setMobileMenuOpen(false);
-  }
-
-  function handleSwitchDemo(targetRole) {
-    setDemoPortal(targetRole);
-    if (targetRole === USER_ROLES.STUDENT) navigate("/student");
-    else if (targetRole === USER_ROLES.ALUMNI) navigate("/alumni");
-    else if (targetRole === USER_ROLES.ADMIN) navigate("/admin");
-    else navigate("/");
     setMobileMenuOpen(false);
   }
 
@@ -102,41 +91,6 @@ export default function Navbar({ onOpenNotifications }) {
 
         {/* Right side utilities: notifications, role selector, user profile */}
         <div className="hidden md:flex items-center space-x-3">
-          {/* Quick Demo Switcher if Supabase not configured */}
-          {!isConfigured && (
-            <div className="relative group">
-              <button className="bg-glblue-900 border border-glgold/40 text-glgold text-xs px-2.5 py-1.5 rounded-lg font-semibold flex items-center space-x-1 hover:bg-glblue-950 transition">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Switch Portal View</span>
-                <ChevronDown className="w-3 h-3" />
-              </button>
-              <div className="absolute right-0 mt-1 w-48 bg-slate-900 border border-teal-700/60 rounded-xl shadow-xl py-2 hidden group-hover:block z-50">
-                <div className="px-3 py-1 text-[10px] uppercase font-bold text-slate-400">Preview Portals</div>
-                <button
-                  onClick={() => handleSwitchDemo(USER_ROLES.STUDENT)}
-                  className="w-full text-left px-3 py-1.5 text-xs text-slate-200 hover:bg-white/10 flex items-center space-x-2"
-                >
-                  <GraduationCap className="w-3.5 h-3.5 text-teal-400" />
-                  <span>Student View</span>
-                </button>
-                <button
-                  onClick={() => handleSwitchDemo(USER_ROLES.ALUMNI)}
-                  className="w-full text-left px-3 py-1.5 text-xs text-slate-200 hover:bg-white/10 flex items-center space-x-2"
-                >
-                  <Briefcase className="w-3.5 h-3.5 text-glgold" />
-                  <span>Alumni View</span>
-                </button>
-                <button
-                  onClick={() => handleSwitchDemo(USER_ROLES.ADMIN)}
-                  className="w-full text-left px-3 py-1.5 text-xs text-slate-200 hover:bg-white/10 flex items-center space-x-2"
-                >
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Admin View</span>
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* Notifications Button */}
           {onOpenNotifications && (
             <button

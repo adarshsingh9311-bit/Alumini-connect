@@ -1,9 +1,10 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import { USER_ROLES } from "../../lib/constants";
 import Modal from "../../components/common/Modal";
+import { isSupabaseConfigured } from "../../lib/supabase";
 import { GraduationCap, Briefcase, ShieldCheck, Lock, ArrowRight, Loader2, KeyRound } from "lucide-react";
 
 export default function LoginPage() {
@@ -26,6 +27,10 @@ export default function LoginPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!isSupabaseConfigured) {
+      addToast("Supabase is not configured. Please contact the administrator.", "error");
+      return;
+    }
     setLoading(true);
     try {
       await login({ identifier, password, role: selectedRole });
@@ -124,6 +129,13 @@ export default function LoginPage() {
             <span>Admin</span>
           </button>
         </div>
+
+        {/* Unconfigured Warning */}
+        {!isSupabaseConfigured && (
+          <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl text-amber-900 text-xs font-semibold text-center">
+            Supabase is not configured. Please contact the administrator.
+          </div>
+        )}
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">

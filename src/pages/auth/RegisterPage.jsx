@@ -1,8 +1,9 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import { USER_ROLES, BRANCH_CODES, BATCH_YEARS, COLLEGE_NAME } from "../../lib/constants";
+import { isSupabaseConfigured } from "../../lib/supabase";
 import { GraduationCap, Briefcase, UserPlus, ArrowRight, Loader2, ShieldAlert } from "lucide-react";
 
 export default function RegisterPage() {
@@ -42,6 +43,10 @@ export default function RegisterPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!isSupabaseConfigured) {
+      addToast("Supabase is not configured. Please contact the administrator.", "error");
+      return;
+    }
     if (!formData.roll_number.trim()) {
       addToast("College Roll Number is required as your primary identity.", "error");
       return;
@@ -119,6 +124,13 @@ export default function RegisterPage() {
             <span>I am an Alumnus / Alumna</span>
           </button>
         </div>
+
+        {/* Unconfigured Warning */}
+        {!isSupabaseConfigured && (
+          <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl text-amber-900 text-xs font-semibold text-center">
+            Supabase is not configured. Please contact the administrator.
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

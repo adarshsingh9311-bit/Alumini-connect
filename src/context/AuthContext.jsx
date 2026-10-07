@@ -128,7 +128,7 @@ export function AuthProvider({ children }) {
     }
 
     if (!isSupabaseConfigured || !supabase) {
-      throw new Error("Supabase is not configured. Please check your VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY settings in .env.");
+      throw new Error("Supabase is not configured. Please contact the administrator.");
     }
 
     let authEmail = identifier.trim();
@@ -205,7 +205,7 @@ export function AuthProvider({ children }) {
     }
 
     if (!isSupabaseConfigured || !supabase) {
-      throw new Error("Supabase is not configured. Please set your Supabase credentials in .env.");
+      throw new Error("Supabase is not configured. Please contact the administrator.");
     }
 
     const emailToUse = data.email ? data.email.trim() : `${data.roll_number.trim().toLowerCase()}@glbajaj.org`;
@@ -290,7 +290,7 @@ export function AuthProvider({ children }) {
   async function resetPassword(identifier) {
     if (!identifier) throw new Error("Roll Number or Email is required.");
     if (!isSupabaseConfigured || !supabase) {
-      throw new Error("Supabase is not configured.");
+      throw new Error("Supabase is not configured. Please contact the administrator.");
     }
 
     let emailToReset = identifier.trim();

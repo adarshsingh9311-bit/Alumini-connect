@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ToastProvider } from "./context/ToastContext";
@@ -107,6 +107,11 @@ function AppContent() {
 
   return (
     <>
+      {!isSupabaseConfigured && (
+        <div className="bg-amber-500 text-slate-900 text-xs sm:text-sm font-semibold px-4 py-2 text-center shadow-sm flex items-center justify-center space-x-2 relative z-50">
+          <span>⚠️ Supabase is not configured. Please contact the administrator.</span>
+        </div>
+      )}
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<LandingPage />} />
