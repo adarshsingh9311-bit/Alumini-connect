@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
@@ -12,7 +12,6 @@ import {
   Calendar, 
   Award, 
   CheckCircle2, 
-  Sparkles, 
   ArrowRight, 
   Clock, 
   Users, 
@@ -96,57 +95,46 @@ export default function AlumniDashboard() {
           .eq("user_id", user.id);
 
         if (fetchUserProfile) await fetchUserProfile(user.id);
+        addToast(`Mentorship status updated to ${next ? "Available" : "Busy"}.`, "success");
       } catch (err) {
         console.warn("Failed to update mentorship status:", err);
       }
     }
-
-    addToast(next ? "You are now OPEN for student mentorship requests." : "Mentorship availability paused.", "info");
   }
 
-  async function handleAcceptMentorship(id) {
-    if (isSupabaseConfigured && supabase) {
+  async function handleAcceptRequest(requestId) {
+    if (user?.id && isSupabaseConfigured && supabase) {
       try {
         await supabase
           .from("mentorship_requests")
-          .update({
-            status: "accepted",
-            response_note: "Accepted! Looking forward to guiding you."
-          })
-          .eq("id", id);
+          .update({ status: "accepted" })
+          .eq("id", requestId);
       } catch (err) {
-        console.warn("Error accepting request:", err);
+        console.warn("Error updating request:", err);
       }
     }
 
     setMentorships((prev) =>
-      prev.map((m) =>
-        m.id === id
-          ? { ...m, status: "accepted", response_note: "Accepted! Looking forward to guiding you." }
-          : m
-      )
+      prev.map((m) => (m.id === requestId ? { ...m, status: "accepted" } : m))
     );
-    addToast("Mentorship request accepted. Mentee added to chat!", "success");
+    addToast("Mentorship request accepted! Direct messaging is now enabled.", "success");
   }
 
-  async function handleRejectMentorship(id) {
-    if (isSupabaseConfigured && supabase) {
+  async function handleDeclineRequest(requestId) {
+    if (user?.id && isSupabaseConfigured && supabase) {
       try {
         await supabase
           .from("mentorship_requests")
-          .update({
-            status: "rejected",
-            response_note: "Currently unavailable for this topic."
-          })
-          .eq("id", id);
+          .update({ status: "rejected" })
+          .eq("id", requestId);
       } catch (err) {
-        console.warn("Error rejecting request:", err);
+        console.warn("Error declining request:", err);
       }
     }
 
     setMentorships((prev) =>
       prev.map((m) =>
-        m.id === id
+        m.id === requestId
           ? { ...m, status: "rejected", response_note: "Currently unavailable for this topic." }
           : m
       )
@@ -157,7 +145,6 @@ export default function AlumniDashboard() {
   async function handleAchievementSubmit(achData) {
     if (user?.id && isSupabaseConfigured && supabase) {
       try {
-        // Find alumni record id
         const { data: alumRec } = await supabase
           .from("alumni")
           .select("id")
@@ -184,237 +171,240 @@ export default function AlumniDashboard() {
   }
 
   const pendingRequests = mentorships.filter((m) => m.status === "pending");
-  const activeMenteesCount = mentorships.filter((m) => m.status === "accepted").length;
+  const acceptedRequests = mentorships.filter((m) => m.status === "accepted");
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 font-sans">
-      {/* Alumni Hero Header */}
-      <div className="bg-gradient-to-r from-[#0C1929] via-[#1A2C42] to-[#0C1929] rounded-3xl p-6 sm:p-8 text-white shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border border-[#E7E1D4]/20">
-        <div className="flex items-center space-x-5">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#C29B38] text-white flex items-center justify-center font-serif font-black text-2xl border-2 border-amber-200/50 shadow-md">
-            {(profile?.full_name || "A")[0]}
+    <div className="max-w-7xl mx-auto space-y-6 font-sans">
+      
+      {/* 1. Alumni Welcome Card */}
+      <div className="bg-[#7A1F24] rounded-lg p-6 sm:p-8 text-white border border-[#5C171B] shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="flex items-center space-x-4">
+          <div className="w-14 h-14 rounded-lg bg-[#5C171B] text-white flex items-center justify-center font-bold text-xl border border-white/20 shrink-0">
+            {(profile?.full_name || "A")[0].toUpperCase()}
           </div>
           <div className="space-y-1">
-            <div className="inline-flex items-center space-x-2 bg-[#C29B38] text-slate-950 text-[11px] px-3 py-0.5 rounded-full font-bold">
+            <div className="inline-flex items-center space-x-1.5 bg-[#5C171B] text-[#B08A3E] text-[11px] px-2.5 py-0.5 rounded font-semibold border border-white/10">
               <Briefcase className="w-3 h-3" />
-              <span>Alumni Portal • {profile?.roll_number ? `Roll No: ${profile.roll_number}` : (profile?.branch || "GL Bajaj")}</span>
+              <span>Alumni Portal • {profile?.graduation_year ? `Batch ${profile.graduation_year}` : (profile?.branch || "GLB")}</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-serif">
-              Welcome Back, {profile?.full_name || "Alumnus"}
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+              Welcome back to GL Bajaj.
             </h1>
-            <p className="text-slate-300 text-xs sm:text-sm">
-              {profile?.graduation_year ? `Batch ${profile.graduation_year} • ` : ""}{profile?.branch || "GLB"}
+            <p className="text-white/80 text-xs sm:text-sm">
+              {profile?.full_name || "Alumnus"}
               {profile?.current_designation ? ` • ${profile.current_designation}` : ""}
               {profile?.current_company ? ` at ${profile.current_company}` : ""}
             </p>
           </div>
         </div>
 
-        {/* Mentorship Toggle & Quick Actions */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
-          <div className="bg-white/10 backdrop-blur-xs border border-white/20 p-2 px-3 rounded-2xl flex items-center space-x-3">
-            <div className="text-left">
-              <div className="text-[10px] uppercase font-bold text-amber-200">Mentorship Status</div>
-              <div className="text-xs font-bold text-white">
-                {isAvailable ? "Available to Mentor" : "Currently Unavailable"}
-              </div>
+        {/* Mentorship Toggle */}
+        <div className="flex items-center space-x-3 bg-[#5C171B] p-2.5 px-3.5 rounded-lg border border-white/10">
+          <div className="text-left">
+            <div className="text-[10px] uppercase font-bold text-white/70">Mentorship Status</div>
+            <div className="text-xs font-semibold text-white">
+              {isAvailable ? "Available to Mentor" : "Currently Unavailable"}
             </div>
-            <button
-              onClick={toggleAvailability}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-xs ${
-                isAvailable ? "bg-emerald-500 text-white" : "bg-slate-600 text-slate-200"
-              }`}
-            >
-              {isAvailable ? "Active" : "Paused"}
-            </button>
           </div>
-
           <button
-            onClick={() => setIsAchievementModalOpen(true)}
-            className="bg-[#C29B38] hover:bg-[#B57C34] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5"
+            onClick={toggleAvailability}
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer ${
+              isAvailable
+                ? "bg-[#2E6B4A] text-white hover:bg-[#25573C]"
+                : "bg-white/20 text-white hover:bg-white/30"
+            }`}
           >
-            <Award className="w-4 h-4" />
-            <span>Share Achievement</span>
+            {isAvailable ? "Active" : "Paused"}
           </button>
         </div>
       </div>
 
-      {/* 4 Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-[#E7E1D4] shadow-xs flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-50 text-[#8C7138] flex items-center justify-center">
-            <MessageSquare className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="text-xl sm:text-2xl font-black text-slate-900">{pendingRequests.length}</div>
-            <div className="text-xs text-slate-500 font-medium">Pending Inquiries</div>
-          </div>
-        </div>
+      {/* 2. Daily GLB Thought */}
+      <DailyThoughtCard />
 
-        <div className="bg-white p-5 rounded-2xl border border-[#E7E1D4] shadow-xs flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-            <Users className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="text-xl sm:text-2xl font-black text-slate-900">{activeMenteesCount}</div>
-            <div className="text-xs text-slate-500 font-medium">Active Mentees</div>
-          </div>
-        </div>
-
-        <div className="bg-white p-5 rounded-2xl border border-[#E7E1D4] shadow-xs flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-            <Calendar className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="text-xl sm:text-2xl font-black text-slate-900">{events.length}</div>
-            <div className="text-xs text-slate-500 font-medium">Upcoming Events</div>
-          </div>
-        </div>
-
-        <div className="bg-white p-5 rounded-2xl border border-[#E7E1D4] shadow-xs flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-xl bg-slate-100 text-[#0C1929] flex items-center justify-center">
-            <Award className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="text-xl sm:text-2xl font-black text-slate-900">
-              {profile?.is_verified ? "Verified" : "Pending"}
-            </div>
-            <div className="text-xs text-slate-500 font-medium">Profile Verification</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Grid: Pending Mentorship & Daily Thought */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* 3. Pending Mentorship Requests & Connected Students Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <div className="lg:col-span-2 space-y-8">
-          
-          {/* Pending Requests Queue */}
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E7E1D4] shadow-xs space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div>
-                <h3 className="font-extrabold text-[#0C1929] text-lg flex items-center gap-2 font-serif">
-                  <MessageSquare className="w-5 h-5 text-[#C29B38]" />
-                  <span>Incoming Mentorship Inquiries</span>
-                </h3>
-                <p className="text-xs text-slate-500">Current students requesting 1-on-1 career guidance from you</p>
-              </div>
-              <Link to="/alumni/mentorship" className="text-xs font-bold text-[#8C7138] hover:underline">
-                View All
-              </Link>
+        {/* Left: Pending Requests */}
+        <div className="lg:col-span-7 bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-6 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#D9DDE3] pb-3">
+            <div className="flex items-center space-x-2">
+              <MessageSquare className="w-4 h-4 text-[#7A1F24]" />
+              <h2 className="text-sm font-bold text-[#202124] uppercase tracking-wide">
+                Pending Mentorship Requests ({pendingRequests.length})
+              </h2>
             </div>
-
-            {loading ? (
-              <div className="py-12 text-center text-slate-400">
-                <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#C29B38] mb-2" />
-                <p className="text-xs">Loading mentorship requests...</p>
-              </div>
-            ) : pendingRequests.length === 0 ? (
-              <EmptyState
-                title="No mentorship requests yet"
-                message="Incoming mentorship inquiries from GL Bajaj scholars will appear here."
-              />
-            ) : (
-              <div className="space-y-4">
-                {pendingRequests.map((req) => (
-                  <div key={req.id} className="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E7E1D4] space-y-3">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <h4 className="font-bold text-sm text-[#0C1929]">{req.student_name}</h4>
-                        <p className="text-xs text-slate-500">{req.topic}</p>
-                      </div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-[#8C7138] px-2.5 py-0.5 rounded-full border border-[#E7E1D4]">
-                        Pending
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-slate-700 bg-white p-3 rounded-xl border border-[#E7E1D4] leading-relaxed italic">
-                      "{req.message}"
-                    </p>
-
-                    <div className="flex items-center justify-end space-x-2 pt-1">
-                      <button
-                        onClick={() => handleRejectMentorship(req.id)}
-                        className="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-500 hover:bg-slate-200"
-                      >
-                        Decline
-                      </button>
-                      <button
-                        onClick={() => handleAcceptMentorship(req.id)}
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-1.5 rounded-xl shadow-xs flex items-center space-x-1"
-                      >
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>Accept & Chat</span>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <Link
+              to="/alumni/mentorship"
+              className="text-xs text-[#7A1F24] hover:underline font-semibold flex items-center space-x-1"
+            >
+              <span>Manage all</span>
+              <ArrowRight className="w-3 h-3" />
+            </Link>
           </div>
 
-          {/* Upcoming Campus Events for Alumni */}
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E7E1D4] shadow-xs space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-lg font-bold text-[#0C1929] flex items-center gap-2 font-serif">
-                <Calendar className="w-5 h-5 text-[#C29B38]" />
-                <span>Upcoming Campus Events & Reunions</span>
-              </h3>
-              <Link to="/alumni/events" className="text-xs font-bold text-[#8C7138] hover:underline">
-                View All
-              </Link>
+          {loading ? (
+            <div className="py-8 flex justify-center text-[#667085]">
+              <Loader2 className="w-6 h-6 animate-spin" />
             </div>
-
-            {events.length === 0 ? (
-              <p className="text-xs text-slate-400 text-center py-6">No events scheduled at this moment.</p>
-            ) : (
-              <div className="space-y-3">
-                {events.map((ev) => (
-                  <div key={ev.id} className="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E7E1D4] space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-[#8C7138] uppercase">{ev.event_type || "Event"}</span>
-                      <span className="text-xs font-bold text-[#0C1929]">{ev.date}</span>
+          ) : pendingRequests.length === 0 ? (
+            <div className="py-8 text-center bg-[#F7F3EA] rounded-md border border-[#D9DDE3] p-6">
+              <p className="text-xs text-[#667085] font-medium">No pending mentorship requests at this time.</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {pendingRequests.map((req) => (
+                <div key={req.id} className="p-4 rounded-md border border-[#D9DDE3] bg-[#F7F3EA] space-y-2.5">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h4 className="font-bold text-xs text-[#202124]">{req.student_name}</h4>
+                      <p className="text-[11px] font-semibold text-[#7A1F24]">{req.topic}</p>
                     </div>
-                    <h4 className="font-bold text-sm text-[#0C1929]">{ev.title}</h4>
-                    <p className="text-xs text-slate-500">{ev.location ? `${ev.location} • ` : ""}{ev.time || ""}</p>
+                    <span className="text-[10px] text-[#667085]">
+                      {new Date(req.created_at).toLocaleDateString()}
+                    </span>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-
+                  <p className="text-xs text-[#667085] bg-white p-2.5 rounded border border-[#D9DDE3] leading-relaxed">
+                    "{req.message}"
+                  </p>
+                  <div className="flex items-center justify-end space-x-2 pt-1">
+                    <button
+                      onClick={() => handleDeclineRequest(req.id)}
+                      className="px-3 py-1.5 rounded-md border border-[#D9DDE3] bg-white hover:bg-slate-50 text-[#667085] text-xs font-semibold transition cursor-pointer"
+                    >
+                      Decline
+                    </button>
+                    <button
+                      onClick={() => handleAcceptRequest(req.id)}
+                      className="px-3 py-1.5 rounded-md bg-[#7A1F24] hover:bg-[#5C171B] text-white text-xs font-semibold transition cursor-pointer"
+                    >
+                      Accept & Mentor
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Sidebar: Daily Thought & Quick Links */}
-        <div className="space-y-6">
-          {/* Daily GLB Positivity & Motivation Card */}
-          <DailyThoughtCard />
-
-          {/* Quick Hub */}
-          <div className="bg-white rounded-3xl p-6 border border-[#E7E1D4] shadow-xs space-y-3 text-xs">
-            <h4 className="font-bold text-[#0C1929] uppercase tracking-wider text-[11px] pb-2 border-b border-slate-100 font-serif">
-              Alumni Quick Actions
-            </h4>
-            <Link to="/alumni/career-journey" className="block py-2 px-3 rounded-xl hover:bg-[#FAF8F5] font-semibold text-slate-700 hover:text-[#0C1929] transition">
-              Manage Career History & Milestones
-            </Link>
-            <Link to="/alumni/profile" className="block py-2 px-3 rounded-xl hover:bg-[#FAF8F5] font-semibold text-slate-700 hover:text-[#0C1929] transition">
-              Update Professional Profile & Socials
-            </Link>
-            <Link to="/alumni/messages" className="block py-2 px-3 rounded-xl hover:bg-[#FAF8F5] font-semibold text-slate-700 hover:text-[#0C1929] transition">
-              Open 1-on-1 Messages
+        {/* Right: Connected Students / Active Mentees */}
+        <div className="lg:col-span-5 bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-6 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#D9DDE3] pb-3">
+            <div className="flex items-center space-x-2">
+              <Users className="w-4 h-4 text-[#7A1F24]" />
+              <h2 className="text-sm font-bold text-[#202124] uppercase tracking-wide">
+                Connected Students ({acceptedRequests.length})
+              </h2>
+            </div>
+            <Link
+              to="/alumni/messages"
+              className="text-xs text-[#7A1F24] hover:underline font-semibold flex items-center space-x-1"
+            >
+              <span>Messages</span>
+              <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
 
+          {loading ? (
+            <div className="py-8 flex justify-center text-[#667085]">
+              <Loader2 className="w-6 h-6 animate-spin" />
+            </div>
+          ) : acceptedRequests.length === 0 ? (
+            <div className="py-8 text-center bg-[#F7F3EA] rounded-md border border-[#D9DDE3] p-6">
+              <p className="text-xs text-[#667085] font-medium">No connected students yet.</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {acceptedRequests.map((req) => (
+                <div key={req.id} className="p-3 rounded-md border border-[#D9DDE3] bg-[#F7F3EA] flex items-center justify-between text-xs">
+                  <div>
+                    <h4 className="font-semibold text-[#202124]">{req.student_name}</h4>
+                    <p className="text-[11px] text-[#667085]">{req.topic}</p>
+                  </div>
+                  <Link
+                    to="/alumni/messages"
+                    className="px-2.5 py-1 rounded bg-[#FFFFFF] hover:bg-[#F7F3EA] text-[#7A1F24] border border-[#D9DDE3] font-semibold text-[11px] transition"
+                  >
+                    Open Chat
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-
       </div>
 
-      <AchievementSubmitModal
-        isOpen={isAchievementModalOpen}
-        onClose={() => setIsAchievementModalOpen(false)}
-        onSubmit={handleAchievementSubmit}
-      />
+      {/* 4. Upcoming Events & Experience Contribution */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="lg:col-span-8 bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-6 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#D9DDE3] pb-3">
+            <div className="flex items-center space-x-2">
+              <Calendar className="w-4 h-4 text-[#7A1F24]" />
+              <h2 className="text-sm font-bold text-[#202124] uppercase tracking-wide">
+                Alumni Events & Reunions
+              </h2>
+            </div>
+            <Link
+              to="/alumni/events"
+              className="text-xs text-[#7A1F24] hover:underline font-semibold flex items-center space-x-1"
+            >
+              <span>View all</span>
+              <ArrowRight className="w-3 h-3" />
+            </Link>
+          </div>
+
+          {loading ? (
+            <div className="py-8 flex justify-center text-[#667085]">
+              <Loader2 className="w-6 h-6 animate-spin" />
+            </div>
+          ) : events.length === 0 ? (
+            <div className="py-8 text-center bg-[#F7F3EA] rounded-md border border-[#D9DDE3] p-6">
+              <p className="text-xs text-[#667085] font-medium">No upcoming alumni events scheduled.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {events.map((ev) => (
+                <div key={ev.id} className="p-3.5 rounded-md border border-[#D9DDE3] bg-[#F7F3EA] space-y-1.5">
+                  <div className="text-[10px] text-[#7A1F24] font-semibold uppercase">{ev.event_type || "Event"}</div>
+                  <h4 className="font-bold text-xs text-[#202124]">{ev.title}</h4>
+                  <div className="text-[11px] text-[#667085] flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    <span>{ev.date}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Share Achievement Action Card */}
+        <div className="lg:col-span-4 bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-6 flex flex-col justify-between space-y-4">
+          <div>
+            <div className="flex items-center space-x-2 text-[#7A1F24] mb-2">
+              <Award className="w-4 h-4" />
+              <h3 className="font-bold text-xs uppercase tracking-wide">Share Achievement</h3>
+            </div>
+            <p className="text-xs text-[#667085] leading-relaxed">
+              Promoted, published a paper, or founded a startup? Submit your career milestones to the official GL Bajaj alumni spotlight.
+            </p>
+          </div>
+          <button
+            onClick={() => setIsAchievementModalOpen(true)}
+            className="w-full bg-[#7A1F24] hover:bg-[#5C171B] text-white text-xs font-semibold py-2.5 rounded-md transition shadow-xs cursor-pointer text-center"
+          >
+            Submit Milestone
+          </button>
+        </div>
+      </div>
+
+      {/* Achievement Submission Modal */}
+      {isAchievementModalOpen && (
+        <AchievementSubmitModal
+          isOpen={isAchievementModalOpen}
+          onClose={() => setIsAchievementModalOpen(false)}
+          onSubmit={handleAchievementSubmit}
+        />
+      )}
     </div>
   );
 }

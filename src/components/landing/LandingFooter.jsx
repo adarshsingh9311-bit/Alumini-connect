@@ -41,7 +41,7 @@ export default function LandingFooter() {
               </div>
               <div className="flex items-center space-x-2.5">
                 <Mail className="w-4 h-4 text-glgold shrink-0" />
-                <span>alumni@glbajaj.org • contact@glbajaj.org</span>
+                <span>alumni@glbitm.ac.in • contact@glbitm.ac.in</span>
               </div>
             </div>
           </div>

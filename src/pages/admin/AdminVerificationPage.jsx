@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase, isSupabaseConfigured } from "../../lib/supabase";
 import { useToast } from "../../context/ToastContext";
 import EmptyState from "../../components/common/EmptyState";
@@ -113,20 +113,20 @@ export default function AdminVerificationPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 font-sans">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0C1929] font-serif">Verification Desk</h1>
-        <p className="text-xs sm:text-sm text-[#718096] mt-1">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#202124] font-serif">Verification Desk</h1>
+        <p className="text-xs sm:text-sm text-[#667085] mt-1">
           Review alumni registrations against college roll numbers, and audit milestone submissions before public showcase.
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center space-x-3 border-b border-[#E7E1D4] pb-3">
+      <div className="flex items-center space-x-3 border-b border-[#D9DDE3] pb-3">
         <button
           onClick={() => setActiveTab("alumni")}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 ${
+          className={`px-4 py-2 rounded-lg text-xs font-bold transition flex items-center space-x-1.5 ${
             activeTab === "alumni"
-              ? "bg-[#0C1929] text-white shadow-xs"
-              : "bg-[#FAF8F5] text-[#718096] hover:text-[#0C1929] border border-[#E7E1D4]"
+              ? "bg-[#7A1F24] text-white shadow-2xs"
+              : "bg-[#F7F3EA] text-[#667085] hover:text-[#202124] border border-[#D9DDE3]"
           }`}
         >
           <Briefcase className="w-4 h-4" />
@@ -135,10 +135,10 @@ export default function AdminVerificationPage() {
 
         <button
           onClick={() => setActiveTab("achievements")}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 ${
+          className={`px-4 py-2 rounded-lg text-xs font-bold transition flex items-center space-x-1.5 ${
             activeTab === "achievements"
-              ? "bg-[#C29B38] text-white shadow-xs"
-              : "bg-[#FAF8F5] text-[#718096] hover:text-[#0C1929] border border-[#E7E1D4]"
+              ? "bg-[#7A1F24] text-white shadow-2xs"
+              : "bg-[#F7F3EA] text-[#667085] hover:text-[#202124] border border-[#D9DDE3]"
           }`}
         >
           <Award className="w-4 h-4" />
@@ -147,8 +147,8 @@ export default function AdminVerificationPage() {
       </div>
 
       {loading ? (
-        <div className="py-20 text-center text-slate-400">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#C29B38] mb-3" />
+        <div className="py-20 text-center text-[#667085]">
+          <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#7A1F24] mb-3" />
           <p className="text-sm">Loading verification queue...</p>
         </div>
       ) : activeTab === "alumni" ? (
@@ -162,32 +162,32 @@ export default function AdminVerificationPage() {
             {alumniList.map((a) => (
               <div
                 key={a.id}
-                className="bg-white rounded-2xl p-5 border border-[#E7E1D4] shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                className="bg-white rounded-xl p-5 border border-[#D9DDE3] shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
               >
                 <div className="space-y-1">
                   <div className="flex items-center space-x-2">
-                    <h3 className="font-bold text-base text-[#0C1929] font-serif">{a.full_name}</h3>
-                    <span className="text-[10px] font-mono font-bold bg-amber-50 text-[#8C7138] border border-[#E7E1D4] px-2 py-0.5 rounded">
+                    <h3 className="font-bold text-base text-[#202124] font-serif">{a.full_name}</h3>
+                    <span className="text-[10px] font-mono font-bold bg-[#F7F3EA] text-[#7A1F24] border border-[#D9DDE3] px-2 py-0.5 rounded">
                       Roll No: {a.roll_number}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-[#667085]">
                     {a.branch} (Batch {a.batch_year}) • {a.current_designation} at {a.current_company}
                   </p>
-                  {a.bio && <p className="text-[11px] text-slate-500 italic max-w-xl">"{a.bio}"</p>}
+                  {a.bio && <p className="text-[11px] text-[#667085] italic max-w-xl">"{a.bio}"</p>}
                 </div>
 
                 <div className="flex items-center space-x-2 shrink-0">
                   <button
                     onClick={() => rejectAlumni(a.id)}
-                    className="p-2 px-3 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 text-xs font-semibold flex items-center gap-1 transition"
+                    className="p-2 px-3 rounded-lg border border-[#B42318]/30 text-[#B42318] hover:bg-[#B42318]/10 text-xs font-semibold flex items-center gap-1 transition"
                   >
                     <XCircle className="w-4 h-4" />
                     <span>Reject</span>
                   </button>
                   <button
                     onClick={() => verifyAlumni(a.id)}
-                    className="p-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition"
+                    className="p-2 px-4 rounded-lg bg-[#2E6B4A] hover:bg-[#235338] text-white text-xs font-bold flex items-center gap-1.5 shadow-2xs transition"
                   >
                     <CheckCircle2 className="w-4 h-4" />
                     <span>Verify & Grant Access</span>
@@ -207,15 +207,15 @@ export default function AdminVerificationPage() {
           {achievements.map((ach) => (
             <div
               key={ach.id}
-              className="bg-white rounded-2xl p-5 border border-[#E7E1D4] shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+              className="bg-white rounded-xl p-5 border border-[#D9DDE3] shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
             >
               <div className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-[#8C7138] px-2 py-0.5 rounded border border-[#E7E1D4]">
+                <span className="text-[10px] font-bold uppercase tracking-wider bg-[#F7F3EA] text-[#7A1F24] px-2 py-0.5 rounded border border-[#D9DDE3]">
                   {ach.category || "Career Milestone"}
                 </span>
-                <h3 className="font-bold text-base text-[#0C1929] font-serif">{ach.title}</h3>
-                <p className="text-xs text-slate-600 leading-relaxed max-w-xl">{ach.description}</p>
-                <div className="text-[11px] text-slate-400">
+                <h3 className="font-bold text-base text-[#202124] font-serif">{ach.title}</h3>
+                <p className="text-xs text-[#667085] leading-relaxed max-w-xl">{ach.description}</p>
+                <div className="text-[11px] text-[#667085]">
                   Submitted by: <strong>{ach.alumni_name}</strong> ({ach.alumni_batch})
                 </div>
               </div>
@@ -223,14 +223,14 @@ export default function AdminVerificationPage() {
               <div className="flex items-center space-x-2 shrink-0">
                 <button
                   onClick={() => rejectAchievement(ach.id)}
-                  className="p-2 px-3 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 text-xs font-semibold flex items-center gap-1 transition"
+                  className="p-2 px-3 rounded-lg border border-[#B42318]/30 text-[#B42318] hover:bg-[#B42318]/10 text-xs font-semibold flex items-center gap-1 transition"
                 >
                   <XCircle className="w-4 h-4" />
                   <span>Reject</span>
                 </button>
                 <button
                   onClick={() => verifyAchievement(ach.id)}
-                  className="p-2 px-4 rounded-xl bg-[#0C1929] hover:bg-[#1A2C42] text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition"
+                  className="p-2 px-4 rounded-lg bg-[#7A1F24] hover:bg-[#5C171B] text-white text-xs font-bold flex items-center gap-1.5 shadow-2xs transition"
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   <span>Approve & Publish</span>

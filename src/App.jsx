@@ -123,7 +123,7 @@ function AppContent() {
         <Route
           path="/student"
           element={
-            <ProtectedRoute allowedRoles={[USER_ROLES.STUDENT, USER_ROLES.ADMIN]}>
+            <ProtectedRoute allowedRoles={[USER_ROLES.STUDENT]}>
               <StudentLayout onOpenNotifications={() => setNotificationsOpen(true)} />
             </ProtectedRoute>
           }
@@ -145,7 +145,7 @@ function AppContent() {
         <Route
           path="/alumni"
           element={
-            <ProtectedRoute allowedRoles={[USER_ROLES.ALUMNI, USER_ROLES.ADMIN]}>
+            <ProtectedRoute allowedRoles={[USER_ROLES.ALUMNI]}>
               <AlumniLayout onOpenNotifications={() => setNotificationsOpen(true)} />
             </ProtectedRoute>
           }

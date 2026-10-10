@@ -4,7 +4,19 @@ import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import { USER_ROLES, BRANCH_CODES, BATCH_YEARS, COLLEGE_NAME } from "../../lib/constants";
 import { isSupabaseConfigured } from "../../lib/supabase";
-import { GraduationCap, Briefcase, UserPlus, ArrowRight, Loader2, ShieldAlert } from "lucide-react";
+import { 
+  GraduationCap, 
+  Briefcase, 
+  ArrowRight, 
+  Loader2, 
+  ArrowLeft,
+  Mail,
+  KeyRound,
+  Lock,
+  User,
+  Building,
+  MapPin
+} from "lucide-react";
 
 export default function RegisterPage() {
   const [searchParams] = useSearchParams();
@@ -30,7 +42,6 @@ export default function RegisterPage() {
     verification_note: ""
   });
 
-  const [isRecordNotFound, setIsRecordNotFound] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const { register } = useAuth();
@@ -47,6 +58,11 @@ export default function RegisterPage() {
       addToast("Supabase is not configured. Please contact the administrator.", "error");
       return;
     }
+    const cleanEmail = (formData.email || "").trim().toLowerCase();
+    if (!cleanEmail.endsWith("@glbitm.ac.in") || cleanEmail.length <= "@glbitm.ac.in".length) {
+      addToast("Please use your official @glbitm.ac.in college email.", "error");
+      return;
+    }
     if (!formData.roll_number.trim()) {
       addToast("College Roll Number is required as your primary identity.", "error");
       return;
@@ -56,14 +72,12 @@ export default function RegisterPage() {
       await register(formData, targetRole);
       addToast(
         targetRole === USER_ROLES.STUDENT
-          ? "Student account activated successfully!"
-          : isRecordNotFound
-          ? "Alumni registration submitted! Verification request sent to College Admin."
-          : "Alumni account registered & roll-number verified!",
+          ? "Student account activated successfully! Welcome to GLB Alumni Connect."
+          : "Alumni account registered! Your profile is now set up.",
         "success"
       );
-      if (targetRole === USER_ROLES.STUDENT) navigate("/student/dashboard");
-      else navigate("/alumni/dashboard");
+      if (targetRole === USER_ROLES.STUDENT) navigate("/student");
+      else navigate("/alumni");
     } catch (err) {
       addToast(err.message || "Registration failed.", "error");
     } finally {
@@ -72,39 +86,34 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-[90vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-slate-950 relative overflow-hidden">
-      <div className="absolute inset-0 z-0 opacity-20">
-        <img
-          src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1920&q=80"
-          alt="GL Bajaj Campus"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-glblue-750/70 to-slate-950"></div>
-      </div>
-
-      <div className="max-w-2xl w-full bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-teal-100 p-8 space-y-6 relative z-10">
-        <div className="text-center space-y-1.5">
-          <div className="w-12 h-12 bg-glgold text-white rounded-2xl flex items-center justify-center font-black text-xl mx-auto shadow-md">
+    <div className="min-h-screen bg-[#F7F3EA] flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="w-full max-w-2xl bg-[#FFFFFF] border border-[#D9DDE3] rounded-xl shadow-sm p-6 sm:p-10">
+        
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="w-12 h-12 bg-[#7A1F24] text-white rounded-lg flex items-center justify-center font-bold text-xl mx-auto mb-3 shadow-xs">
             GL
           </div>
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight">Register with Roll Number</h2>
-          <p className="text-xs text-glgold font-bold uppercase tracking-widest">
+          <h1 className="text-2xl font-bold text-[#202124] tracking-tight">
+            Create College Account
+          </h1>
+          <p className="text-xs text-[#B08A3E] font-bold tracking-widest uppercase mt-1">
             "Once GLB, Always GLB."
           </p>
-          <p className="text-xs text-slate-500">
-            {COLLEGE_NAME} • Roll-Number-Based Identity Architecture
+          <p className="text-xs text-[#667085] mt-1">
+            {COLLEGE_NAME} • Institutional Directory
           </p>
         </div>
 
-        {/* Role Toggle */}
-        <div className="grid grid-cols-2 gap-2 p-1.5 bg-slate-100 rounded-2xl">
+        {/* Role Selector Tabs (Student & Alumni Only - Admin is strictly excluded) */}
+        <div className="grid grid-cols-2 gap-2 p-1 bg-[#F7F3EA] border border-[#D9DDE3] rounded-lg mb-6">
           <button
             type="button"
             onClick={() => setTargetRole(USER_ROLES.STUDENT)}
-            className={`py-2.5 text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition ${
+            className={`py-2 text-xs font-semibold rounded-md flex items-center justify-center gap-2 transition ${
               targetRole === USER_ROLES.STUDENT
-                ? "bg-white text-glgold shadow-sm"
-                : "text-slate-600 hover:text-slate-900"
+                ? "bg-[#7A1F24] text-[#FFFFFF] shadow-xs"
+                : "text-[#202124] hover:bg-[#FFFFFF]/70"
             }`}
           >
             <GraduationCap className="w-4 h-4" />
@@ -114,10 +123,10 @@ export default function RegisterPage() {
           <button
             type="button"
             onClick={() => setTargetRole(USER_ROLES.ALUMNI)}
-            className={`py-2.5 text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition ${
+            className={`py-2 text-xs font-semibold rounded-md flex items-center justify-center gap-2 transition ${
               targetRole === USER_ROLES.ALUMNI
-                ? "bg-white text-glblue-750 shadow-sm"
-                : "text-slate-600 hover:text-slate-900"
+                ? "bg-[#7A1F24] text-[#FFFFFF] shadow-xs"
+                : "text-[#202124] hover:bg-[#FFFFFF]/70"
             }`}
           >
             <Briefcase className="w-4 h-4" />
@@ -125,18 +134,19 @@ export default function RegisterPage() {
           </button>
         </div>
 
-        {/* Unconfigured Warning */}
+        {/* Unconfigured Alert */}
         {!isSupabaseConfigured && (
-          <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl text-amber-900 text-xs font-semibold text-center">
+          <div className="p-3 bg-[#F7F3EA] border border-[#B08A3E] rounded-lg text-[#202124] text-xs font-medium mb-6">
             Supabase is not configured. Please contact the administrator.
           </div>
         )}
 
+        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                Full Name <span className="text-red-500">*</span>
+              <label className="block text-xs font-semibold text-[#202124] mb-1">
+                Full Name <span className="text-[#B42318]">*</span>
               </label>
               <input
                 type="text"
@@ -145,12 +155,13 @@ export default function RegisterPage() {
                 value={formData.full_name}
                 onChange={handleChange}
                 placeholder="e.g. Rahul Sharma"
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
               />
             </div>
+
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                College Roll Number <span className="text-red-500">*</span>
+              <label className="block text-xs font-semibold text-[#202124] mb-1">
+                College Roll Number <span className="text-[#B42318]">*</span>
               </label>
               <input
                 type="text"
@@ -158,16 +169,16 @@ export default function RegisterPage() {
                 name="roll_number"
                 value={formData.roll_number}
                 onChange={handleChange}
-                placeholder="e.g. 220192010001"
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-sm font-mono focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+                placeholder={targetRole === USER_ROLES.STUDENT ? "e.g. 2300001" : "e.g. 2200001"}
+                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm font-mono text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                Email Address <span className="text-red-500">*</span>
+              <label className="block text-xs font-semibold text-[#202124] mb-1">
+                College Email <span className="text-[#B42318]">*</span>
               </label>
               <input
                 type="email"
@@ -175,13 +186,17 @@ export default function RegisterPage() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder={targetRole === USER_ROLES.STUDENT ? "rollno@glbajaj.org" : "you@company.com"}
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+                placeholder={targetRole === USER_ROLES.STUDENT ? "student@glbitm.ac.in" : "alumni@glbitm.ac.in"}
+                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
               />
+              <p className="text-[11px] text-[#667085] mt-1">
+                Use your official @glbitm.ac.in email address.
+              </p>
             </div>
+
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                Account Password <span className="text-red-500">*</span>
+              <label className="block text-xs font-semibold text-[#202124] mb-1">
+                Account Password <span className="text-[#B42318]">*</span>
               </label>
               <input
                 type="password"
@@ -189,192 +204,130 @@ export default function RegisterPage() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="Secure password (at least 6 chars)"
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+                placeholder="At least 6 characters"
+                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+              <label className="block text-xs font-semibold text-[#202124] mb-1">
                 Branch / Dept
               </label>
               <select
                 name="branch"
                 value={formData.branch}
                 onChange={handleChange}
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
               >
                 {BRANCH_CODES.map((b) => (
                   <option key={b} value={b}>{b}</option>
                 ))}
               </select>
             </div>
+
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+              <label className="block text-xs font-semibold text-[#202124] mb-1">
                 {targetRole === USER_ROLES.STUDENT ? "Graduation Year" : "Graduated Batch"}
               </label>
               <select
                 name="batch_year"
                 value={formData.batch_year}
                 onChange={handleChange}
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
               >
                 {BATCH_YEARS.map((y) => (
                   <option key={y} value={y}>{y}</option>
                 ))}
               </select>
             </div>
+
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                Phone Number
+              <label className="block text-xs font-semibold text-[#202124] mb-1">
+                Phone Number (Optional)
               </label>
               <input
                 type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                placeholder="+91 9876543210"
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+                placeholder="e.g. +91 9876543210"
+                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
               />
             </div>
           </div>
 
-          {/* Student Fields */}
-          {targetRole === USER_ROLES.STUDENT && (
-            <div className="space-y-3 pt-2 border-t border-slate-100">
-              <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                  Skills (comma separated)
-                </label>
-                <input
-                  type="text"
-                  name="skills"
-                  value={formData.skills}
-                  onChange={handleChange}
-                  placeholder="e.g. React, Python, Data Structures, Machine Learning"
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                  Career Interests & Target Goals
-                </label>
-                <input
-                  type="text"
-                  name="interests"
-                  value={formData.interests}
-                  onChange={handleChange}
-                  placeholder="e.g. Seeking Cloud Backend roles, Preparing for GATE, Open Source"
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Alumni Fields */}
+          {/* Alumni Specific Professional Fields */}
           {targetRole === USER_ROLES.ALUMNI && (
-            <div className="space-y-3 pt-2 border-t border-slate-100">
+            <div className="pt-2 border-t border-[#D9DDE3] space-y-4">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#7A1F24]">
+                Professional Information
+              </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Current Company <span className="text-red-500">*</span>
+                  <label className="block text-xs font-semibold text-[#202124] mb-1">
+                    Current Company / Organization
                   </label>
                   <input
                     type="text"
-                    required
                     name="current_company"
                     value={formData.current_company}
                     onChange={handleChange}
-                    placeholder="e.g. Google, Microsoft, Amazon"
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+                    placeholder="e.g. Tata Consultancy Services"
+                    className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Current Designation <span className="text-red-500">*</span>
+                  <label className="block text-xs font-semibold text-[#202124] mb-1">
+                    Current Designation
                   </label>
                   <input
                     type="text"
-                    required
                     name="current_designation"
                     value={formData.current_designation}
                     onChange={handleChange}
                     placeholder="e.g. Senior Software Engineer"
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+                    className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
                   />
                 </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Industry / Domain
-                  </label>
-                  <input
-                    type="text"
-                    name="industry"
-                    value={formData.industry}
-                    onChange={handleChange}
-                    placeholder="e.g. Cloud & AI Architecture"
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Location / City
-                  </label>
-                  <input
-                    type="text"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                    placeholder="e.g. Bengaluru, India"
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* Request Verification notice if record mismatch */}
-              <div className="bg-amber-50/70 border border-amber-200 rounded-xl p-3.5 space-y-1">
-                <div className="flex items-center space-x-2 text-glgold font-bold text-xs">
-                  <ShieldAlert className="w-4 h-4" />
-                  <span>Alumni Roster Verification</span>
-                </div>
-                <p className="text-[11px] text-slate-600 leading-relaxed">
-                  If your Roll Number is not pre-indexed in the college database, submitting this form will automatically flag your profile as "Pending Verification". College Administration will review and approve your GLB Verified Badge.
-                </p>
               </div>
             </div>
           )}
 
-          <div className="pt-3">
+          {/* Submit Button */}
+          <div className="pt-4">
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-glgold hover:bg-glgold-dark text-white font-bold py-3 rounded-xl text-sm transition shadow-lg flex items-center justify-center space-x-2 disabled:opacity-50"
+              className="w-full bg-[#7A1F24] hover:bg-[#5C171B] text-[#FFFFFF] font-semibold py-2.5 px-4 rounded-lg text-xs sm:text-sm transition flex items-center justify-center space-x-1.5 disabled:opacity-50 shadow-xs cursor-pointer"
             >
               {loading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
                 <>
-                  <UserPlus className="w-4 h-4" />
-                  <span>Activate {targetRole === USER_ROLES.STUDENT ? "Student" : "Alumni"} Account</span>
+                  <span>Complete Registration</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </>
               )}
             </button>
           </div>
         </form>
 
-        <div className="text-center text-xs text-slate-500 pt-2 border-t border-slate-100">
-          Already verified?{" "}
-          <Link to={`/login?portal=${targetRole}`} className="text-glblue-750 font-bold hover:underline">
-            Sign In with Roll Number
+        {/* Footer Link */}
+        <div className="pt-6 mt-6 border-t border-[#D9DDE3] flex items-center justify-between text-xs">
+          <div className="text-[#667085]">
+            Already have an account?{" "}
+            <Link to={`/login?role=${targetRole}`} className="text-[#7A1F24] font-semibold hover:underline">
+              Sign In
+            </Link>
+          </div>
+          <Link to="/" className="text-[#667085] hover:text-[#202124] flex items-center space-x-1 font-medium transition">
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Home</span>
           </Link>
         </div>
       </div>
     </div>
   );
 }
-

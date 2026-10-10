@@ -2,28 +2,49 @@ import React, { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
-import { USER_ROLES } from "../../lib/constants";
+import { USER_ROLES, COLLEGE_NAME } from "../../lib/constants";
 import Modal from "../../components/common/Modal";
 import { isSupabaseConfigured } from "../../lib/supabase";
-import { GraduationCap, Briefcase, ShieldCheck, Lock, ArrowRight, Loader2, KeyRound } from "lucide-react";
+import { 
+  GraduationCap, 
+  Briefcase, 
+  ShieldCheck, 
+  Lock, 
+  ArrowRight, 
+  Loader2, 
+  KeyRound,
+  Mail,
+  Users,
+  Network,
+  TrendingUp,
+  ArrowLeft
+} from "lucide-react";
 
 export default function LoginPage() {
   const [searchParams] = useSearchParams();
   const initialRole = searchParams.get("portal") || searchParams.get("role") || USER_ROLES.STUDENT;
 
   const [selectedRole, setSelectedRole] = useState(initialRole);
-  const [identifier, setIdentifier] = useState("");
+  const [email, setEmail] = useState("");
+  const [rollNumber, setRollNumber] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   // Forgot password modal
   const [forgotModalOpen, setForgotModalOpen] = useState(false);
-  const [forgotInput, setForgotInput] = useState("");
+  const [forgotEmail, setForgotEmail] = useState("");
   const [forgotLoading, setForgotLoading] = useState(false);
 
   const { login, resetPassword } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
+
+  function handleRoleChange(newRole) {
+    setSelectedRole(newRole);
+    setEmail("");
+    setRollNumber("");
+    setPassword("");
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -31,16 +52,34 @@ export default function LoginPage() {
       addToast("Supabase is not configured. Please contact the administrator.", "error");
       return;
     }
+
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail.endsWith("@glbitm.ac.in") || cleanEmail.length <= "@glbitm.ac.in".length) {
+      addToast("Please use your official @glbitm.ac.in college email.", "error");
+      return;
+    }
+
+    if (selectedRole !== USER_ROLES.ADMIN && !rollNumber.trim()) {
+      addToast("The college email and roll number do not match our records.", "error");
+      return;
+    }
+
     setLoading(true);
     try {
-      await login({ identifier, password, role: selectedRole });
+      await login({
+        email: cleanEmail,
+        rollNumber: rollNumber.trim(),
+        password,
+        role: selectedRole,
+      });
+
       addToast(`Welcome back to the GLB ${selectedRole.toUpperCase()} Portal!`, "success");
-      if (selectedRole === USER_ROLES.STUDENT) navigate("/student/dashboard");
-      else if (selectedRole === USER_ROLES.ALUMNI) navigate("/alumni/dashboard");
-      else if (selectedRole === USER_ROLES.ADMIN) navigate("/admin/dashboard");
+      if (selectedRole === USER_ROLES.STUDENT) navigate("/student");
+      else if (selectedRole === USER_ROLES.ALUMNI) navigate("/alumni");
+      else if (selectedRole === USER_ROLES.ADMIN) navigate("/admin");
       else navigate("/");
     } catch (err) {
-      addToast(err.message || "Invalid credentials. Please verify your Roll Number/Password.", "error");
+      addToast(err.message || "Invalid login credentials.", "error");
     } finally {
       setLoading(false);
     }
@@ -48,13 +87,20 @@ export default function LoginPage() {
 
   async function handleForgotSubmit(e) {
     e.preventDefault();
-    if (!forgotInput.trim()) return;
+    if (!forgotEmail.trim()) return;
+
+    const cleanEmail = forgotEmail.trim().toLowerCase();
+    if (!cleanEmail.endsWith("@glbitm.ac.in") || cleanEmail.length <= "@glbitm.ac.in".length) {
+      addToast("Please use your official @glbitm.ac.in college email.", "error");
+      return;
+    }
+
     setForgotLoading(true);
     try {
-      await resetPassword(forgotInput);
-      addToast(`Password recovery link has been dispatched for ${forgotInput}.`, "success");
+      await resetPassword(cleanEmail);
+      addToast(`Password recovery link has been dispatched to ${cleanEmail}.`, "success");
       setForgotModalOpen(false);
-      setForgotInput("");
+      setForgotEmail("");
     } catch (err) {
       addToast(err.message || "Failed to process password recovery.", "error");
     } finally {
@@ -62,168 +108,294 @@ export default function LoginPage() {
     }
   }
 
+  const roleMeta = {
+    [USER_ROLES.STUDENT]: {
+      title: "Student Login",
+      subtitle: "Welcome back! Please login with your college credentials.",
+      registerText: "Register as Student",
+      registerLink: "/register?role=student",
+      rollLabel: "College Roll Number",
+      rollPlaceholder: "e.g. 2300001",
+      emailPlaceholder: "student@glbitm.ac.in"
+    },
+    [USER_ROLES.ALUMNI]: {
+      title: "Alumni Login",
+      subtitle: "Welcome back to GL Bajaj! Please login with your registered credentials.",
+      registerText: "Register as Alumni",
+      registerLink: "/register?role=alumni",
+      rollLabel: "Roll Number or Alumni ID",
+      rollPlaceholder: "e.g. 2200001",
+      emailPlaceholder: "alumni@glbitm.ac.in"
+    },
+    [USER_ROLES.ADMIN]: {
+      title: "Admin Login",
+      subtitle: "Authorized GL Bajaj administration access.",
+      registerText: null,
+      registerLink: null,
+      rollLabel: null,
+      rollPlaceholder: null,
+      emailPlaceholder: "admin@glbitm.ac.in"
+    }
+  }[selectedRole] || {
+    title: "Portal Login",
+    subtitle: "Please login with your official credentials.",
+    registerText: "Register account",
+    registerLink: "/register",
+    rollLabel: "Roll Number",
+    rollPlaceholder: "e.g. 2300001",
+    emailPlaceholder: "user@glbitm.ac.in"
+  };
+
   return (
-    <div className="min-h-[88vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[#0C1929] relative overflow-hidden">
-      <div className="absolute inset-0 z-0 opacity-20">
-        <img
-          src="/assets/hero-exact.png"
-          alt="GL Bajaj Campus"
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            e.currentTarget.onerror = null;
-            e.currentTarget.src = "/assets/hero-bg.png";
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0C1929]/90 via-[#0C1929]/70 to-[#0C1929]"></div>
-      </div>
-
-      <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl border border-[#E7E1D4] p-8 space-y-6 relative z-10">
-        <div className="text-center space-y-1.5">
-          <div className="w-12 h-12 bg-[#0C1929] text-[#E5C378] rounded-2xl flex items-center justify-center font-serif font-black text-xl mx-auto shadow-md">
-            GL
-          </div>
-          <h2 className="text-2xl font-black text-[#0C1929] tracking-tight font-serif">GLB Alumni Connect</h2>
-          <p className="text-xs text-[#8C7138] font-bold uppercase tracking-widest">
-            "Once GLB, Always GLB."
-          </p>
-        </div>
-
-        {/* Separate Portal Entry Tabs */}
-        <div className="grid grid-cols-3 gap-1.5 p-1.5 bg-[#FAF8F5] border border-[#E7E1D4] rounded-2xl">
-          <button
-            type="button"
-            onClick={() => { setSelectedRole(USER_ROLES.STUDENT); setIdentifier(""); }}
-            className={`py-2 text-xs font-bold rounded-xl flex flex-col items-center justify-center gap-1 transition ${
-              selectedRole === USER_ROLES.STUDENT
-                ? "bg-white text-[#8C7138] shadow-xs border border-[#E7E1D4]"
-                : "text-[#718096] hover:text-[#0C1929]"
-            }`}
-          >
-            <GraduationCap className="w-4 h-4" />
-            <span>Student</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => { setSelectedRole(USER_ROLES.ALUMNI); setIdentifier(""); }}
-            className={`py-2 text-xs font-bold rounded-xl flex flex-col items-center justify-center gap-1 transition ${
-              selectedRole === USER_ROLES.ALUMNI
-                ? "bg-white text-[#0C1929] shadow-xs border border-[#E7E1D4]"
-                : "text-[#718096] hover:text-[#0C1929]"
-            }`}
-          >
-            <Briefcase className="w-4 h-4" />
-            <span>Alumni</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => { setSelectedRole(USER_ROLES.ADMIN); setIdentifier(""); }}
-            className={`py-2 text-xs font-bold rounded-xl flex flex-col items-center justify-center gap-1 transition ${
-              selectedRole === USER_ROLES.ADMIN
-                ? "bg-white text-[#0C1929] shadow-xs border border-[#E7E1D4]"
-                : "text-[#718096] hover:text-[#0C1929]"
-            }`}
-          >
-            <ShieldCheck className="w-4 h-4" />
-            <span>Admin</span>
-          </button>
-        </div>
-
-        {/* Unconfigured Warning */}
-        {!isSupabaseConfigured && (
-          <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl text-amber-900 text-xs font-semibold text-center">
-            Supabase is not configured. Please contact the administrator.
-          </div>
-        )}
-
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="min-h-screen bg-[#F7F3EA] flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      {/* Container - Two Column Academic Card */}
+      <div className="w-full max-w-5xl bg-[#FFFFFF] border border-[#D9DDE3] rounded-xl shadow-sm overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[640px]">
+        
+        {/* LEFT COLUMN: Academic Identity & Visual Context */}
+        <div className="lg:col-span-5 bg-[#F7F3EA] p-8 sm:p-10 border-b lg:border-b-0 lg:border-r border-[#D9DDE3] flex flex-col justify-between">
           <div>
-            <label className="block text-xs font-bold text-[#2B3442] uppercase tracking-wide mb-1">
-              {selectedRole === USER_ROLES.ADMIN
-                ? "College Admin Email / ID"
-                : "College Roll Number / Email"}
-            </label>
-            <div className="relative">
-              <KeyRound className="w-4 h-4 text-[#A0AEC0] absolute left-3.5 top-3" />
-              <input
-                type="text"
-                required
-                value={identifier}
-                onChange={(e) => setIdentifier(e.target.value)}
-                placeholder={
-                  selectedRole === USER_ROLES.ADMIN
-                    ? "admin@glbajaj.org"
-                    : selectedRole === USER_ROLES.STUDENT
-                    ? "e.g. 230192010055"
-                    : "e.g. 220192010001"
-                }
-                className="w-full bg-[#FAF8F5] border border-[#E7E1D4] rounded-xl pl-10 pr-4 py-2.5 text-sm font-mono text-[#0C1929] focus:outline-none focus:ring-2 focus:ring-[#C29B38]"
+            {/* College Crest & Name */}
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="w-11 h-11 bg-[#7A1F24] text-white rounded-lg flex items-center justify-center font-bold text-lg shadow-sm shrink-0">
+                GL
+              </div>
+              <div>
+                <h1 className="font-extrabold text-[#7A1F24] text-base leading-tight tracking-tight">
+                  GL BAJAJ
+                </h1>
+                <p className="text-[11px] font-semibold text-[#202124] tracking-wide">
+                  Alumni Connect
+                </p>
+              </div>
+            </div>
+
+            {/* Academic Motto */}
+            <div className="inline-block px-3 py-1 bg-[#FFFFFF] border border-[#D9DDE3] rounded-md text-[11px] font-bold text-[#B08A3E] tracking-widest uppercase mb-4">
+              "Once GLB, Always GLB."
+            </div>
+
+            <p className="text-sm text-[#202124] leading-relaxed mb-6 font-medium">
+              A platform to connect, mentor and grow together.
+            </p>
+
+            {/* Real Campus Image */}
+            <div className="rounded-lg border border-[#D9DDE3] overflow-hidden mb-6 bg-[#FFFFFF]">
+              <img
+                src="/assets/hero-exact.png"
+                alt="GL Bajaj Campus"
+                className="w-full h-36 object-cover"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/assets/hero-bg.png";
+                }}
               />
             </div>
-            {selectedRole !== USER_ROLES.ADMIN && (
-              <p className="text-[11px] text-[#718096] mt-1">
-                Enter your permanent GL Bajaj Roll Number or registered email.
-              </p>
-            )}
+
+            {/* Institutional Highlights with Simple Line Icons */}
+            <div className="space-y-3">
+              <div className="flex items-center space-x-3 text-xs text-[#202124]">
+                <div className="w-7 h-7 rounded-md bg-[#FFFFFF] border border-[#D9DDE3] flex items-center justify-center text-[#7A1F24] shrink-0">
+                  <Users className="w-3.5 h-3.5" />
+                </div>
+                <span>One-on-one alumni mentorship & advice</span>
+              </div>
+              <div className="flex items-center space-x-3 text-xs text-[#202124]">
+                <div className="w-7 h-7 rounded-md bg-[#FFFFFF] border border-[#D9DDE3] flex items-center justify-center text-[#7A1F24] shrink-0">
+                  <Network className="w-3.5 h-3.5" />
+                </div>
+                <span>Verified GL Bajaj graduate directory</span>
+              </div>
+              <div className="flex items-center space-x-3 text-xs text-[#202124]">
+                <div className="w-7 h-7 rounded-md bg-[#FFFFFF] border border-[#D9DDE3] flex items-center justify-center text-[#7A1F24] shrink-0">
+                  <TrendingUp className="w-3.5 h-3.5" />
+                </div>
+                <span>Career opportunities & campus events</span>
+              </div>
+            </div>
           </div>
 
+          <div className="pt-6 mt-6 border-t border-[#D9DDE3] text-[11px] text-[#667085]">
+            {COLLEGE_NAME}
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: Institutional Login Form */}
+        <div className="lg:col-span-7 bg-[#FFFFFF] p-8 sm:p-12 flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between mb-1">
-              <label className="block text-xs font-bold text-[#2B3442] uppercase tracking-wide">
-                Password
-              </label>
+            {/* Role Selector Tabs */}
+            <div className="grid grid-cols-3 gap-2 p-1 bg-[#F7F3EA] border border-[#D9DDE3] rounded-lg mb-8">
               <button
                 type="button"
-                onClick={() => setForgotModalOpen(true)}
-                className="text-[11px] font-semibold text-[#8C7138] hover:underline"
+                onClick={() => handleRoleChange(USER_ROLES.STUDENT)}
+                className={`py-2 text-xs font-semibold rounded-md flex items-center justify-center gap-1.5 transition ${
+                  selectedRole === USER_ROLES.STUDENT
+                    ? "bg-[#7A1F24] text-[#FFFFFF] shadow-sm"
+                    : "text-[#202124] hover:bg-[#FFFFFF]/70"
+                }`}
               >
-                Forgot Password?
+                <GraduationCap className="w-3.5 h-3.5" />
+                <span>Student</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleRoleChange(USER_ROLES.ALUMNI)}
+                className={`py-2 text-xs font-semibold rounded-md flex items-center justify-center gap-1.5 transition ${
+                  selectedRole === USER_ROLES.ALUMNI
+                    ? "bg-[#7A1F24] text-[#FFFFFF] shadow-sm"
+                    : "text-[#202124] hover:bg-[#FFFFFF]/70"
+                }`}
+              >
+                <Briefcase className="w-3.5 h-3.5" />
+                <span>Alumni</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleRoleChange(USER_ROLES.ADMIN)}
+                className={`py-2 text-xs font-semibold rounded-md flex items-center justify-center gap-1.5 transition ${
+                  selectedRole === USER_ROLES.ADMIN
+                    ? "bg-[#7A1F24] text-[#FFFFFF] shadow-sm"
+                    : "text-[#202124] hover:bg-[#FFFFFF]/70"
+                }`}
+              >
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>Admin</span>
               </button>
             </div>
-            <div className="relative">
-              <Lock className="w-4 h-4 text-[#A0AEC0] absolute left-3.5 top-3" />
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password"
-                className="w-full bg-[#FAF8F5] border border-[#E7E1D4] rounded-xl pl-10 pr-4 py-2.5 text-sm text-[#0C1929] focus:outline-none focus:ring-2 focus:ring-[#C29B38]"
-              />
+
+            {/* Unconfigured Alert */}
+            {!isSupabaseConfigured && (
+              <div className="p-3 bg-[#F7F3EA] border border-[#B08A3E] rounded-lg text-[#202124] text-xs font-medium mb-6">
+                Supabase is not configured. Please contact the administrator.
+              </div>
+            )}
+
+            {/* Card Header */}
+            <div className="mb-6">
+              <h2 className="text-xl font-bold text-[#202124] tracking-tight">
+                {roleMeta.title}
+              </h2>
+              <p className="text-xs text-[#667085] mt-1">
+                {roleMeta.subtitle}
+              </p>
             </div>
+
+            {/* The Login Form */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* College Email Field */}
+              <div>
+                <label className="block text-xs font-semibold text-[#202124] mb-1">
+                  {selectedRole === USER_ROLES.ADMIN ? "Official Admin Email" : "College Email"} <span className="text-[#B42318]">*</span>
+                </label>
+                <div className="relative">
+                  <Mail className="w-4 h-4 text-[#667085] absolute left-3 top-2.5" />
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder={roleMeta.emailPlaceholder}
+                    className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg pl-9 pr-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                  />
+                </div>
+                <p className="text-[11px] text-[#667085] mt-1">
+                  Use your official @glbitm.ac.in email address.
+                </p>
+              </div>
+
+              {/* Roll Number Field (Student and Alumni only) */}
+              {selectedRole !== USER_ROLES.ADMIN && (
+                <div>
+                  <label className="block text-xs font-semibold text-[#202124] mb-1">
+                    {roleMeta.rollLabel} <span className="text-[#B42318]">*</span>
+                  </label>
+                  <div className="relative">
+                    <KeyRound className="w-4 h-4 text-[#667085] absolute left-3 top-2.5" />
+                    <input
+                      type="text"
+                      required
+                      value={rollNumber}
+                      onChange={(e) => setRollNumber(e.target.value)}
+                      placeholder={roleMeta.rollPlaceholder}
+                      className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg pl-9 pr-3 py-2 text-xs sm:text-sm font-mono text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Password Field */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-semibold text-[#202124]">
+                    Password <span className="text-[#B42318]">*</span>
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setForgotModalOpen(true)}
+                    className="text-[11px] font-semibold text-[#7A1F24] hover:underline"
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-[#667085] absolute left-3 top-2.5" />
+                  <input
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg pl-9 pr-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                  />
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-[#7A1F24] hover:bg-[#5C171B] text-[#FFFFFF] font-semibold py-2.5 px-4 rounded-lg text-xs sm:text-sm transition flex items-center justify-center space-x-1.5 disabled:opacity-50 mt-2 shadow-xs cursor-pointer"
+              >
+                {loading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <>
+                    <span>Login</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </>
+                )}
+              </button>
+            </form>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-[#0C1929] hover:bg-[#1A2C42] text-[#FAF8F5] font-bold py-3 rounded-xl text-sm transition shadow-md flex items-center justify-center space-x-2 disabled:opacity-50"
-          >
-            {loading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
+          {/* Bottom Secondary Links */}
+          <div className="pt-6 mt-6 border-t border-[#D9DDE3] flex flex-col sm:flex-row items-center justify-between text-xs gap-3">
+            {roleMeta.registerText ? (
+              <div className="text-[#667085]">
+                Don't have an account?{" "}
+                <Link
+                  to={roleMeta.registerLink}
+                  className="text-[#7A1F24] font-semibold hover:underline"
+                >
+                  {roleMeta.registerText}
+                </Link>
+              </div>
             ) : (
-              <>
-                <span>Sign In to {selectedRole.toUpperCase()} Portal</span>
-                <ArrowRight className="w-4 h-4" />
-              </>
+              <div className="text-[#667085] text-[11px]">
+                Authorized GL Bajaj administration access.
+              </div>
             )}
-          </button>
-        </form>
 
-        {/* Footer registration links */}
-        {selectedRole !== USER_ROLES.ADMIN ? (
-          <div className="text-center text-xs text-[#718096] pt-1 border-t border-[#E7E1D4]">
-            New member?{" "}
-            <Link to={`/register?role=${selectedRole}`} className="text-[#8C7138] font-bold hover:underline">
-              Register with your Roll Number
+            <Link
+              to="/"
+              className="text-[#667085] hover:text-[#202124] flex items-center space-x-1 font-medium transition"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back to Home</span>
             </Link>
           </div>
-        ) : (
-          <div className="text-center text-[11px] text-[#718096] bg-[#FAF8F5] p-2.5 rounded-xl border border-[#E7E1D4]">
-            Public admin registration is restricted. Admin accounts are provisioned directly by the college.
-          </div>
-        )}
+        </div>
       </div>
 
       {/* Forgot Password Modal */}
@@ -234,36 +406,39 @@ export default function LoginPage() {
         maxWidth="max-w-md"
       >
         <form onSubmit={handleForgotSubmit} className="space-y-4">
-          <p className="text-xs text-[#718096]">
-            Enter your College Roll Number or registered email address. We will verify your authorized profile and send recovery instructions.
+          <p className="text-xs text-[#667085]">
+            Enter your official GL Bajaj college email address. A recovery link will be sent to your inbox.
           </p>
           <div>
-            <label className="block text-xs font-semibold text-[#0C1929] uppercase mb-1">
-              Roll Number or Registered Email
+            <label className="block text-xs font-semibold text-[#202124] mb-1">
+              Official College Email
             </label>
             <input
-              type="text"
+              type="email"
               required
-              value={forgotInput}
-              onChange={(e) => setForgotInput(e.target.value)}
-              placeholder="e.g. 230192010055 or student@glbajaj.org"
-              className="w-full bg-[#FAF8F5] border border-[#E7E1D4] rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#C29B38] font-mono text-[#0C1929]"
+              value={forgotEmail}
+              onChange={(e) => setForgotEmail(e.target.value)}
+              placeholder="e.g. adarsh@glbitm.ac.in"
+              className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
             />
+            <p className="text-[11px] text-[#667085] mt-1">
+              Use your official @glbitm.ac.in email address.
+            </p>
           </div>
           <div className="flex justify-end space-x-2 pt-2">
             <button
               type="button"
               onClick={() => setForgotModalOpen(false)}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-[#718096] hover:bg-[#FAF8F5]"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold text-[#667085] hover:bg-[#F7F3EA]"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={forgotLoading}
-              className="bg-[#C29B38] hover:bg-[#B57C34] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1"
+              className="bg-[#7A1F24] hover:bg-[#5C171B] text-white text-xs font-semibold px-4 py-2 rounded-lg transition"
             >
-              {forgotLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Send Recovery Link</span>}
+              {forgotLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <span>Send Recovery Link</span>}
             </button>
           </div>
         </form>

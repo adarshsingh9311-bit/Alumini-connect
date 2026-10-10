@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import { supabase, isSupabaseConfigured } from "../../lib/supabase";
@@ -120,22 +120,22 @@ export default function StudentMentorshipPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 font-sans">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0C1929] font-serif">Mentorship Hub & Messaging</h1>
-        <p className="text-xs sm:text-sm text-[#718096] mt-1">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#202124] font-serif">Mentorship Hub & Messaging</h1>
+        <p className="text-xs sm:text-sm text-[#667085] mt-1">
           Track your mentorship requests, review alumni feedback, and chat directly with connected mentors.
         </p>
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center space-x-2 border-b border-[#E7E1D4] pb-3">
+      <div className="flex items-center space-x-2 border-b border-[#D9DDE3] pb-3">
         {["all", "accepted", "pending", "rejected"].map((tab) => (
           <button
             key={tab}
             onClick={() => setStatusFilter(tab)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold capitalize transition ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold capitalize transition ${
               statusFilter === tab
-                ? "bg-[#0C1929] text-white shadow-xs"
-                : "bg-[#FAF8F5] text-[#718096] hover:text-[#0C1929] border border-[#E7E1D4]"
+                ? "bg-[#7A1F24] text-white shadow-2xs"
+                : "bg-[#F7F3EA] text-[#667085] hover:text-[#202124] border border-[#D9DDE3]"
             }`}
           >
             {tab}
@@ -148,13 +148,13 @@ export default function StudentMentorshipPage() {
         
         {/* Left Column: Requests List (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
-          <h3 className="font-bold text-sm text-[#0C1929] uppercase tracking-wide">
+          <h3 className="font-bold text-sm text-[#202124] uppercase tracking-wide font-serif">
             Your Mentorship Connections ({filteredRequests.length})
           </h3>
 
           {loading ? (
-            <div className="p-12 text-center text-slate-400">
-              <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#C29B38] mb-2" />
+            <div className="p-12 text-center text-[#667085]">
+              <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#7A1F24] mb-2" />
               <p className="text-xs">Loading mentorship requests...</p>
             </div>
           ) : filteredRequests.length === 0 ? (
@@ -178,24 +178,24 @@ export default function StudentMentorshipPage() {
                     onClick={() => {
                       if (isAccepted) setActiveChatMentorship(req);
                     }}
-                    className={`p-4 rounded-2xl border transition cursor-pointer ${
+                    className={`p-4 rounded-xl border transition cursor-pointer ${
                       isSelected
-                        ? "border-[#C29B38] bg-amber-50/40 shadow-xs"
-                        : "border-[#E7E1D4] bg-white hover:border-[#C29B38]/50"
+                        ? "border-[#7A1F24] bg-[#F7F3EA]/70 shadow-2xs"
+                        : "border-[#D9DDE3] bg-white hover:border-[#7A1F24]/50"
                     }`}
                   >
                     <div className="flex items-start justify-between">
                       <div>
-                        <h4 className="font-bold text-[#0C1929] text-sm">{req.alumni_name}</h4>
-                        <p className="text-xs font-semibold text-[#8C7138]">{req.topic}</p>
+                        <h4 className="font-bold text-[#202124] text-sm font-serif">{req.alumni_name}</h4>
+                        <p className="text-xs font-semibold text-[#7A1F24]">{req.topic}</p>
                       </div>
                       <span
                         className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase flex items-center gap-1 ${
                           isAccepted
-                            ? "bg-emerald-100 text-emerald-800"
+                            ? "bg-[#2E6B4A]/10 text-[#2E6B4A]"
                             : isPending
-                            ? "bg-amber-100 text-amber-800"
-                            : "bg-red-100 text-red-800"
+                            ? "bg-[#A66A00]/10 text-[#A66A00]"
+                            : "bg-[#B42318]/10 text-[#B42318]"
                         }`}
                       >
                         {isAccepted && <CheckCircle2 className="w-3 h-3" />}
@@ -205,20 +205,20 @@ export default function StudentMentorshipPage() {
                       </span>
                     </div>
 
-                    <p className="text-xs text-slate-600 bg-[#FAF8F5] p-2.5 rounded-xl mt-3 line-clamp-2 italic border border-[#E7E1D4]">
+                    <p className="text-xs text-[#202124] bg-[#F7F3EA] p-2.5 rounded-lg mt-3 line-clamp-2 italic border border-[#D9DDE3]">
                       "{req.message}"
                     </p>
 
                     {req.response_note && (
-                      <div className="mt-2 text-xs bg-emerald-50 text-emerald-900 p-2 rounded-lg border border-emerald-200 font-medium">
+                      <div className="mt-2 text-xs bg-[#2E6B4A]/10 text-[#2E6B4A] p-2 rounded-lg border border-[#2E6B4A]/20 font-medium">
                         <strong>Mentor Response:</strong> {req.response_note}
                       </div>
                     )}
 
-                    <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+                    <div className="mt-3 pt-2 border-t border-[#D9DDE3] flex items-center justify-between text-[11px] text-[#667085]">
                       <span>{req.created_at ? new Date(req.created_at).toLocaleDateString() : ""}</span>
                       {isAccepted && (
-                        <span className="text-[#8C7138] font-bold flex items-center gap-1">
+                        <span className="text-[#7A1F24] font-bold flex items-center gap-1">
                           <MessageCircle className="w-3.5 h-3.5" />
                           <span>Click to Chat</span>
                         </span>

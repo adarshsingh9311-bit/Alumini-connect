@@ -42,34 +42,34 @@ export default function BroadcastModal({ isOpen, onClose, onSendBroadcast }) {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Broadcast Wishes & Direct Messages to Alumni" maxWidth="max-w-xl">
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 font-sans">
         {/* Template shortcuts */}
         <div className="flex items-center space-x-2">
-          <span className="text-[11px] font-bold text-slate-500 uppercase">Quick Templates:</span>
+          <span className="text-[11px] font-bold text-[#667085] uppercase">Quick Templates:</span>
           <button
             type="button"
             onClick={() => handleTemplateSelect("wishes")}
-            className="text-[11px] bg-amber-50 text-glgold hover:bg-amber-100 px-2.5 py-1 rounded-lg font-bold border border-glgold/30"
+            className="text-[11px] bg-[#F7F3EA] text-[#7A1F24] hover:bg-[#D9DDE3]/50 px-2.5 py-1 rounded-lg font-bold border border-[#D9DDE3]"
           >
             Festive Wishes
           </button>
           <button
             type="button"
             onClick={() => handleTemplateSelect("invitation")}
-            className="text-[11px] bg-teal-50 text-glblue-750 hover:bg-teal-100 px-2.5 py-1 rounded-lg font-bold border border-teal-200"
+            className="text-[11px] bg-[#F7F3EA] text-[#7A1F24] hover:bg-[#D9DDE3]/50 px-2.5 py-1 rounded-lg font-bold border border-[#D9DDE3]"
           >
             Alumni Keynote Invite
           </button>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+          <label className="block text-xs font-semibold text-[#202124] uppercase mb-1">
             Target Audience Batch
           </label>
           <select
             value={targetBatch}
             onChange={(e) => setTargetBatch(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-glblue-750"
+            className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
           >
             <option value="all">All Alumni Batches (2005 - 2026)</option>
             <option value="2024">Batch of 2024</option>
@@ -81,7 +81,7 @@ export default function BroadcastModal({ isOpen, onClose, onSendBroadcast }) {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+          <label className="block text-xs font-semibold text-[#202124] uppercase mb-1">
             Subject / Greeting Header *
           </label>
           <input
@@ -90,12 +90,12 @@ export default function BroadcastModal({ isOpen, onClose, onSendBroadcast }) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Heartiest Congratulations on Foundation Day!"
-            className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-glblue-750"
+            className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+          <label className="block text-xs font-semibold text-[#202124] uppercase mb-1">
             Personalized Message Content *
           </label>
           <textarea
@@ -104,7 +104,7 @@ export default function BroadcastModal({ isOpen, onClose, onSendBroadcast }) {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Write your wishes or message from the college administration..."
-            className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-glblue-750 leading-relaxed"
+            className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg p-3 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24] leading-relaxed"
           ></textarea>
         </div>
 
@@ -112,14 +112,14 @@ export default function BroadcastModal({ isOpen, onClose, onSendBroadcast }) {
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100"
+            className="px-4 py-2 rounded-lg text-xs font-semibold text-[#667085] hover:bg-black/5"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="bg-glgold hover:bg-glgold-dark text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5"
+            className="bg-[#7A1F24] hover:bg-[#5C171B] text-white text-xs font-bold px-5 py-2.5 rounded-lg transition shadow-2xs flex items-center space-x-1.5"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
             <span>Broadcast to Alumni</span>

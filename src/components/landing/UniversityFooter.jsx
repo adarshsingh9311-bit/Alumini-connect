@@ -42,7 +42,7 @@ export default function UniversityFooter({ onOpenAuthModal }) {
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="w-3.5 h-3.5 text-[#C29B38] shrink-0" />
-                <span>alumni@glbajaj.org</span>
+                <span>alumni@glbitm.ac.in</span>
               </div>
             </div>
           </div>

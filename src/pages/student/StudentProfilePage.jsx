@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import { supabase, isSupabaseConfigured } from "../../lib/supabase";
@@ -81,20 +81,20 @@ export default function StudentProfilePage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 font-sans">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0C1929] font-serif">Student Scholar Profile</h1>
-        <p className="text-xs sm:text-sm text-[#718096] mt-1">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#202124] font-serif">Student Scholar Profile</h1>
+        <p className="text-xs sm:text-sm text-[#667085] mt-1">
           Your verified academic record and placement interests visible to GL Bajaj alumni mentors.
         </p>
       </div>
 
-      <form onSubmit={handleSave} className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E7E1D4] shadow-xs space-y-6">
-        <div className="flex items-center space-x-4 pb-6 border-b border-slate-100">
-          <div className="w-16 h-16 rounded-2xl bg-[#0C1929] text-[#E5C378] font-black text-xl flex items-center justify-center shadow-xs font-serif">
+      <form onSubmit={handleSave} className="bg-white rounded-xl p-6 sm:p-8 border border-[#D9DDE3] shadow-xs space-y-6">
+        <div className="flex items-center space-x-4 pb-6 border-b border-[#D9DDE3]">
+          <div className="w-16 h-16 rounded-xl bg-[#7A1F24] text-white font-black text-xl flex items-center justify-center font-serif shadow-2xs">
             {(formData.full_name || "S")[0]}
           </div>
           <div>
-            <h3 className="font-extrabold text-[#0C1929] text-lg font-serif">{formData.full_name || "Scholar"}</h3>
-            <p className="text-xs text-[#8C7138] font-mono font-bold">
+            <h3 className="font-bold text-[#202124] text-lg font-serif">{formData.full_name || "Scholar"}</h3>
+            <p className="text-xs text-[#7A1F24] font-mono font-bold">
               {formData.roll_number ? `Roll No: ${formData.roll_number} • ` : ""}{formData.branch} (Batch {formData.batch_year})
             </p>
           </div>
@@ -102,78 +102,78 @@ export default function StudentProfilePage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Full Name</label>
+            <label className="block text-xs font-bold text-[#202124] uppercase mb-1">Full Name</label>
             <input
               type="text"
               required
               name="full_name"
               value={formData.full_name}
               onChange={handleChange}
-              className="w-full bg-[#FAF8F5] border border-[#E7E1D4] rounded-xl px-4 py-2.5 text-xs sm:text-sm text-[#0C1929] focus:outline-none focus:ring-2 focus:ring-[#C29B38]"
+              className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address</label>
+            <label className="block text-xs font-bold text-[#202124] uppercase mb-1">Email Address</label>
             <input
               type="email"
               disabled
               value={formData.email}
-              className="w-full bg-slate-100 border border-[#E7E1D4] rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-500 cursor-not-allowed"
+              className="w-full bg-[#F7F3EA] border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#667085] cursor-not-allowed"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">College Roll Number</label>
+            <label className="block text-xs font-bold text-[#202124] uppercase mb-1">College Roll Number</label>
             <input
               type="text"
               disabled
               value={formData.roll_number}
-              className="w-full bg-slate-100 border border-[#E7E1D4] rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-500 font-mono cursor-not-allowed"
+              className="w-full bg-[#F7F3EA] border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#667085] font-mono cursor-not-allowed"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Graduation Batch Year</label>
+            <label className="block text-xs font-bold text-[#202124] uppercase mb-1">Graduation Batch Year</label>
             <input
               type="text"
               name="batch_year"
               value={formData.batch_year}
               onChange={handleChange}
-              className="w-full bg-[#FAF8F5] border border-[#E7E1D4] rounded-xl px-4 py-2.5 text-xs sm:text-sm text-[#0C1929] focus:outline-none focus:ring-2 focus:ring-[#C29B38]"
+              className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Technical Skills (comma separated)</label>
+          <label className="block text-xs font-bold text-[#202124] uppercase mb-1">Technical Skills (comma separated)</label>
           <input
             type="text"
             name="skills"
             value={formData.skills}
             onChange={handleChange}
             placeholder="e.g. Python, React, Data Structures, Machine Learning"
-            className="w-full bg-[#FAF8F5] border border-[#E7E1D4] rounded-xl px-4 py-2.5 text-xs sm:text-sm text-[#0C1929] focus:outline-none focus:ring-2 focus:ring-[#C29B38]"
+            className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Career & Mentorship Interests</label>
+          <label className="block text-xs font-bold text-[#202124] uppercase mb-1">Career & Mentorship Interests</label>
           <textarea
             rows={3}
             name="interests"
             value={formData.interests}
             onChange={handleChange}
             placeholder="What domains, companies or guidance are you seeking from alumni?"
-            className="w-full bg-[#FAF8F5] border border-[#E7E1D4] rounded-xl p-3 text-xs sm:text-sm text-[#0C1929] focus:outline-none focus:ring-2 focus:ring-[#C29B38]"
+            className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg p-3 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
           />
         </div>
 
-        <div className="flex justify-end pt-4 border-t border-slate-100">
+        <div className="flex justify-end pt-4 border-t border-[#D9DDE3]">
           <button
             type="submit"
             disabled={saving}
-            className="bg-[#0C1929] hover:bg-[#1A2C42] text-[#FAF8F5] font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl transition shadow-xs flex items-center space-x-1.5 disabled:opacity-50"
+            className="bg-[#7A1F24] hover:bg-[#5C171B] text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-lg transition shadow-2xs flex items-center space-x-1.5 disabled:opacity-50"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             <span>Save Profile Changes</span>

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import { supabase, isSupabaseConfigured } from "../../lib/supabase";
@@ -236,30 +236,30 @@ export default function ChatLayout({ currentUserRole }) {
                   onClick={() => { setActiveConversation(c); setError(null); }}
                   className={`p-4 flex items-start space-x-3 cursor-pointer transition ${
                     isSelected
-                      ? "bg-amber-50/70 border-l-4 border-[#C29B38]"
-                      : "hover:bg-slate-100/70 bg-white"
+                      ? "bg-[#F7F3EA] border-l-4 border-[#7A1F24]"
+                      : "hover:bg-[#F7F3EA]/50 bg-white"
                   }`}
                 >
                   <div className="relative shrink-0">
-                    <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#0C1929] to-[#1A2C42] text-[#E5C378] font-bold text-sm flex items-center justify-center shadow-xs">
+                    <div className="w-10 h-10 rounded-lg bg-[#7A1F24] text-white font-bold text-sm flex items-center justify-center font-serif shadow-2xs">
                       {c.partner_name ? c.partner_name[0] : "U"}
                     </div>
-                    <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white ring-1 ring-emerald-300"></span>
+                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-600 rounded-full border-2 border-white"></span>
                   </div>
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <h4 className="font-bold text-xs sm:text-sm text-slate-900 truncate">
+                      <h4 className="font-bold text-xs sm:text-sm text-[#202124] truncate">
                         {c.partner_name}
                       </h4>
-                      <span className="text-[10px] text-slate-400">
+                      <span className="text-[10px] text-[#667085]">
                         {c.created_at ? new Date(c.created_at).toLocaleDateString([], { month: "short", day: "numeric" }) : "Active"}
                       </span>
                     </div>
-                    <p className="text-xs text-[#8C7138] font-semibold truncate mt-0.5">
+                    <p className="text-xs text-[#7A1F24] font-semibold truncate mt-0.5">
                       {c.topic}
                     </p>
-                    <p className="text-[11px] text-slate-500 truncate mt-0.5">
+                    <p className="text-[11px] text-[#667085] truncate mt-0.5">
                       {currentUserRole === "student"
                         ? "GLB Alumni Mentor"
                         : "GLB Student Mentee"}
@@ -277,22 +277,22 @@ export default function ChatLayout({ currentUserRole }) {
         {activeConversation ? (
           <>
             {/* Chat Top Bar */}
-            <div className="p-4 border-b border-slate-200 bg-white flex items-center justify-between shadow-xs z-10">
+            <div className="p-4 border-b border-[#D9DDE3] bg-white flex items-center justify-between shadow-2xs z-10">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#0C1929] text-[#E5C378] font-bold text-sm flex items-center justify-center shadow-xs">
+                <div className="w-10 h-10 rounded-lg bg-[#7A1F24] text-white font-bold text-sm flex items-center justify-center font-serif shadow-2xs">
                   {activeConversation.partner_name ? activeConversation.partner_name[0] : "U"}
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-sm text-slate-900 leading-tight">
+                  <h3 className="font-bold text-sm text-[#202124] leading-tight font-serif">
                     {activeConversation.partner_name}
                   </h3>
-                  <div className="flex items-center space-x-2 text-[11px] text-slate-500 mt-0.5">
-                    <span className="font-medium text-[#8C7138]">
+                  <div className="flex items-center space-x-2 text-[11px] text-[#667085] mt-0.5">
+                    <span className="font-semibold text-[#7A1F24]">
                       {activeConversation.topic}
                     </span>
                     <span>•</span>
-                    <span className="inline-flex items-center text-emerald-600 font-semibold">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1 animate-pulse"></span>
+                    <span className="inline-flex items-center text-[#2E6B4A] font-semibold">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#2E6B4A] mr-1"></span>
                       Mentorship Active
                     </span>
                   </div>
@@ -301,14 +301,14 @@ export default function ChatLayout({ currentUserRole }) {
             </div>
 
             {/* Messages Scroll Area */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 bg-[#FAF8F5]/50">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 bg-[#F7F3EA]/30">
               {messages.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-center p-8 text-slate-400">
-                  <div className="w-12 h-12 rounded-2xl bg-white border border-[#E7E1D4] flex items-center justify-center text-[#8C7138] mb-3 shadow-xs">
+                <div className="h-full flex flex-col items-center justify-center text-center p-8 text-[#667085]">
+                  <div className="w-12 h-12 rounded-xl bg-white border border-[#D9DDE3] flex items-center justify-center text-[#7A1F24] mb-3 shadow-2xs">
                     <MessageSquare className="w-6 h-6" />
                   </div>
-                  <h4 className="font-bold text-slate-700 text-sm">No messages exchanged yet</h4>
-                  <p className="text-xs text-slate-500 max-w-sm mt-1">
+                  <h4 className="font-bold text-[#202124] text-sm">No messages exchanged yet</h4>
+                  <p className="text-xs text-[#667085] max-w-sm mt-1">
                     Begin the mentorship conversation by introducing yourself and discussing your guidance goals.
                   </p>
                 </div>
@@ -322,15 +322,15 @@ export default function ChatLayout({ currentUserRole }) {
                       className={`flex flex-col ${isMine ? "items-end" : "items-start"}`}
                     >
                       <div
-                        className={`max-w-[85%] sm:max-w-md rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed shadow-xs ${
+                        className={`max-w-[85%] sm:max-w-md rounded-xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed ${
                           isMine
-                            ? "bg-[#0C1929] text-[#FAF8F5] rounded-br-xs"
-                            : "bg-white text-slate-800 border border-[#E7E1D4] rounded-bl-xs"
+                            ? "bg-[#7A1F24] text-white rounded-br-xs"
+                            : "bg-white text-[#202124] border border-[#D9DDE3] rounded-bl-xs shadow-2xs"
                         }`}
                       >
                         {m.content}
                       </div>
-                      <div className="flex items-center space-x-1 text-[10px] text-slate-400 mt-1 px-1">
+                      <div className="flex items-center space-x-1 text-[10px] text-[#667085] mt-1 px-1">
                         <Clock className="w-3 h-3" />
                         <span>
                           {m.created_at ? new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "Just now"}
@@ -344,18 +344,18 @@ export default function ChatLayout({ currentUserRole }) {
             </div>
 
             {/* Chat Input Bar */}
-            <form onSubmit={handleSendMessage} className="p-3 sm:p-4 border-t border-slate-200 bg-white flex items-center space-x-2">
+            <form onSubmit={handleSendMessage} className="p-3 sm:p-4 border-t border-[#D9DDE3] bg-white flex items-center space-x-2">
               <input
                 type="text"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="Type your message..."
-                className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0C1929] focus:bg-white transition"
+                className="flex-1 bg-[#F7F3EA]/40 border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24] transition"
               />
               <button
                 type="submit"
                 disabled={!inputText.trim()}
-                className="bg-[#0C1929] hover:bg-[#1A2C42] text-[#FAF8F5] p-2.5 sm:px-4 sm:py-2.5 rounded-xl font-bold text-xs flex items-center space-x-1.5 transition disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
+                className="bg-[#7A1F24] hover:bg-[#5C171B] text-white p-2.5 sm:px-4 sm:py-2.5 rounded-lg font-bold text-xs flex items-center space-x-1.5 transition disabled:opacity-40 disabled:cursor-not-allowed shadow-2xs"
               >
                 <Send className="w-4 h-4" />
                 <span className="hidden sm:inline">Send</span>
@@ -363,7 +363,7 @@ export default function ChatLayout({ currentUserRole }) {
             </form>
           </>
         ) : (
-          <div className="h-full flex items-center justify-center p-8 bg-[#FAF8F5]/30">
+          <div className="h-full flex items-center justify-center p-8 bg-[#F7F3EA]/30">
             <EmptyState
               title="No Conversation Selected"
               message="Choose a mentorship connection from the list on the left to start chatting."

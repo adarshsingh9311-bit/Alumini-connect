@@ -298,7 +298,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
       });
 
       if (!emailVal && autoGenEmail && rollVal) {
-        emailVal = `${rollVal.toLowerCase()}@glbajaj.org`;
+        emailVal = `${rollVal.toLowerCase()}@glbitm.ac.in`;
       }
 
       if (rollVal) rollCounts[rollVal] = (rollCounts[rollVal] || 0) + 1;
@@ -322,7 +322,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
       
       let email = extracted.email || "";
       if (!email && autoGenEmail && rollNumber) {
-        email = `${rollNumber.toLowerCase()}@glbajaj.org`;
+        email = `${rollNumber.toLowerCase()}@glbitm.ac.in`;
       }
 
       const branch = extracted.branch || defaultBranch || "CSE";
@@ -692,7 +692,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
                 onChange={(e) => setAutoGenEmail(e.target.checked)}
                 className="rounded border-slate-300 text-glgold focus:ring-glgold"
               />
-              <span>Auto-generate college email (<code className="text-glblue-750">{`{roll}@glbajaj.org`}</code>) if absent</span>
+              <span>Auto-generate college email (<code className="text-glblue-750">{`{roll}@glbitm.ac.in`}</code>) if absent</span>
             </label>
           </div>
         </div>

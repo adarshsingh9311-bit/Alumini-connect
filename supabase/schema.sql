@@ -496,7 +496,16 @@ BEGIN
     user_name,
     user_role
   )
-  ON CONFLICT (id) DO NOTHING;
+  ON CONFLICT (id) DO UPDATE SET
+    role = EXCLUDED.role,
+    updated_at = NOW();
+
+  -- If registered as admin, automatically provision in admins table
+  IF user_role = 'admin' THEN
+    INSERT INTO public.admins (user_id, department, designation)
+    VALUES (NEW.id, 'Dean Alumni Relations & Central Administration', 'Chief Administrator')
+    ON CONFLICT (user_id) DO NOTHING;
+  END IF;
 
   RETURN NEW;
 END;
@@ -506,6 +515,31 @@ DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+
+-- Helper function to provision or promote an existing user to Admin
+CREATE OR REPLACE FUNCTION public.setup_admin_account(admin_email TEXT)
+RETURNS TEXT AS $$
+DECLARE
+  target_user_id UUID;
+BEGIN
+  SELECT id INTO target_user_id FROM auth.users WHERE LOWER(TRIM(email)) = LOWER(TRIM(admin_email));
+  IF target_user_id IS NULL THEN
+    RAISE EXCEPTION 'User with email % not found in auth.users. Please create the user first in Supabase Auth (Dashboard > Authentication > Users > Add User).', admin_email;
+  END IF;
+
+  -- 1. Ensure profile exists and has role = 'admin'
+  INSERT INTO public.profiles (id, email, full_name, role)
+  VALUES (target_user_id, LOWER(TRIM(admin_email)), SPLIT_PART(admin_email, '@', 1), 'admin')
+  ON CONFLICT (id) DO UPDATE SET role = 'admin', updated_at = NOW();
+
+  -- 2. Ensure record exists in admins table
+  INSERT INTO public.admins (user_id, department, designation)
+  VALUES (target_user_id, 'Dean Alumni Relations & Central Administration', 'Chief Administrator')
+  ON CONFLICT (user_id) DO NOTHING;
+
+  RETURN 'Admin account successfully configured for: ' || admin_email;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- ==============================================================================
 -- 18. ENABLE SUPABASE REALTIME REPLICATION
