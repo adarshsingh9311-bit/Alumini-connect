@@ -7,6 +7,7 @@ import AlumniCard from "../../components/student/AlumniCard";
 import AlumniProfileModal from "../../components/student/AlumniProfileModal";
 import MentorshipRequestModal from "../../components/student/MentorshipRequestModal";
 import EmptyState from "../../components/common/EmptyState";
+import DailyThoughtCard from "../../components/alumni/DailyThoughtCard";
 import { 
   Users, 
   MessageSquare, 
@@ -175,7 +176,10 @@ export default function StudentDashboard() {
         </div>
       </div>
 
-      {/* 2. My Mentorship Section & Recent Notices Grid */}
+      {/* 2. Daily GLB Thought */}
+      <DailyThoughtCard />
+
+      {/* 3. My Mentorship Section & Recent Notices Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* Left: My Mentorship Section */}

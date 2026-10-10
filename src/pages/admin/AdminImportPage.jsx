@@ -1,8 +1,8 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import SpreadsheetImporter from "../../components/admin/SpreadsheetImporter";
 import { supabase, isSupabaseConfigured } from "../../lib/supabase";
 import { useAuth } from "../../context/AuthContext";
-import { FileSpreadsheet, Clock, CheckCircle2, History, Loader2 } from "lucide-react";
+import { FileSpreadsheet, History, Loader2, CheckCircle2, AlertTriangle } from "lucide-react";
 
 export default function AdminImportPage() {
   const { user } = useAuth();
@@ -20,18 +20,18 @@ export default function AdminImportPage() {
         setLoading(true);
         const { data, error } = await supabase
           .from("import_history")
-          .select("*, profiles(full_name)")
+          .select("*")
           .order("created_at", { ascending: false });
 
         if (!error && data) {
           setHistory(data.map(h => ({
             id: h.id,
             filename: h.file_name,
-            imported_by: h.profiles?.full_name || "Admin Central Office",
-            total_rows: h.record_count,
-            imported_count: h.record_count,
-            error_count: 0,
-            status: "Completed Successfully",
+            file_type: h.file_type || "Roster",
+            total_rows: h.total_rows || 0,
+            successful_rows: h.successful_rows || 0,
+            failed_rows: h.failed_rows || 0,
+            status: h.status || "completed",
             created_at: h.created_at
           })));
         }
@@ -49,87 +49,101 @@ export default function AdminImportPage() {
     const newLog = {
       id: "imp-" + Date.now(),
       filename: result.filename,
-      imported_by: "Admin Central Office",
+      file_type: result.type,
       total_rows: result.total,
-      imported_count: result.valid,
-      error_count: result.invalid,
-      status: result.invalid === 0 ? "Completed Successfully" : "Completed with Conflicts",
+      successful_rows: result.valid,
+      failed_rows: result.invalid,
+      status: result.invalid === 0 ? "completed" : "completed_with_errors",
       created_at: new Date().toISOString()
     };
-    setHistory([newLog, ...history]);
-
-    if (isSupabaseConfigured && supabase) {
-      try {
-        await supabase.from("import_history").insert({
-          file_name: result.filename,
-          record_count: result.valid,
-          imported_by: user?.id || null
-        });
-      } catch (err) {
-        console.warn("Failed to record import history:", err);
-      }
-    }
+    setHistory(prev => [newLog, ...prev]);
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 font-sans">
+    <div className="max-w-7xl mx-auto space-y-6 font-sans">
+      
+      {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0C1929] font-serif">Spreadsheet Batch Data Engine</h1>
-        <p className="text-xs sm:text-sm text-[#718096] mt-1">
-          Import batches of students or alumni from Excel (.xlsx) and CSV files with duplicate detection, validation preview, and audit history.
+        <div className="flex items-center space-x-2 text-[#7A1F24] text-xs font-bold uppercase tracking-wider mb-1">
+          <FileSpreadsheet className="w-4 h-4 text-[#7A1F24]" />
+          <span>Central Administration • Record Enrollment</span>
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#202124] font-serif">
+          Student & Alumni Data Importer
+        </h1>
+        <p className="text-xs sm:text-sm text-[#667085] mt-1">
+          Download standardized CSV templates generated directly from the college database schema, validate records with duplicate detection, and import student/alumni rosters.
         </p>
       </div>
 
       {/* Spreadsheet Importer Component */}
       <SpreadsheetImporter onImportComplete={handleImportComplete} />
 
-      {/* Import History Table */}
-      <div className="bg-white rounded-3xl border border-[#E7E1D4] shadow-xs overflow-hidden">
-        <div className="px-6 py-4 border-b border-[#E7E1D4] flex justify-between items-center bg-[#FAF8F5]">
-          <h3 className="font-bold text-[#0C1929] text-sm flex items-center gap-2 font-serif">
-            <History className="w-4 h-4 text-[#C29B38]" />
-            <span>Spreadsheet Import History Audit Log</span>
-          </h3>
-          <span className="text-xs text-[#718096] font-medium">Recorded in Database</span>
+      {/* Import History Audit Log */}
+      <div className="bg-white rounded-lg border border-[#D9DDE3] shadow-xs overflow-hidden">
+        <div className="px-5 py-3.5 border-b border-[#D9DDE3] flex justify-between items-center bg-[#F7F3EA]">
+          <div className="flex items-center space-x-2">
+            <History className="w-4 h-4 text-[#7A1F24]" />
+            <h3 className="font-bold text-[#202124] text-xs sm:text-sm uppercase tracking-wide">
+              Import History & Audit Log
+            </h3>
+          </div>
+          <span className="text-xs text-[#667085] font-medium">Recorded in Database</span>
         </div>
 
         {loading ? (
-          <div className="p-8 text-center text-slate-400">
-            <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#C29B38] mb-2" />
-            <p className="text-xs">Loading import audit history...</p>
+          <div className="p-8 text-center text-[#667085]">
+            <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#7A1F24] mb-2" />
+            <p className="text-xs">Loading import history from database...</p>
           </div>
         ) : history.length === 0 ? (
-          <div className="p-8 text-center text-slate-400 text-xs">
-            No spreadsheet batch imports recorded yet. Upload a roster above to get started.
+          <div className="p-8 text-center text-[#667085] text-xs bg-[#F7F3EA]/30">
+            No batch imports recorded yet. Select a roster above to download the template and import records.
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse text-xs">
-              <thead className="bg-[#FAF8F5] text-slate-600 font-bold uppercase tracking-wider border-b border-[#E7E1D4]">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead className="bg-[#F7F3EA] text-[#667085] font-bold uppercase tracking-wider border-b border-[#D9DDE3]">
                 <tr>
-                  <th className="px-6 py-3.5">Filename</th>
-                  <th className="px-6 py-3.5">Imported By</th>
-                  <th className="px-6 py-3.5 text-center">Total Rows</th>
-                  <th className="px-6 py-3.5 text-center">Imported</th>
-                  <th className="px-6 py-3.5">Status</th>
-                  <th className="px-6 py-3.5">Date & Time</th>
+                  <th className="px-4 py-3">File Name</th>
+                  <th className="px-4 py-3">Roster Type</th>
+                  <th className="px-4 py-3 text-center">Total Rows</th>
+                  <th className="px-4 py-3 text-center">Imported</th>
+                  <th className="px-4 py-3 text-center">Rejected</th>
+                  <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3">Date & Time</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E7E1D4]">
+              <tbody className="divide-y divide-[#D9DDE3]">
                 {history.map((log) => (
-                  <tr key={log.id} className="hover:bg-[#FAF8F5]/60 transition">
-                    <td className="px-6 py-4 font-mono font-bold text-[#0C1929]">{log.filename}</td>
-                    <td className="px-6 py-4 text-slate-600">{log.imported_by}</td>
-                    <td className="px-6 py-4 text-center font-mono">{log.total_rows}</td>
-                    <td className="px-6 py-4 text-center font-mono font-bold text-emerald-700">{log.imported_count}</td>
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-emerald-100 text-emerald-800">
-                        <CheckCircle2 className="w-3 h-3" />
+                  <tr key={log.id} className="hover:bg-[#F7F3EA]/50 transition">
+                    <td className="px-4 py-3 font-mono font-bold text-[#202124]">{log.filename}</td>
+                    <td className="px-4 py-3 text-[#667085] uppercase font-semibold text-[11px]">
+                      {log.file_type}
+                    </td>
+                    <td className="px-4 py-3 text-center font-mono">{log.total_rows}</td>
+                    <td className="px-4 py-3 text-center font-mono font-bold text-[#2E6B4A]">
+                      {log.successful_rows}
+                    </td>
+                    <td className="px-4 py-3 text-center font-mono font-bold text-[#B42318]">
+                      {log.failed_rows || 0}
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded uppercase ${
+                        log.status === "completed"
+                          ? "bg-green-50 text-[#2E6B4A] border border-green-200"
+                          : "bg-amber-50 text-[#A66A00] border border-amber-200"
+                      }`}>
+                        {log.status === "completed" ? (
+                          <CheckCircle2 className="w-3 h-3" />
+                        ) : (
+                          <AlertTriangle className="w-3 h-3" />
+                        )}
                         <span>{log.status}</span>
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-slate-500 font-mono">
-                      {log.created_at ? new Date(log.created_at).toLocaleString() : ""}
+                    <td className="px-4 py-3 text-[#667085] font-mono text-[11px]">
+                      {log.created_at ? new Date(log.created_at).toLocaleString() : "Recent"}
                     </td>
                   </tr>
                 ))}
@@ -138,6 +152,7 @@ export default function AdminImportPage() {
           </div>
         )}
       </div>
+
     </div>
   );
 }

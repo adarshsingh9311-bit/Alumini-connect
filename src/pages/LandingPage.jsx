@@ -22,8 +22,10 @@ import {
   X, 
   Search,
   BookOpen,
-  Award
+  Award,
+  Sun
 } from "lucide-react";
+import { getThoughtForDate } from "../lib/dailyThoughtsData";
 
 export default function LandingPage() {
   const { user, role } = useAuth();
@@ -43,6 +45,7 @@ export default function LandingPage() {
     batchesConnected: "2009 - 2026"
   });
   const [loading, setLoading] = useState(true);
+  const dailyThought = getThoughtForDate();
 
   useEffect(() => {
     async function fetchHomeData() {
@@ -264,6 +267,30 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Daily Institutional Thought of the Day */}
+      {dailyThought && (
+        <section className="bg-[#FAF8F5] border-b border-[#D9DDE3] py-4 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs">
+            <div className="flex items-center space-x-2 shrink-0">
+              <span className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded bg-[#7A1F24] text-white font-bold text-[11px] uppercase tracking-wider">
+                <Sun className="w-3.5 h-3.5 text-[#B08A3E]" />
+                <span>Thought of the Day</span>
+              </span>
+              <span className="text-[#667085] hidden sm:inline">•</span>
+              <span className="text-[11px] font-semibold text-[#7A1F24] hidden sm:inline">
+                {dailyThought.category}
+              </span>
+            </div>
+            <div className="flex-1 min-w-0 italic text-[#202124] md:mx-4 font-serif text-xs sm:text-sm">
+              "{dailyThought.quote}"
+              <span className="font-sans not-italic text-[11px] text-[#667085] ml-2 font-normal">
+                — {dailyThought.author}
+              </span>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ============================================================
           3. COLLEGE PRESENCE & VITAL STATS (Practical, Solid Borders)

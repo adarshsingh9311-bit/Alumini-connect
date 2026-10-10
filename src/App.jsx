@@ -53,7 +53,6 @@ import AdminOpportunitiesPage from "./pages/admin/AdminOpportunitiesPage";
 import AdminImportPage from "./pages/admin/AdminImportPage";
 import AdminAnalyticsPage from "./pages/admin/AdminAnalyticsPage";
 import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
-import AdminDailyThoughtsPage from "./pages/admin/AdminDailyThoughtsPage";
 
 function AppContent() {
   const { user } = useAuth();
@@ -179,7 +178,6 @@ function AppContent() {
           <Route path="alumni" element={<AdminAlumniPage />} />
           <Route path="mentorship" element={<AdminMentorshipPage />} />
           <Route path="notices-wishes" element={<AdminNoticesWishesPage />} />
-          <Route path="daily-thoughts" element={<AdminDailyThoughtsPage />} />
           <Route path="notices" element={<AdminNoticesWishesPage />} />
           <Route path="events" element={<AdminEventsPage />} />
           <Route path="achievements" element={<AdminAchievementsPage />} />

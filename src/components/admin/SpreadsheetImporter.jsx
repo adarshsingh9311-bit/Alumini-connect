@@ -3,6 +3,7 @@ import * as XLSX from "xlsx";
 import { 
   Upload, 
   FileSpreadsheet, 
+  Download,
   CheckCircle2, 
   AlertTriangle, 
   X, 
@@ -11,51 +12,64 @@ import {
   Eye, 
   ShieldCheck, 
   ClipboardCheck, 
-  CheckCheck,
-  ArrowRight,
-  Sparkles,
+  ArrowRight, 
   RefreshCw,
   SlidersHorizontal,
-  Filter
+  Filter,
+  GraduationCap,
+  Briefcase,
+  HelpCircle
 } from "lucide-react";
 import { useToast } from "../../context/ToastContext";
-import { BRANCH_CODES, BATCH_YEARS } from "../../lib/constants";
+import { useAuth } from "../../context/AuthContext";
+import { BRANCH_CODES } from "../../lib/constants";
 import { supabase, isSupabaseConfigured } from "../../lib/supabase";
 import { cleanEncodingArtifacts } from "../../lib/formatters";
 
-// Database target fields for Student & Alumni rosters
-const STUDENT_FIELDS = [
-  { key: "roll_number", label: "Roll Number", required: true },
-  { key: "full_name", label: "Full Name", required: true },
-  { key: "email", label: "Email", required: true },
-  { key: "branch", label: "Branch", required: true },
-  { key: "batch_year", label: "Batch Year", required: true }
+// ==============================================================================
+// EXACT SCHEMA FIELDS (Directly aligned with live Supabase database tables)
+// ==============================================================================
+
+export const STUDENT_SCHEMA_FIELDS = [
+  { key: "roll_number", label: "Roll Number", required: true, description: "Official College Roll Number (Unique)" },
+  { key: "full_name", label: "Full Name", required: true, description: "Student's Full Name" },
+  { key: "email", label: "College Email", required: true, description: "Official College Email (@glbitm.ac.in)" },
+  { key: "branch", label: "Branch", required: true, description: "Department code (e.g. CSE, IT, ECE, ME)" },
+  { key: "batch", label: "Batch", required: true, description: "Academic Batch (e.g. 2023-2027 or 2027)" },
+  { key: "graduation_year", label: "Graduation Year", required: false, description: "Year of graduation (e.g. 2027)" },
+  { key: "phone", label: "Phone", required: false, description: "Contact number" },
+  { key: "skills", label: "Skills", required: false, description: "Comma-separated technical skills" },
+  { key: "bio", label: "Bio", required: false, description: "Brief academic background" }
 ];
 
-const ALUMNI_FIELDS = [
-  { key: "roll_number", label: "Roll Number", required: true },
-  { key: "full_name", label: "Full Name", required: true },
-  { key: "email", label: "Email", required: true },
-  { key: "branch", label: "Branch", required: true },
-  { key: "batch_year", label: "Batch Year", required: true },
-  { key: "current_company", label: "Current Company", required: false },
-  { key: "current_designation", label: "Current Designation", required: false },
-  { key: "industry", label: "Industry", required: false },
-  { key: "location", label: "Location", required: false },
-  { key: "skills", label: "Skills", required: false },
-  { key: "phone", label: "Phone", required: false }
+export const ALUMNI_SCHEMA_FIELDS = [
+  { key: "roll_number", label: "Roll Number / ID", required: true, description: "College Roll Number / Alumni Identifier (Unique)" },
+  { key: "full_name", label: "Full Name", required: true, description: "Alumnus / Alumna Full Name" },
+  { key: "email", label: "Email", required: true, description: "Official or registered email" },
+  { key: "branch", label: "Branch", required: true, description: "Department code (e.g. CSE, ECE, IT)" },
+  { key: "batch", label: "Batch", required: true, description: "Graduating Batch (e.g. 2019-2023 or 2023)" },
+  { key: "graduation_year", label: "Graduation Year", required: false, description: "Year of graduation (e.g. 2023)" },
+  { key: "current_company", label: "Current Company", required: false, description: "Employer or current organization" },
+  { key: "current_designation", label: "Designation / Role", required: false, description: "Job title or position" },
+  { key: "industry", label: "Industry", required: false, description: "Domain / Sector" },
+  { key: "location", label: "Location", required: false, description: "City or Work Location" },
+  { key: "phone", label: "Phone", required: false, description: "Contact phone" },
+  { key: "skills", label: "Skills", required: false, description: "Comma-separated skills" },
+  { key: "bio", label: "Bio / Career Journey", required: false, description: "Career summary or quote" },
+  { key: "mentorship_available", label: "Mentorship Available", required: false, description: "TRUE or FALSE (default TRUE)" }
 ];
 
-// Header normalization rule: strip spaces, dots, dashes, underscores, and convert to lowercase
+// Clean normalization for header auto-mapping
 function normalizeHeaderKey(raw) {
   if (!raw || typeof raw !== "string") return "";
   return raw
     .toLowerCase()
+    .replace(/^\uFEFF/, "") // strip BOM
     .trim()
     .replace(/[._\-\s]+/g, "");
 }
 
-// Common header variations & aliases mapped to database fields
+// Aliases mapped to real database schema fields
 const ALIAS_MAP = {
   roll_number: [
     "rollnumber", "rollno", "roll", "enrollmentno", "enrollmentnumber",
@@ -65,19 +79,22 @@ const ALIAS_MAP = {
     "fullname", "name", "studentname", "alumniname", "candidatename", "student", "scholarname"
   ],
   email: [
-    "email", "emailid", "emailaddress", "mail", "mailid", "studentemail", "alumniemail"
+    "email", "emailid", "emailaddress", "mail", "mailid", "studentemail", "alumniemail", "collegeemail"
   ],
   branch: [
     "branch", "department", "dept", "course", "program", "stream", "specialization", "discipline"
   ],
-  batch_year: [
-    "batch", "passingyear", "passoutyear", "graduationyear", "gradyear", "year", "batchyear", "session"
+  batch: [
+    "batch", "batchyear", "session", "academicyear", "class"
+  ],
+  graduation_year: [
+    "graduationyear", "passingyear", "passoutyear", "gradyear", "yearofpassing", "year"
   ],
   current_company: [
-    "company", "currentcompany", "organization", "employer", "workplace", "currentorganization"
+    "currentcompany", "company", "organization", "employer", "workplace", "currentorganization"
   ],
   current_designation: [
-    "designation", "currentdesignation", "role", "title", "position", "jobtitle"
+    "currentdesignation", "designation", "role", "title", "position", "jobtitle"
   ],
   industry: [
     "industry", "sector", "domain"
@@ -90,6 +107,12 @@ const ALIAS_MAP = {
   ],
   phone: [
     "phone", "mobile", "contact", "phonenumber", "contactnumber", "mobileno"
+  ],
+  bio: [
+    "bio", "about", "summary", "description", "journey"
+  ],
+  mentorship_available: [
+    "mentorshipavailable", "mentorship", "availableformentorship", "ismentor", "mentor"
   ]
 };
 
@@ -97,13 +120,13 @@ function detectDbField(rawHeader) {
   const norm = normalizeHeaderKey(rawHeader);
   if (!norm) return null;
 
-  // Specific high-priority exact matches
+  // Direct exact matches
   if (norm === "rollno" || norm === "rollnumber") return "roll_number";
-  if (norm === "admissionno" || norm === "enrollmentno") return "roll_number";
-  if (norm === "studentname" || norm === "fullname" || norm === "name") return "full_name";
+  if (norm === "fullname" || norm === "studentname" || norm === "alumniname" || norm === "name") return "full_name";
   if (norm === "email" || norm === "emailid" || norm === "emailaddress") return "email";
-  if (norm === "branch" || norm === "department" || norm === "course") return "branch";
-  if (norm === "batch" || norm === "passingyear" || norm === "graduationyear" || norm === "batchyear") return "batch_year";
+  if (norm === "branch" || norm === "department" || norm === "dept") return "branch";
+  if (norm === "batch" || norm === "batchyear") return "batch";
+  if (norm === "graduationyear" || norm === "passingyear" || norm === "gradyear") return "graduation_year";
 
   for (const [dbField, aliases] of Object.entries(ALIAS_MAP)) {
     if (aliases.includes(norm)) {
@@ -113,11 +136,7 @@ function detectDbField(rawHeader) {
   return null;
 }
 
-/**
- * Intelligent Multi-Row Header Auto-Detection:
- * University Excel files often contain 1 to 3 title banner rows
- * before the actual column table headers.
- */
+// Multi-row header auto-detection (finds actual header row even if title banners exist)
 function findHeaderRow(rows2D) {
   const limit = Math.min(10, rows2D.length);
   for (let i = 0; i < limit; i++) {
@@ -130,60 +149,113 @@ function findHeaderRow(rows2D) {
       if (field) matchedCount++;
     });
 
-    // If at least 2 distinct known fields are found in this row, it's the header row
     if (matchedCount >= 2) {
       return i;
     }
   }
-  return 0; // Default to first row
+  return 0;
 }
+
+// ==============================================================================
+// TEMPLATE DOWNLOAD HELPERS
+// ==============================================================================
+
+export function downloadStudentTemplate() {
+  const headers = ["roll_number", "full_name", "email", "branch", "batch", "graduation_year", "phone", "skills", "bio"];
+  const sampleRows = [
+    ["2300001", "Adarsh Kumar Singh", "adarsh.23@glbitm.ac.in", "CSE", "2023-2027", "2027", "9876543210", "Java, Python, Data Structures", "Computer Science scholar"],
+    ["2300002", "Pooja Sharma", "pooja.23@glbitm.ac.in", "IT", "2023-2027", "2027", "9876543211", "React, Node.js, Web Development", "Information Technology undergraduate"],
+    ["2300003", "Rahul Verma", "rahul.23@glbitm.ac.in", "ECE", "2023-2027", "2027", "9876543212", "C++, Embedded Systems, IoT", "Electronics & Communication scholar"]
+  ];
+
+  const csvContent = "\uFEFF" + [
+    headers.join(","),
+    ...sampleRows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(","))
+  ].join("\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", "glbajaj_student_template.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+export function downloadAlumniTemplate() {
+  const headers = [
+    "roll_number", "full_name", "email", "branch", "batch", "graduation_year",
+    "current_company", "current_designation", "industry", "location", "phone", "skills", "bio", "mentorship_available"
+  ];
+  const sampleRows = [
+    [
+      "1900001", "Saurabh Sarkar", "saurabh.alum@glbitm.ac.in", "CSE", "2019-2023", "2023",
+      "Microsoft", "Software Engineer", "Technology", "Noida", "9876543213",
+      "Distributed Systems, Go, Azure", "GL Bajaj CSE graduate now engineering cloud systems", "TRUE"
+    ],
+    [
+      "1900002", "Ananya Gupta", "ananya.alum@glbitm.ac.in", "ECE", "2018-2022", "2022",
+      "Qualcomm", "Hardware Engineer", "Semiconductors", "Bengaluru", "9876543214",
+      "VLSI, Embedded C, Digital Design", "Electronics alumna focused on chip verification", "TRUE"
+    ]
+  ];
+
+  const csvContent = "\uFEFF" + [
+    headers.join(","),
+    ...sampleRows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(","))
+  ].join("\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", "glbajaj_alumni_template.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+// ==============================================================================
+// MAIN SPREADSHEET IMPORTER COMPONENT
+// ==============================================================================
 
 export default function SpreadsheetImporter({ onImportComplete }) {
   const { addToast } = useToast();
+  const { user } = useAuth();
 
-  const [file, setFile] = useState(null);
   const [targetType, setTargetType] = useState("student"); // "student" | "alumni"
+  const [file, setFile] = useState(null);
   const [rawHeaders, setRawHeaders] = useState([]);
   const [rawRows, setRawRows] = useState([]);
   const [columnMappings, setColumnMappings] = useState({}); // { [colIdx]: dbField }
-  const [defaultBranch, setDefaultBranch] = useState("CSE");
-  const [defaultBatch, setDefaultBatch] = useState("2027");
-  const [autoGenEmail, setAutoGenEmail] = useState(true);
+  
+  // Validation and Tab States
   const [activeTab, setActiveTab] = useState("all"); // "all" | "valid" | "errors"
-
   const [validationReport, setValidationReport] = useState(null);
   const [importing, setImporting] = useState(false);
+  const [importResult, setImportResult] = useState(null);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // 6-step progress
-  // 1: Upload, 2: Preview & Map, 3: Validate, 4: Show Errors, 5: Confirm, 6: Success
-  let currentStep = 1;
-  if (isSuccess) currentStep = 6;
-  else if (importing) currentStep = 5;
-  else if (validationReport && validationReport.invalid > 0) currentStep = 4;
-  else if (validationReport) currentStep = 3;
-  else if (rawRows.length > 0) currentStep = 2;
+  const currentSchemaFields = targetType === "student" ? STUDENT_SCHEMA_FIELDS : ALUMNI_SCHEMA_FIELDS;
 
-  const steps = [
-    { num: 1, label: "Upload", icon: Upload },
-    { num: 2, label: "Preview", icon: Eye },
-    { num: 3, label: "Validate", icon: ShieldCheck },
-    { num: 4, label: "Show Errors", icon: AlertTriangle },
-    { num: 5, label: "Confirm", icon: ClipboardCheck },
-    { num: 6, label: "Success", icon: CheckCheck }
-  ];
-
-  const dbFields = targetType === "student" ? STUDENT_FIELDS : ALUMNI_FIELDS;
-
+  // File Upload Handler (.csv, .xlsx, .xls)
   function handleFileChange(e) {
-    const selected = e.target.files[0];
-    if (!selected) return;
-    setIsSuccess(false);
-    setFile(selected);
-    processFile(selected);
-  }
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) return;
 
-  function processFile(selectedFile) {
+    const fileExt = selectedFile.name.split(".").pop().toLowerCase();
+    if (!["xlsx", "xls", "csv"].includes(fileExt)) {
+      addToast("Unsupported file format. Please upload a .csv, .xlsx, or .xls file.", "error");
+      return;
+    }
+
+    setFile(selectedFile);
+    setIsSuccess(false);
+    setImportResult(null);
+
     const reader = new FileReader();
     reader.onload = (evt) => {
       try {
@@ -191,29 +263,22 @@ export default function SpreadsheetImporter({ onImportComplete }) {
         const workbook = XLSX.read(data, { type: "array" });
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
+
+        // Parse rows as raw array of arrays
         const rows2D = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
 
-        if (!rows2D || rows2D.length === 0) {
-          addToast("Uploaded spreadsheet appears to be empty.", "error");
+        if (!rows2D || rows2D.length < 2) {
+          addToast("The uploaded file appears to be empty or has no data rows.", "error");
           return;
         }
 
         // 1. Detect Header Row
         const headerRowIdx = findHeaderRow(rows2D);
-        const headers = (rows2D[headerRowIdx] || []).map((h) => String(h || "").trim());
+        const headers = (rows2D[headerRowIdx] || []).map((h) => 
+          String(h || "").replace(/^\uFEFF/, "").trim()
+        );
 
-        // Extract metadata if title row mentions branch (e.g. "ECE B.TECH...")
-        for (let r = 0; r < headerRowIdx; r++) {
-          const rowText = (rows2D[r] || []).join(" ").toUpperCase();
-          for (const bCode of BRANCH_CODES) {
-            if (rowText.includes(bCode)) {
-              setDefaultBranch(bCode);
-              break;
-            }
-          }
-        }
-
-        // 2. Extract Data Rows (discard blank or header rows)
+        // 2. Extract Data Rows (discard blank rows)
         const validDataRows = rows2D.slice(headerRowIdx + 1).filter((r) => {
           if (!Array.isArray(r) || r.length === 0) return false;
           return r.some((cell) => cell !== null && cell !== undefined && String(cell).trim() !== "");
@@ -224,22 +289,11 @@ export default function SpreadsheetImporter({ onImportComplete }) {
           return;
         }
 
-        // 3. Auto-detect Column Mappings
+        // 3. Auto-detect Column Mappings against schema
         const initialMappings = {};
         const mappedFields = new Set();
 
-        // Pass 1: exact matches for roll number
         headers.forEach((h, colIdx) => {
-          const norm = normalizeHeaderKey(h);
-          if (norm === "rollno" || norm === "rollnumber") {
-            initialMappings[colIdx] = "roll_number";
-            mappedFields.add("roll_number");
-          }
-        });
-
-        // Pass 2: other fields
-        headers.forEach((h, colIdx) => {
-          if (initialMappings[colIdx]) return;
           const field = detectDbField(h);
           if (field && !mappedFields.has(field)) {
             initialMappings[colIdx] = field;
@@ -252,11 +306,11 @@ export default function SpreadsheetImporter({ onImportComplete }) {
         setColumnMappings(initialMappings);
 
         addToast(
-          `Detected ${validDataRows.length} records. Header found at row ${headerRowIdx + 1}.`,
+          `Loaded ${validDataRows.length} records from ${selectedFile.name}. Header row detected at line ${headerRowIdx + 1}.`,
           "info"
         );
       } catch (err) {
-        addToast("Failed to parse spreadsheet file: " + err.message, "error");
+        addToast("Failed to parse file: " + err.message, "error");
       }
     };
     reader.readAsArrayBuffer(selectedFile);
@@ -268,7 +322,6 @@ export default function SpreadsheetImporter({ onImportComplete }) {
       if (!newField || newField === "skip") {
         delete updated[colIdx];
       } else {
-        // If another column already has this field, clear it to avoid collision
         Object.keys(updated).forEach((key) => {
           if (updated[key] === newField) delete updated[key];
         });
@@ -278,61 +331,52 @@ export default function SpreadsheetImporter({ onImportComplete }) {
     });
   }
 
-  // Row-by-Row Validation Engine
+  // ==============================================================================
+  // STRICT ROW-BY-ROW VALIDATION ENGINE
+  // ==============================================================================
   const parsedRecords = useMemo(() => {
     if (!rawRows.length || !rawHeaders.length) return [];
 
-    // Track duplicates within the batch
     const rollCounts = {};
     const emailCounts = {};
 
-    // First pass to count frequencies for duplicates
+    // Pass 1: Frequencies for duplicate detection
     rawRows.forEach((row) => {
       let rollVal = "";
       let emailVal = "";
 
       Object.entries(columnMappings).forEach(([colIdx, dbField]) => {
         const val = cleanEncodingArtifacts(String(row[Number(colIdx)] || "")).trim();
-        if (dbField === "roll_number") rollVal = val;
+        if (dbField === "roll_number") rollVal = val.toLowerCase();
         if (dbField === "email") emailVal = val.toLowerCase();
       });
-
-      if (!emailVal && autoGenEmail && rollVal) {
-        emailVal = `${rollVal.toLowerCase()}@glbitm.ac.in`;
-      }
 
       if (rollVal) rollCounts[rollVal] = (rollCounts[rollVal] || 0) + 1;
       if (emailVal) emailCounts[emailVal] = (emailCounts[emailVal] || 0) + 1;
     });
 
-    // Second pass to validate each row
+    // Pass 2: Row-level validation and error assignment
     return rawRows.map((row, idx) => {
       const errors = [];
       const extracted = {};
 
-      // Map values from mapped columns
       Object.entries(columnMappings).forEach(([colIdx, dbField]) => {
         const val = cleanEncodingArtifacts(String(row[Number(colIdx)] || "")).trim();
         extracted[dbField] = val;
       });
 
-      // Apply defaults for unmapped or empty values
       const rollNumber = extracted.roll_number || "";
       const fullName = extracted.full_name || "";
-      
-      let email = extracted.email || "";
-      if (!email && autoGenEmail && rollNumber) {
-        email = `${rollNumber.toLowerCase()}@glbitm.ac.in`;
-      }
-
-      const branch = extracted.branch || defaultBranch || "CSE";
-      const batchYear = extracted.batch_year || defaultBatch || "2027";
+      const email = extracted.email || "";
+      const branch = extracted.branch || "";
+      const batch = extracted.batch || extracted.graduation_year || "";
+      const gradYearRaw = extracted.graduation_year || extracted.batch || "";
 
       // 1. Roll Number Validation
       if (!rollNumber) {
         errors.push("Missing Roll Number");
-      } else if (rollCounts[rollNumber] > 1) {
-        errors.push("Duplicate Roll Number in file");
+      } else if (rollCounts[rollNumber.toLowerCase()] > 1) {
+        errors.push(`Duplicate Roll Number "${rollNumber}" in file`);
       }
 
       // 2. Full Name Validation
@@ -344,33 +388,54 @@ export default function SpreadsheetImporter({ onImportComplete }) {
       if (!email) {
         errors.push("Missing Email");
       } else if (!email.includes("@") || !email.includes(".")) {
-        errors.push("Invalid Email format");
+        errors.push("Invalid Email format (must contain @ and valid domain)");
       } else if (emailCounts[email.toLowerCase()] > 1) {
-        errors.push("Duplicate Email in file");
+        errors.push(`Duplicate Email "${email}" in file`);
       }
 
       // 4. Branch Validation
       if (!branch) {
-        errors.push("Missing Branch");
+        errors.push("Missing Branch / Department");
       }
 
-      // 5. Batch Validation
-      if (!batchYear) {
-        errors.push("Missing Batch");
+      // 5. Graduation Year integer check if provided
+      let parsedGradYear = null;
+      if (gradYearRaw) {
+        const match = String(gradYearRaw).match(/\d{4}/);
+        if (match) {
+          parsedGradYear = parseInt(match[0], 10);
+        } else if (!isNaN(Number(gradYearRaw))) {
+          parsedGradYear = parseInt(gradYearRaw, 10);
+        }
+      }
+
+      // Mentorship availability boolean check
+      let isMentor = true;
+      if (extracted.mentorship_available !== undefined && extracted.mentorship_available !== "") {
+        const v = String(extracted.mentorship_available).trim().toLowerCase();
+        isMentor = v === "true" || v === "yes" || v === "1";
       }
 
       const cleanData = {
-        roll_number: rollNumber || "MISSING",
-        full_name: fullName || "MISSING",
-        email: email || "MISSING",
+        roll_number: rollNumber,
+        full_name: fullName,
+        email: email,
         branch: branch.toUpperCase(),
-        batch_year: String(batchYear),
-        current_company: extracted.current_company || "",
-        current_designation: extracted.current_designation || "",
-        industry: extracted.industry || "",
-        location: extracted.location || "",
-        skills: extracted.skills ? extracted.skills.split(",").map((s) => s.trim()) : [],
-        phone: extracted.phone || ""
+        batch: String(batch || (parsedGradYear ? String(parsedGradYear) : "2026")),
+        graduation_year: parsedGradYear || (targetType === "student" ? 2027 : 2023),
+        phone: extracted.phone || "",
+        skills: extracted.skills 
+          ? extracted.skills.split(",").map((s) => s.trim()).filter(Boolean) 
+          : [],
+        bio: extracted.bio || "",
+        ...(targetType === "alumni" && {
+          current_company: extracted.current_company || "",
+          current_designation: extracted.current_designation || "",
+          industry: extracted.industry || "",
+          location: extracted.location || "",
+          mentorship_available: isMentor,
+          verified: true
+        })
       };
 
       return {
@@ -380,9 +445,9 @@ export default function SpreadsheetImporter({ onImportComplete }) {
         errors
       };
     });
-  }, [rawRows, rawHeaders, columnMappings, defaultBranch, defaultBatch, autoGenEmail]);
+  }, [rawRows, rawHeaders, columnMappings, targetType]);
 
-  // Update validation report dynamically whenever records change
+  // Validation report updater
   useEffect(() => {
     if (parsedRecords.length > 0) {
       const validCount = parsedRecords.filter((r) => r.isValid).length;
@@ -397,7 +462,21 @@ export default function SpreadsheetImporter({ onImportComplete }) {
     }
   }, [parsedRecords]);
 
-  // Commit valid records to Supabase / Application state
+  // Reset all state
+  function handleReset() {
+    setFile(null);
+    setRawHeaders([]);
+    setRawRows([]);
+    setColumnMappings({});
+    setValidationReport(null);
+    setIsSuccess(false);
+    setImportResult(null);
+    setActiveTab("all");
+  }
+
+  // ==============================================================================
+  // CONFIRM & COMMIT RECORDS TO SUPABASE
+  // ==============================================================================
   async function handleCommitImport() {
     if (!validationReport || validationReport.valid === 0) {
       addToast("No valid records to import.", "error");
@@ -406,64 +485,98 @@ export default function SpreadsheetImporter({ onImportComplete }) {
 
     setImporting(true);
     const validRecords = parsedRecords.filter((r) => r.isValid).map((r) => r.data);
+    const totalCount = parsedRecords.length;
+    const validCount = validRecords.length;
+    const rejectedCount = totalCount - validCount;
+
+    let savedToDbCount = 0;
+    let dbErrorMessage = null;
 
     try {
-      // If Supabase is connected, safely upsert valid records
       if (isSupabaseConfigured && supabase) {
-        const table = targetType === "student" ? "students" : "alumni";
-        const rowsToInsert = validRecords.map((r) => ({
-          roll_number: r.roll_number,
-          branch: r.branch,
-          batch_year: r.batch_year,
-          ...(targetType === "alumni" && {
-            current_company: r.current_company,
-            current_designation: r.current_designation,
-            industry: r.industry,
-            location: r.location,
-            skills: r.skills,
-            is_verified: true
-          })
-        }));
+        const targetTable = targetType === "student" ? "students" : "alumni";
 
-        const { error } = await supabase.from(table).upsert(rowsToInsert, {
-          onConflict: "roll_number",
-          ignoreDuplicates: false
-        });
+        // Upsert valid records into Supabase
+        for (const record of validRecords) {
+          try {
+            const rowPayload = {
+              roll_number: record.roll_number,
+              branch: record.branch,
+              batch: record.batch,
+              graduation_year: record.graduation_year,
+              skills: record.skills,
+              bio: record.bio,
+              ...(targetType === "alumni" && {
+                current_company: record.current_company,
+                current_designation: record.current_designation,
+                industry: record.industry,
+                location: record.location,
+                mentorship_available: record.mentorship_available,
+                verified: true
+              })
+            };
 
-        if (error) {
-          console.warn("Supabase upsert warning:", error);
+            const { error: upsertErr } = await supabase
+              .from(targetTable)
+              .upsert(rowPayload, { onConflict: "roll_number" });
+
+            if (!upsertErr) {
+              savedToDbCount++;
+            } else {
+              console.warn(`Upsert warning for ${record.roll_number}:`, upsertErr.message);
+            }
+          } catch (rowErr) {
+            console.warn("Row save error:", rowErr);
+          }
+        }
+
+        // Record entry in import_history
+        try {
+          await supabase.from("import_history").insert({
+            file_name: file?.name || `${targetType}_import.csv`,
+            file_type: targetType === "student" ? "students" : "alumni",
+            total_rows: totalCount,
+            successful_rows: validCount,
+            failed_rows: rejectedCount,
+            status: rejectedCount === 0 ? "completed" : "completed_with_errors",
+            uploaded_by: user?.id || null
+          });
+        } catch (auditErr) {
+          console.warn("Audit record failed:", auditErr);
         }
       }
 
-      onImportComplete({
-        filename: file?.name || "import_data.xlsx",
-        total: validationReport.total,
-        valid: validationReport.valid,
-        invalid: validationReport.invalid,
-        records: validRecords,
+      const summary = {
+        filename: file?.name || "import_data.csv",
+        total: totalCount,
+        valid: validCount,
+        invalid: rejectedCount,
+        savedToDb: savedToDbCount,
         type: targetType
-      });
+      };
 
-      addToast(`Successfully committed ${validRecords.length} valid ${targetType} records!`, "success");
+      setImportResult(summary);
       setIsSuccess(true);
+
+      if (onImportComplete) {
+        onImportComplete({
+          ...summary,
+          records: validRecords
+        });
+      }
+
+      addToast(
+        `Import completed! ${validCount} records processed successfully (${rejectedCount} rejected).`,
+        "success"
+      );
     } catch (err) {
-      addToast("Import commit failed: " + err.message, "error");
+      addToast("Import commit encountered an error: " + err.message, "error");
     } finally {
       setImporting(false);
     }
   }
 
-  function handleReset() {
-    setFile(null);
-    setRawHeaders([]);
-    setRawRows([]);
-    setColumnMappings({});
-    setValidationReport(null);
-    setIsSuccess(false);
-    setActiveTab("all");
-  }
-
-  // Filtered rows for preview table
+  // Filtered rows for the preview table
   const displayedRows = useMemo(() => {
     if (activeTab === "valid") return parsedRecords.filter((r) => r.isValid);
     if (activeTab === "errors") return parsedRecords.filter((r) => !r.isValid);
@@ -471,392 +584,475 @@ export default function SpreadsheetImporter({ onImportComplete }) {
   }, [parsedRecords, activeTab]);
 
   return (
-    <div className="bg-white rounded-3xl p-6 sm:p-8 border border-teal-100 shadow-sm space-y-8">
-      <div className="border-b border-slate-100 pb-4">
-        <h3 className="font-extrabold text-slate-900 text-lg sm:text-xl flex items-center gap-2">
-          <FileSpreadsheet className="w-5 h-5 text-glgold" />
-          <span>Excel & CSV Bulk Data Import Engine</span>
-        </h3>
-        <p className="text-xs text-slate-500 mt-0.5">
-          Intelligent column-mapping, multi-row header auto-detection, duplicate checking, and safe database commitment.
-        </p>
-      </div>
-
-      {/* 6-Step Visual Stepper */}
-      <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5">
-        <div className="flex items-center justify-between">
-          {steps.map((step, idx) => {
-            const Icon = step.icon;
-            const isCompleted = currentStep > step.num || (step.num === 6 && isSuccess);
-            const isCurrent = currentStep === step.num;
-
-            return (
-              <React.Fragment key={step.num}>
-                <div className="flex flex-col items-center text-center">
-                  <div
-                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-xs font-bold transition shadow-sm ${
-                      isCompleted
-                        ? "bg-emerald-600 text-white"
-                        : isCurrent
-                        ? "bg-glgold text-slate-950 font-black ring-4 ring-amber-100"
-                        : "bg-white text-slate-400 border border-slate-200"
-                    }`}
-                  >
-                    {isCompleted ? <Check className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
-                  </div>
-                  <span className={`text-[10px] sm:text-xs mt-1.5 font-bold ${
-                    isCurrent ? "text-glgold" : isCompleted ? "text-emerald-700" : "text-slate-400"
-                  }`}>
-                    {step.label}
-                  </span>
-                </div>
-
-                {idx < steps.length - 1 && (
-                  <div
-                    className={`flex-1 h-0.5 mx-1 sm:mx-2 transition ${
-                      currentStep > step.num ? "bg-emerald-500" : "bg-slate-200"
-                    }`}
-                  />
-                )}
-              </React.Fragment>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Target Directory Selection */}
-      <div className="flex items-center space-x-6">
-        <span className="text-xs font-bold text-slate-700 uppercase">Target Directory:</span>
-        <label className="flex items-center space-x-2 text-xs font-semibold text-slate-800 cursor-pointer">
-          <input
-            type="radio"
-            name="targetType"
-            value="student"
-            checked={targetType === "student"}
-            onChange={() => setTargetType("student")}
-            className="text-glgold focus:ring-glgold"
-          />
-          <span>Student Records</span>
-        </label>
-        <label className="flex items-center space-x-2 text-xs font-semibold text-slate-800 cursor-pointer">
-          <input
-            type="radio"
-            name="targetType"
-            value="alumni"
-            checked={targetType === "alumni"}
-            onChange={() => setTargetType("alumni")}
-            className="text-glblue-750 focus:ring-glblue-750"
-          />
-          <span>Alumni Records</span>
-        </label>
-      </div>
-
-      {/* Upload Zone */}
-      {!rawRows.length && !isSuccess && (
-        <div
-          onClick={() => document.getElementById("excel-file-input").click()}
-          className="border-2 border-dashed border-slate-300 hover:border-glgold rounded-2xl p-8 text-center cursor-pointer bg-slate-50 hover:bg-amber-50/20 transition space-y-3"
-        >
-          <input
-            id="excel-file-input"
-            type="file"
-            accept=".xlsx, .xls, .csv"
-            onChange={handleFileChange}
-            className="hidden"
-          />
-          <div className="w-14 h-14 bg-teal-50 text-glblue-750 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
-            <Upload className="w-7 h-7" />
+    <div className="space-y-6 font-sans">
+      
+      {/* ============================================================
+          1. IMPORT COLLEGE RECORDS & TEMPLATE DOWNLOAD SECTION
+      ============================================================ */}
+      <div className="bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-6 space-y-5 shadow-xs">
+        <div>
+          <div className="flex items-center space-x-2 text-[#7A1F24] text-xs font-bold uppercase tracking-wider mb-1">
+            <FileSpreadsheet className="w-4 h-4 text-[#7A1F24]" />
+            <span>Database Schema Importer</span>
           </div>
-          <div>
-            <h4 className="font-bold text-slate-900 text-sm sm:text-base">Click to upload or drag & drop spreadsheet</h4>
-            <p className="text-xs text-slate-500 mt-0.5">Supports Microsoft Excel (.xlsx, .xls) and CSV (.csv)</p>
-          </div>
-          <div className="inline-block bg-glblue-750 hover:bg-teal-900 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition">
-            Select Spreadsheet File
-          </div>
-        </div>
-      )}
-
-      {/* Success State Screen */}
-      {isSuccess && (
-        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-8 text-center space-y-3">
-          <div className="w-14 h-14 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mx-auto shadow-md">
-            <CheckCheck className="w-7 h-7" />
-          </div>
-          <h4 className="font-black text-slate-900 text-lg">Batch Import Completed Successfully!</h4>
-          <p className="text-xs text-slate-600 max-w-md mx-auto">
-            All valid records have been synced with the central directory and audit history. Invalid rows were kept out of the database.
+          <h2 className="text-xl sm:text-2xl font-bold text-[#202124] font-serif">
+            Import College Records
+          </h2>
+          <p className="text-xs sm:text-sm text-[#667085] mt-1">
+            Download the appropriate template, fill in your records in Excel or another spreadsheet application, and upload the completed file.
           </p>
-          <button
-            onClick={handleReset}
-            className="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md"
-          >
-            Import Another Batch
-          </button>
         </div>
-      )}
 
-      {/* Interactive Column Mapping Section */}
-      {rawRows.length > 0 && !isSuccess && (
-        <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-4">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-200 pb-3">
+        {/* Two Clear Options: Students vs Alumni */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          {/* 1. Student Template Card */}
+          <div 
+            className={`p-5 rounded-lg border transition ${
+              targetType === "student"
+                ? "border-[#7A1F24] bg-[#F7F3EA]/50 ring-1 ring-[#7A1F24]"
+                : "border-[#D9DDE3] bg-white hover:border-[#7A1F24]/50"
+            }`}
+          >
+            <div className="flex items-start justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-lg bg-[#7A1F24] text-white flex items-center justify-center font-bold text-base shadow-xs">
+                  <GraduationCap className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-[#202124]">Students Roster</h3>
+                  <p className="text-xs text-[#667085]">Enrolled scholars, roll numbers, branches</p>
+                </div>
+              </div>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white text-[#7A1F24] border border-[#D9DDE3]">
+                9 Schema Fields
+              </span>
+            </div>
+
+            <p className="text-xs text-[#667085] mt-3 leading-relaxed">
+              Required: <code className="text-[#7A1F24] font-semibold">roll_number</code>, <code className="text-[#7A1F24] font-semibold">full_name</code>, <code className="text-[#7A1F24] font-semibold">email</code>, <code className="text-[#7A1F24] font-semibold">branch</code>, <code className="text-[#7A1F24] font-semibold">batch</code>.
+            </p>
+
+            <div className="mt-4 pt-3 border-t border-[#D9DDE3] flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={downloadStudentTemplate}
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-md bg-white border border-[#D9DDE3] hover:border-[#7A1F24] hover:text-[#7A1F24] text-xs font-semibold text-[#202124] transition shadow-xs cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5 text-[#7A1F24]" />
+                <span>Download Student CSV Template</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setTargetType("student");
+                  handleReset();
+                }}
+                className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer ${
+                  targetType === "student"
+                    ? "bg-[#7A1F24] text-white"
+                    : "bg-[#F7F3EA] text-[#202124] hover:bg-white border border-[#D9DDE3]"
+                }`}
+              >
+                <Upload className="w-3.5 h-3.5" />
+                <span>Select for Upload</span>
+              </button>
+            </div>
+          </div>
+
+          {/* 2. Alumni Template Card */}
+          <div 
+            className={`p-5 rounded-lg border transition ${
+              targetType === "alumni"
+                ? "border-[#7A1F24] bg-[#F7F3EA]/50 ring-1 ring-[#7A1F24]"
+                : "border-[#D9DDE3] bg-white hover:border-[#7A1F24]/50"
+            }`}
+          >
+            <div className="flex items-start justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-lg bg-[#5C171B] text-white flex items-center justify-center font-bold text-base shadow-xs">
+                  <Briefcase className="w-5 h-5 text-[#B08A3E]" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-[#202124]">Alumni Directory</h3>
+                  <p className="text-xs text-[#667085]">Graduates, companies, designations, cities</p>
+                </div>
+              </div>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white text-[#7A1F24] border border-[#D9DDE3]">
+                14 Schema Fields
+              </span>
+            </div>
+
+            <p className="text-xs text-[#667085] mt-3 leading-relaxed">
+              Required: <code className="text-[#7A1F24] font-semibold">roll_number</code>, <code className="text-[#7A1F24] font-semibold">full_name</code>, <code className="text-[#7A1F24] font-semibold">email</code>, <code className="text-[#7A1F24] font-semibold">branch</code>, <code className="text-[#7A1F24] font-semibold">batch</code>.
+            </p>
+
+            <div className="mt-4 pt-3 border-t border-[#D9DDE3] flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={downloadAlumniTemplate}
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-md bg-white border border-[#D9DDE3] hover:border-[#7A1F24] hover:text-[#7A1F24] text-xs font-semibold text-[#202124] transition shadow-xs cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5 text-[#7A1F24]" />
+                <span>Download Alumni CSV Template</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setTargetType("alumni");
+                  handleReset();
+                }}
+                className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer ${
+                  targetType === "alumni"
+                    ? "bg-[#7A1F24] text-white"
+                    : "bg-[#F7F3EA] text-[#202124] hover:bg-white border border-[#D9DDE3]"
+                }`}
+              >
+                <Upload className="w-3.5 h-3.5" />
+                <span>Select for Upload</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* ============================================================
+          2. FILE DROPZONE & UPLOAD INSTRUCTIONS
+      ============================================================ */}
+      {!file && (
+        <div className="bg-white border border-[#D9DDE3] rounded-lg p-6 sm:p-8 space-y-4 text-center">
+          <div className="max-w-md mx-auto space-y-3">
+            <div className="w-12 h-12 rounded-lg bg-[#F7F3EA] text-[#7A1F24] border border-[#D9DDE3] flex items-center justify-center mx-auto shadow-xs">
+              <Upload className="w-6 h-6" />
+            </div>
+
             <div>
-              <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                <SlidersHorizontal className="w-4 h-4 text-glgold" />
-                <span>Column Mapping Configuration</span>
-              </h4>
-              <p className="text-[11px] text-slate-500">
-                Confirm or adjust the auto-detected mapping between your file columns and database fields.
+              <h3 className="font-bold text-sm sm:text-base text-[#202124]">
+                Upload {targetType === "student" ? "Student" : "Alumni"} Records File
+              </h3>
+              <p className="text-xs text-[#667085] mt-1">
+                Choose a completed CSV, Excel (.xlsx), or .xls file from your computer.
               </p>
             </div>
-            <span className="text-[10px] font-semibold bg-teal-100 text-teal-800 px-2.5 py-1 rounded-full">
-              {rawHeaders.length} Columns Detected
-            </span>
+
+            <label className="inline-block bg-[#7A1F24] hover:bg-[#5C171B] text-white text-xs font-semibold px-5 py-2.5 rounded-md transition shadow-xs cursor-pointer">
+              <span>Browse & Select File</span>
+              <input
+                type="file"
+                accept=".csv, .xlsx, .xls"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </label>
+
+            <div className="pt-2 text-[11px] text-[#667085] space-y-1">
+              <div>Supported Formats: <strong>.csv, .xlsx, .xls</strong> (UTF-8 encoding supported)</div>
+              <div>Auto-handles title headers, duplicate detection, and space trimming.</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================
+          3. ACTIVE FILE PROCESSING & COLUMN MAPPING PANEL
+      ============================================================ */}
+      {file && (
+        <div className="space-y-6">
+          
+          {/* File Header Bar */}
+          <div className="bg-white border border-[#D9DDE3] rounded-lg p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-lg bg-[#F7F3EA] text-[#7A1F24] border border-[#D9DDE3] flex items-center justify-center">
+                <FileSpreadsheet className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="font-bold text-sm text-[#202124]">{file.name}</div>
+                <div className="text-xs text-[#667085]">
+                  {(file.size / 1024).toFixed(1)} KB • Target: <span className="font-semibold text-[#7A1F24] uppercase">{targetType}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <button
+                type="button"
+                onClick={handleReset}
+                className="px-3 py-1.5 rounded-md border border-[#D9DDE3] bg-white hover:bg-[#F7F3EA] text-xs font-semibold text-[#202124] transition cursor-pointer"
+              >
+                Choose Different File
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {rawHeaders.map((header, colIdx) => {
-              const currentField = columnMappings[colIdx] || "skip";
-              const isMapped = currentField !== "skip";
+          {/* Column Mapping Section */}
+          <div className="bg-white border border-[#D9DDE3] rounded-lg p-5 space-y-4 shadow-xs">
+            <div className="flex items-center justify-between border-b border-[#D9DDE3] pb-3">
+              <div className="flex items-center space-x-2">
+                <SlidersHorizontal className="w-4 h-4 text-[#7A1F24]" />
+                <h3 className="font-bold text-sm text-[#202124]">
+                  Header Verification & Field Mapping
+                </h3>
+              </div>
+              <span className="text-xs text-[#667085]">
+                {Object.keys(columnMappings).length} of {rawHeaders.length} columns recognized
+              </span>
+            </div>
 
-              return (
-                <div
-                  key={colIdx}
-                  className={`p-3 rounded-xl border transition flex flex-col justify-between ${
-                    isMapped ? "bg-white border-amber-300 shadow-xs" : "bg-white/60 border-slate-200"
-                  }`}
-                >
-                  <div className="flex items-center justify-between text-xs mb-1.5">
-                    <span className="font-bold text-slate-800 truncate" title={header}>
-                      {header || `Column ${colIdx + 1}`}
-                    </span>
-                    <span className="text-[10px] text-slate-400 font-mono">Col {colIdx + 1}</span>
-                  </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {rawHeaders.map((headerName, colIdx) => {
+                const currentField = columnMappings[colIdx] || "";
+                return (
+                  <div
+                    key={colIdx}
+                    className="p-3 rounded-md border border-[#D9DDE3] bg-[#F7F3EA]/30 space-y-1.5 text-xs"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-[10px] text-[#667085]">Col {colIdx + 1}</span>
+                      {currentField ? (
+                        <span className="text-[10px] font-bold text-[#2E6B4A] flex items-center gap-1">
+                          <Check className="w-3 h-3" />
+                          <span>Mapped</span>
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-[#667085]">Skipped</span>
+                      )}
+                    </div>
+                    
+                    <div className="font-bold text-[#202124] truncate" title={headerName}>
+                      "{headerName}"
+                    </div>
 
-                  <div className="flex items-center gap-2">
-                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                     <select
                       value={currentField}
                       onChange={(e) => handleMappingChange(colIdx, e.target.value)}
-                      className={`w-full text-xs rounded-lg px-2.5 py-1.5 border font-medium focus:outline-none focus:ring-1 focus:ring-glgold ${
-                        isMapped
-                          ? "border-amber-400 bg-amber-50/40 text-slate-900 font-semibold"
-                          : "border-slate-200 text-slate-500 bg-slate-50"
-                      }`}
+                      className="w-full bg-white border border-[#D9DDE3] rounded px-2.5 py-1.5 text-xs text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24]"
                     >
-                      <option value="skip">— Skip / Do Not Import —</option>
-                      {dbFields.map((f) => (
+                      <option value="skip">— Skip this column —</option>
+                      {currentSchemaFields.map((f) => (
                         <option key={f.key} value={f.key}>
-                          {f.label} {f.required ? "(Required)" : "(Optional)"}
+                          {f.label} {f.required ? "*" : ""}
                         </option>
                       ))}
                     </select>
                   </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Validation Metrics Bar */}
+          {validationReport && (
+            <div className="bg-white border border-[#D9DDE3] rounded-lg p-5 shadow-xs">
+              <div className="grid grid-cols-3 divide-x divide-[#D9DDE3] text-center">
+                <div>
+                  <div className="text-xl sm:text-2xl font-extrabold text-[#202124] font-mono">
+                    {validationReport.total}
+                  </div>
+                  <div className="text-xs font-semibold text-[#667085] uppercase tracking-wide mt-0.5">
+                    Total Records
+                  </div>
                 </div>
-              );
-            })}
-          </div>
 
-          {/* Defaults and Fallback Controls for Missing Columns */}
-          <div className="pt-3 border-t border-slate-200 flex flex-wrap items-center gap-4 text-xs">
-            <div className="flex items-center space-x-2">
-              <span className="text-slate-600 font-medium">Default Branch:</span>
-              <select
-                value={defaultBranch}
-                onChange={(e) => setDefaultBranch(e.target.value)}
-                className="bg-white border border-slate-300 rounded-lg px-2 py-1 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-glgold"
-              >
-                {BRANCH_CODES.map((b) => (
-                  <option key={b} value={b}>{b}</option>
-                ))}
-              </select>
+                <div>
+                  <div className="text-xl sm:text-2xl font-extrabold text-[#2E6B4A] font-mono">
+                    {validationReport.valid}
+                  </div>
+                  <div className="text-xs font-semibold text-[#2E6B4A] uppercase tracking-wide mt-0.5">
+                    Valid & Ready
+                  </div>
+                </div>
+
+                <div>
+                  <div className={`text-xl sm:text-2xl font-extrabold font-mono ${validationReport.invalid > 0 ? "text-[#B42318]" : "text-[#667085]"}`}>
+                    {validationReport.invalid}
+                  </div>
+                  <div className={`text-xs font-semibold uppercase tracking-wide mt-0.5 ${validationReport.invalid > 0 ? "text-[#B42318]" : "text-[#667085]"}`}>
+                    Errors / Conflicts
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ============================================================
+              4. PREVIEW TABLE & TABBED FILTERING
+          ============================================================ */}
+          <div className="bg-white border border-[#D9DDE3] rounded-lg shadow-xs overflow-hidden">
+            
+            {/* Filter Tabs & Commit Action */}
+            <div className="px-5 py-3.5 border-b border-[#D9DDE3] bg-[#F7F3EA] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="flex items-center space-x-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("all")}
+                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer ${
+                    activeTab === "all"
+                      ? "bg-[#7A1F24] text-white"
+                      : "bg-white text-[#202124] border border-[#D9DDE3] hover:bg-[#F7F3EA]"
+                  }`}
+                >
+                  All Records ({parsedRecords.length})
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("valid")}
+                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer ${
+                    activeTab === "valid"
+                      ? "bg-[#2E6B4A] text-white"
+                      : "bg-white text-[#202124] border border-[#D9DDE3] hover:bg-[#F7F3EA]"
+                  }`}
+                >
+                  Valid & Ready ({validationReport?.valid || 0})
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("errors")}
+                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer ${
+                    activeTab === "errors"
+                      ? "bg-[#B42318] text-white"
+                      : "bg-white text-[#202124] border border-[#D9DDE3] hover:bg-[#F7F3EA]"
+                  }`}
+                >
+                  Errors & Conflicts ({validationReport?.invalid || 0})
+                </button>
+              </div>
+
+              {/* Commit Button */}
+              <div>
+                <button
+                  type="button"
+                  disabled={importing || !validationReport || validationReport.valid === 0}
+                  onClick={handleCommitImport}
+                  className="bg-[#7A1F24] hover:bg-[#5C171B] text-white text-xs font-bold px-5 py-2 rounded-md transition shadow-xs flex items-center space-x-1.5 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  {importing ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      <span>Saving to Supabase...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>Confirm & Import ({validationReport?.valid || 0} Valid Records)</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
 
-            <div className="flex items-center space-x-2">
-              <span className="text-slate-600 font-medium">Default Batch:</span>
-              <select
-                value={defaultBatch}
-                onChange={(e) => setDefaultBatch(e.target.value)}
-                className="bg-white border border-slate-300 rounded-lg px-2 py-1 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-glgold"
-              >
-                {BATCH_YEARS.map((y) => (
-                  <option key={y} value={y}>{y}</option>
-                ))}
-              </select>
-            </div>
-
-            <label className="flex items-center space-x-2 cursor-pointer font-medium text-slate-700 select-none">
-              <input
-                type="checkbox"
-                checked={autoGenEmail}
-                onChange={(e) => setAutoGenEmail(e.target.checked)}
-                className="rounded border-slate-300 text-glgold focus:ring-glgold"
-              />
-              <span>Auto-generate college email (<code className="text-glblue-750">{`{roll}@glbitm.ac.in`}</code>) if absent</span>
-            </label>
-          </div>
-        </div>
-      )}
-
-      {/* Validation Summary Bar */}
-      {validationReport && !isSuccess && (
-        <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div className="flex items-center space-x-6 text-xs">
-            <div>
-              <span className="text-slate-400 block font-semibold uppercase text-[10px]">TOTAL RECORDS</span>
-              <strong className="text-slate-900 text-base">{validationReport.total}</strong>
-            </div>
-            <div>
-              <span className="text-emerald-600 block font-semibold uppercase text-[10px]">VALID & READY</span>
-              <strong className="text-emerald-700 text-base flex items-center gap-1">
-                <CheckCircle2 className="w-4 h-4" />
-                <span>{validationReport.valid}</span>
-              </strong>
-            </div>
-            <div>
-              <span className="text-red-500 block font-semibold uppercase text-[10px]">ERRORS / CONFLICTS</span>
-              <strong className="text-red-600 text-base flex items-center gap-1">
-                <AlertTriangle className="w-4 h-4" />
-                <span>{validationReport.invalid}</span>
-              </strong>
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-3 w-full sm:w-auto">
-            <button
-              onClick={handleReset}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-200 transition"
-            >
-              Reset
-            </button>
-            <button
-              onClick={handleCommitImport}
-              disabled={importing || validationReport.valid === 0}
-              className="bg-glgold hover:bg-glgold-dark text-slate-950 font-black text-xs px-6 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5 disabled:opacity-50"
-            >
-              {importing ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <>
-                  <Check className="w-4 h-4" />
-                  <span>Confirm & Commit {validationReport.valid} Records</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Spreadsheet Live Preview Table with Filter Tabs */}
-      {parsedRecords.length > 0 && !isSuccess && (
-        <div className="space-y-3">
-          <div className="flex items-center justify-between text-xs">
-            <div className="flex items-center space-x-2">
-              <span className="font-bold text-slate-700">Filter Records:</span>
-              <button
-                onClick={() => setActiveTab("all")}
-                className={`px-3 py-1 rounded-lg font-bold text-xs transition ${
-                  activeTab === "all" ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                }`}
-              >
-                All ({validationReport?.total || 0})
-              </button>
-              <button
-                onClick={() => setActiveTab("valid")}
-                className={`px-3 py-1 rounded-lg font-bold text-xs transition ${
-                  activeTab === "valid" ? "bg-emerald-700 text-white" : "bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
-                }`}
-              >
-                Valid & Ready ({validationReport?.valid || 0})
-              </button>
-              <button
-                onClick={() => setActiveTab("errors")}
-                className={`px-3 py-1 rounded-lg font-bold text-xs transition ${
-                  activeTab === "errors" ? "bg-red-700 text-white" : "bg-red-50 text-red-800 hover:bg-red-100"
-                }`}
-              >
-                Errors ({validationReport?.invalid || 0})
-              </button>
-            </div>
-            <span className="text-slate-400 text-[11px]">
-              Showing {displayedRows.length} of {parsedRecords.length} records
-            </span>
-          </div>
-
-          <div className="overflow-x-auto border border-slate-200 rounded-2xl max-h-96 overflow-y-auto">
-            <table className="w-full text-left border-collapse text-xs">
-              <thead className="bg-slate-100 text-slate-600 font-bold uppercase sticky top-0 z-10 shadow-xs">
-                <tr className="border-b border-slate-200">
-                  <th className="px-4 py-2.5">Row</th>
-                  <th className="px-4 py-2.5">Validation Status</th>
-                  <th className="px-4 py-2.5">Roll Number</th>
-                  <th className="px-4 py-2.5">Full Name</th>
-                  <th className="px-4 py-2.5">Email</th>
-                  <th className="px-4 py-2.5">Branch</th>
-                  <th className="px-4 py-2.5">Batch</th>
-                  {targetType === "alumni" && <th className="px-4 py-2.5">Current Role & Company</th>}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {displayedRows.length === 0 ? (
+            {/* Table Content */}
+            <div className="overflow-x-auto max-h-96">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead className="bg-[#F7F3EA] text-[#667085] font-bold uppercase tracking-wider border-b border-[#D9DDE3] sticky top-0 z-10">
                   <tr>
-                    <td colSpan={targetType === "alumni" ? 8 : 7} className="text-center py-8 text-slate-400">
-                      No records match the selected filter.
-                    </td>
+                    <th className="px-4 py-3 text-center">Row</th>
+                    <th className="px-4 py-3">Status</th>
+                    <th className="px-4 py-3">Roll Number</th>
+                    <th className="px-4 py-3">Full Name</th>
+                    <th className="px-4 py-3">Email</th>
+                    <th className="px-4 py-3">Branch & Batch</th>
+                    <th className="px-4 py-3">Validation Details</th>
                   </tr>
-                ) : (
-                  displayedRows.map((r) => (
-                    <tr
-                      key={r.rowIndex}
-                      className={`hover:bg-slate-50 transition ${!r.isValid ? "bg-red-50/40" : "bg-white"}`}
-                    >
-                      <td className="px-4 py-2.5 text-slate-400 font-mono">{r.rowIndex}</td>
-                      <td className="px-4 py-2.5">
-                        {r.isValid ? (
-                          <span className="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                            <CheckCircle2 className="w-3 h-3" />
-                            <span>Valid</span>
-                          </span>
-                        ) : (
-                          <div className="flex flex-col gap-0.5">
-                            {r.errors.map((err, i) => (
-                              <span
-                                key={i}
-                                className="inline-flex items-center gap-1 bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full w-fit"
-                              >
-                                <AlertTriangle className="w-3 h-3 shrink-0" />
-                                <span>{err}</span>
-                              </span>
-                            ))}
-                          </div>
-                        )}
+                </thead>
+                <tbody className="divide-y divide-[#D9DDE3]">
+                  {displayedRows.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="px-4 py-8 text-center text-xs text-[#667085]">
+                        No records match the active filter.
                       </td>
-                      <td className={`px-4 py-2.5 font-mono font-bold ${r.data.roll_number === "MISSING" ? "text-red-500 italic" : "text-slate-900"}`}>
-                        {r.data.roll_number}
-                      </td>
-                      <td className={`px-4 py-2.5 font-semibold ${r.data.full_name === "MISSING" ? "text-red-500 italic" : "text-slate-900"}`}>
-                        {r.data.full_name}
-                      </td>
-                      <td className={`px-4 py-2.5 ${r.data.email === "MISSING" ? "text-red-500 italic" : "text-slate-600"}`}>
-                        {r.data.email}
-                      </td>
-                      <td className="px-4 py-2.5 text-slate-600 font-semibold">{r.data.branch}</td>
-                      <td className="px-4 py-2.5 text-slate-600">{r.data.batch_year}</td>
-                      {targetType === "alumni" && (
-                        <td className="px-4 py-2.5 text-slate-600">
-                          {r.data.current_designation || r.data.current_company
-                            ? `${r.data.current_designation || "Specialist"} @ ${r.data.current_company || "Industry"}`
-                            : "—"}
-                        </td>
-                      )}
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    displayedRows.map((r) => (
+                      <tr 
+                        key={r.rowIndex}
+                        className={`transition ${r.isValid ? "hover:bg-[#F7F3EA]/40" : "bg-red-50/40 hover:bg-red-50/70"}`}
+                      >
+                        <td className="px-4 py-3 text-center font-mono text-[#667085]">
+                          #{r.rowIndex}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          {r.isValid ? (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded bg-green-50 text-[#2E6B4A] border border-green-200 uppercase">
+                              <Check className="w-3 h-3" />
+                              <span>Valid</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded bg-red-50 text-[#B42318] border border-red-200 uppercase">
+                              <AlertTriangle className="w-3 h-3" />
+                              <span>Error</span>
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 font-mono font-bold text-[#7A1F24]">
+                          {r.data.roll_number || "—"}
+                        </td>
+                        <td className="px-4 py-3 font-bold text-[#202124]">
+                          {r.data.full_name || "—"}
+                        </td>
+                        <td className="px-4 py-3 text-[#667085] font-mono">
+                          {r.data.email || "—"}
+                        </td>
+                        <td className="px-4 py-3 text-[#202124]">
+                          {r.data.branch} ({r.data.batch})
+                        </td>
+                        <td className="px-4 py-3">
+                          {r.isValid ? (
+                            <span className="text-[11px] text-[#2E6B4A]">
+                              Ready for database insertion
+                            </span>
+                          ) : (
+                            <div className="space-y-0.5">
+                              {r.errors.map((err, errIdx) => (
+                                <div key={errIdx} className="text-[11px] text-[#B42318] font-medium flex items-center gap-1">
+                                  <span>•</span>
+                                  <span>{err}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+
           </div>
+
+          {/* Success Summary Banner */}
+          {isSuccess && importResult && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-5 space-y-2 text-[#2E6B4A]">
+              <div className="flex items-center space-x-2 font-bold text-sm">
+                <CheckCircle2 className="w-5 h-5 text-[#2E6B4A]" />
+                <span>Import Operation Completed</span>
+              </div>
+              <p className="text-xs text-[#2E6B4A]/90">
+                Successfully processed <strong>{importResult.valid}</strong> records from <strong>{importResult.filename}</strong>.
+                {importResult.invalid > 0 && (
+                  <span> (Rejected {importResult.invalid} malformed or duplicate records).</span>
+                )}
+              </p>
+              <div className="pt-2 flex items-center space-x-3">
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  className="bg-[#2E6B4A] hover:bg-[#25573C] text-white text-xs font-semibold px-4 py-1.5 rounded transition cursor-pointer"
+                >
+                  Import Another File
+                </button>
+              </div>
+            </div>
+          )}
+
         </div>
       )}
+
     </div>
   );
 }
