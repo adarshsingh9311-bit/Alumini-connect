@@ -5,12 +5,15 @@ import { useAuth } from "../../context/AuthContext";
 import { USER_ROLES } from "../../lib/constants";
 
 export default function UniversityHero() {
-  const { setDemoPortal } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   function handleFindMentor() {
-    setDemoPortal(USER_ROLES.STUDENT);
-    navigate("/student/alumni");
+    if (user) {
+      navigate("/student/alumni");
+    } else {
+      navigate("/login?role=student");
+    }
   }
 
   const pillars = [

@@ -395,7 +395,17 @@ export function AuthProvider({ children }) {
       throw new Error("Graduation year must be between 2005 and 2050 inclusive.");
     }
 
-    // 4. Verify user against existing student/alumni database records where applicable
+    // 4. Verify user against existing profiles and student/alumni database records to prevent duplicate requests from wasting email quota
+    const { data: existingProfile } = await supabase
+      .from("profiles")
+      .select("id, email")
+      .eq("email", cleanEmail)
+      .maybeSingle();
+
+    if (existingProfile) {
+      throw new Error("This college email is already registered. If you need to verify your email, please use the resend verification link on the login page.");
+    }
+
     if (targetRole === USER_ROLES.STUDENT) {
       const { data: existingStudent } = await supabase
         .from("students")
