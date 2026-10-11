@@ -47,6 +47,13 @@ export default function LoginPage() {
   const isVerifiedParam = searchParams.get("verified") === "true";
 
   React.useEffect(() => {
+    const urlRole = searchParams.get("portal") || searchParams.get("role");
+    if (urlRole && (urlRole === USER_ROLES.STUDENT || urlRole === USER_ROLES.ALUMNI || urlRole === USER_ROLES.ADMIN)) {
+      setSelectedRole(urlRole);
+    }
+  }, [searchParams]);
+
+  React.useEffect(() => {
     let timer = null;
     if (loginResendCooldown > 0) {
       timer = setTimeout(() => {
