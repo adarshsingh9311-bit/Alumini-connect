@@ -129,7 +129,7 @@ export default function RegisterPage() {
   // If email confirmation is required, render dedicated verification instructions
   if (confirmationSentEmail) {
     return (
-      <div className="min-h-screen bg-[#F7F3EA] flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="min-h-screen bg-[#F7F5F0] flex items-center justify-center p-4 sm:p-6 lg:p-8">
         <div className="w-full max-w-lg bg-[#FFFFFF] border border-[#D9DDE3] rounded-xl shadow-sm p-6 sm:p-10 text-center">
           <div className="w-14 h-14 bg-[#2E6B4A]/10 text-[#2E6B4A] rounded-full flex items-center justify-center mx-auto mb-4">
             <Mail className="w-7 h-7" />
@@ -149,7 +149,7 @@ export default function RegisterPage() {
             Please open your inbox and click the verification link to activate your GL Bajaj account before logging in.
           </p>
 
-          <div className="bg-[#F7F3EA] border border-[#D9DDE3] rounded-lg p-4 text-xs text-[#202124] mb-6 text-left space-y-2">
+          <div className="bg-[#F7F5F0] border border-[#D9DDE3] rounded-lg p-4 text-xs text-[#202124] mb-6 text-left space-y-2">
             <div className="flex items-start gap-2">
               <CheckCircle2 className="w-4 h-4 text-[#2E6B4A] shrink-0 mt-0.5" />
               <span>Allowed domain: <strong>@glbitm.ac.in</strong></span>
@@ -163,7 +163,7 @@ export default function RegisterPage() {
           <div className="space-y-3">
             <Link
               to={`/login?portal=${targetRole}`}
-              className="w-full inline-flex items-center justify-center gap-2 bg-[#7A1F24] hover:bg-[#5C171B] text-white py-2.5 px-4 rounded-lg font-semibold text-xs sm:text-sm transition shadow-xs"
+              className="w-full inline-flex items-center justify-center gap-2 bg-[#102235] hover:bg-[#0B1724] text-white py-2.5 px-4 rounded-lg font-semibold text-xs sm:text-sm transition shadow-xs"
             >
               <span>Go to Login</span>
               <ArrowRight className="w-4 h-4" />
@@ -173,7 +173,7 @@ export default function RegisterPage() {
               type="button"
               onClick={handleResend}
               disabled={resending || resendCooldown > 0}
-              className="w-full inline-flex items-center justify-center gap-2 border border-[#D9DDE3] hover:bg-[#F7F3EA] text-[#202124] py-2.5 px-4 rounded-lg font-semibold text-xs transition disabled:opacity-50"
+              className="w-full inline-flex items-center justify-center gap-2 border border-[#D9DDE3] hover:bg-[#F7F5F0] text-[#202124] py-2.5 px-4 rounded-lg font-semibold text-xs transition disabled:opacity-50"
             >
               {resending ? (
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -193,18 +193,34 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F3EA] flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#F7F5F0] flex items-center justify-center p-4 sm:p-6 lg:p-8">
       <div className="w-full max-w-2xl bg-[#FFFFFF] border border-[#D9DDE3] rounded-xl shadow-sm p-6 sm:p-10">
         
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-12 h-12 bg-[#7A1F24] text-white rounded-lg flex items-center justify-center font-bold text-xl mx-auto mb-3 shadow-xs">
-            GL
-          </div>
+          <Link to="/" className="inline-flex items-center space-x-3 mb-3 group">
+            <img
+              src="/assets/glb-crest-clean.png"
+              alt="GL Bajaj Seal"
+              className="w-12 h-12 object-contain"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/assets/glb-crest.png";
+              }}
+            />
+            <div className="flex flex-col text-left">
+              <span className="font-bold text-xl tracking-wide text-[#102235] leading-tight font-serif">
+                GL BAJAJ
+              </span>
+              <span className="text-[10px] font-semibold text-[#D6A34D] uppercase tracking-widest leading-none mt-0.5">
+                ALUMNI CONNECT
+              </span>
+            </div>
+          </Link>
           <h1 className="text-2xl font-bold text-[#202124] tracking-tight">
             Create College Account
           </h1>
-          <p className="text-xs text-[#B08A3E] font-bold tracking-widest uppercase mt-1">
+          <p className="text-xs text-[#D6A34D] font-bold tracking-widest uppercase mt-1 font-serif">
             "Once GLB, Always GLB."
           </p>
           <p className="text-xs text-[#667085] mt-1">
@@ -213,13 +229,13 @@ export default function RegisterPage() {
         </div>
 
         {/* Role Selector Tabs (Student & Alumni Only - Admin is strictly excluded) */}
-        <div className="grid grid-cols-2 gap-2 p-1 bg-[#F7F3EA] border border-[#D9DDE3] rounded-lg mb-6">
+        <div className="grid grid-cols-2 gap-2 p-1 bg-[#F7F5F0] border border-[#D9DDE3] rounded-lg mb-6">
           <button
             type="button"
             onClick={() => setTargetRole(USER_ROLES.STUDENT)}
             className={`py-2 text-xs font-semibold rounded-md flex items-center justify-center gap-2 transition ${
               targetRole === USER_ROLES.STUDENT
-                ? "bg-[#7A1F24] text-[#FFFFFF] shadow-xs"
+                ? "bg-[#102235] text-[#FFFFFF] shadow-xs"
                 : "text-[#202124] hover:bg-[#FFFFFF]/70"
             }`}
           >
@@ -232,7 +248,7 @@ export default function RegisterPage() {
             onClick={() => setTargetRole(USER_ROLES.ALUMNI)}
             className={`py-2 text-xs font-semibold rounded-md flex items-center justify-center gap-2 transition ${
               targetRole === USER_ROLES.ALUMNI
-                ? "bg-[#7A1F24] text-[#FFFFFF] shadow-xs"
+                ? "bg-[#102235] text-[#FFFFFF] shadow-xs"
                 : "text-[#202124] hover:bg-[#FFFFFF]/70"
             }`}
           >
@@ -243,7 +259,7 @@ export default function RegisterPage() {
 
         {/* Unconfigured Alert */}
         {!isSupabaseConfigured && (
-          <div className="p-3 bg-[#F7F3EA] border border-[#B08A3E] rounded-lg text-[#202124] text-xs font-medium mb-6">
+          <div className="p-3 bg-[#F7F5F0] border border-[#D6A34D] rounded-lg text-[#202124] text-xs font-medium mb-6">
             Supabase is not configured. Please contact the administrator.
           </div>
         )}
@@ -262,7 +278,7 @@ export default function RegisterPage() {
                 value={formData.full_name}
                 onChange={handleChange}
                 placeholder="e.g. Rahul Sharma"
-                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#102235] focus:ring-1 focus:ring-[#102235]"
               />
             </div>
 
@@ -277,7 +293,7 @@ export default function RegisterPage() {
                 value={formData.roll_number}
                 onChange={handleChange}
                 placeholder={targetRole === USER_ROLES.STUDENT ? "e.g. 2300001" : "e.g. 2200001"}
-                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm font-mono text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm font-mono text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#102235] focus:ring-1 focus:ring-[#102235]"
               />
             </div>
           </div>
@@ -294,7 +310,7 @@ export default function RegisterPage() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder={targetRole === USER_ROLES.STUDENT ? "student@glbitm.ac.in" : "alumni@glbitm.ac.in"}
-                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#102235] focus:ring-1 focus:ring-[#102235]"
               />
               <p className="text-[11px] text-[#667085] mt-1">
                 Use your official @glbitm.ac.in email address.
@@ -312,7 +328,7 @@ export default function RegisterPage() {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="At least 6 characters"
-                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#102235] focus:ring-1 focus:ring-[#102235]"
               />
             </div>
           </div>
@@ -326,7 +342,7 @@ export default function RegisterPage() {
                 name="branch"
                 value={formData.branch}
                 onChange={handleChange}
-                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] focus:outline-none focus:border-[#102235] focus:ring-1 focus:ring-[#102235]"
               >
                 {BRANCH_CODES.map((b) => (
                   <option key={b} value={b}>{b}</option>
@@ -342,7 +358,7 @@ export default function RegisterPage() {
                 name="batch_year"
                 value={formData.batch_year}
                 onChange={handleChange}
-                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] focus:outline-none focus:border-[#102235] focus:ring-1 focus:ring-[#102235]"
               >
                 {BATCH_YEARS.map((y) => (
                   <option key={y} value={y}>{y}</option>
@@ -360,7 +376,7 @@ export default function RegisterPage() {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="e.g. +91 9876543210"
-                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#102235] focus:ring-1 focus:ring-[#102235]"
               />
             </div>
           </div>
@@ -368,7 +384,7 @@ export default function RegisterPage() {
           {/* Alumni Specific Professional Fields */}
           {targetRole === USER_ROLES.ALUMNI && (
             <div className="pt-2 border-t border-[#D9DDE3] space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-[#7A1F24]">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#102235]">
                 Professional Information
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -382,7 +398,7 @@ export default function RegisterPage() {
                     value={formData.current_company}
                     onChange={handleChange}
                     placeholder="e.g. Tata Consultancy Services"
-                    className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                    className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#102235] focus:ring-1 focus:ring-[#102235]"
                   />
                 </div>
                 <div>
@@ -395,7 +411,7 @@ export default function RegisterPage() {
                     value={formData.current_designation}
                     onChange={handleChange}
                     placeholder="e.g. Senior Software Engineer"
-                    className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                    className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#102235] focus:ring-1 focus:ring-[#102235]"
                   />
                 </div>
               </div>
@@ -407,7 +423,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#7A1F24] hover:bg-[#5C171B] text-[#FFFFFF] font-semibold py-2.5 px-4 rounded-lg text-xs sm:text-sm transition flex items-center justify-center space-x-1.5 disabled:opacity-50 shadow-xs cursor-pointer"
+              className="w-full bg-[#D6A34D] hover:bg-[#C2933E] text-[#102235] font-bold py-2.5 px-4 rounded-lg text-xs sm:text-sm transition flex items-center justify-center space-x-1.5 disabled:opacity-50 shadow-xs cursor-pointer"
             >
               {loading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -425,7 +441,7 @@ export default function RegisterPage() {
         <div className="pt-6 mt-6 border-t border-[#D9DDE3] flex items-center justify-between text-xs">
           <div className="text-[#667085]">
             Already have an account?{" "}
-            <Link to={`/login?role=${targetRole}`} className="text-[#7A1F24] font-semibold hover:underline">
+            <Link to={`/login?role=${targetRole}`} className="text-[#102235] font-bold hover:text-[#D6A34D] hover:underline">
               Sign In
             </Link>
           </div>

@@ -123,7 +123,7 @@ export default function AdminAlumniPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search alumni by name, roll, company, role..."
-            className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg pl-10 pr-4 py-2 text-xs sm:text-sm text-[#202124] focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24] focus:outline-none"
+            className="w-full bg-[#F7F5F0]/30 border border-[#D9DDE3] rounded-lg pl-10 pr-4 py-2 text-xs sm:text-sm text-[#202124] focus:ring-1 focus:ring-[#102235] focus:border-[#102235] focus:outline-none"
           />
         </div>
 
@@ -131,7 +131,7 @@ export default function AdminAlumniPage() {
           <select
             value={branchFilter}
             onChange={(e) => setBranchFilter(e.target.value)}
-            className="bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24] focus:outline-none"
+            className="bg-[#F7F5F0]/30 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:ring-1 focus:ring-[#102235] focus:border-[#102235] focus:outline-none"
           >
             <option value="">All Branches</option>
             {BRANCH_CODES.map((b) => (
@@ -142,7 +142,7 @@ export default function AdminAlumniPage() {
           <select
             value={batchFilter}
             onChange={(e) => setBatchFilter(e.target.value)}
-            className="bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24] focus:outline-none"
+            className="bg-[#F7F5F0]/30 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:ring-1 focus:ring-[#102235] focus:border-[#102235] focus:outline-none"
           >
             <option value="">All Batches</option>
             {BATCH_YEARS.map((y) => (
@@ -153,7 +153,7 @@ export default function AdminAlumniPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24] focus:outline-none"
+            className="bg-[#F7F5F0]/30 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:ring-1 focus:ring-[#102235] focus:border-[#102235] focus:outline-none"
           >
             <option value="">All Statuses</option>
             <option value="verified">Verified Only</option>
@@ -165,7 +165,7 @@ export default function AdminAlumniPage() {
       {/* Alumni Table */}
       {loading ? (
         <div className="py-20 text-center text-[#667085]">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#7A1F24] mb-3" />
+          <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#102235] mb-3" />
           <p className="text-sm">Loading alumni records...</p>
         </div>
       ) : filtered.length === 0 ? (
@@ -181,7 +181,7 @@ export default function AdminAlumniPage() {
         <div className="bg-white rounded-xl border border-[#D9DDE3] shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-[#F7F3EA] text-[#667085] font-bold uppercase tracking-wider border-b border-[#D9DDE3]">
+              <thead className="bg-[#F7F5F0] text-[#667085] font-bold uppercase tracking-wider border-b border-[#D9DDE3]">
                 <tr>
                   <th className="p-4">Alumnus Name</th>
                   <th className="p-4">Roll Number</th>
@@ -193,9 +193,9 @@ export default function AdminAlumniPage() {
               </thead>
               <tbody className="divide-y divide-[#D9DDE3]">
                 {filtered.map((a) => (
-                  <tr key={a.id} className="hover:bg-[#F7F3EA]/50 transition">
+                  <tr key={a.id} className="hover:bg-[#F7F5F0]/50 transition">
                     <td className="p-4 font-bold text-[#202124] font-serif">{a.full_name}</td>
-                    <td className="p-4 font-mono font-bold text-[#7A1F24]">{a.roll_number || "—"}</td>
+                    <td className="p-4 font-mono font-bold text-[#102235]">{a.roll_number || "—"}</td>
                     <td className="p-4 text-[#667085]">{a.branch} (Batch {a.batch_year})</td>
                     <td className="p-4 text-[#202124]">
                       {a.current_designation ? `${a.current_designation} at ` : ""}{a.current_company || "GLB Alumnus"}

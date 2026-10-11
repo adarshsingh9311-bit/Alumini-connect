@@ -30,24 +30,27 @@ export default function Navbar({ onOpenNotifications }) {
   const isAdminActive = location.pathname.startsWith("/admin");
 
   return (
-    <header className="bg-[#7A1F24] text-white sticky top-0 z-40 border-b border-[#5C171B] shadow-xs">
+    <header className="bg-[#102235] text-white sticky top-0 z-40 border-b border-[#0B1724] shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
         {/* Brand Logo & Name */}
-        <Link to="/" className="flex items-center space-x-3">
-          <div className="bg-[#FFFFFF] text-[#7A1F24] w-9 h-9 rounded-lg flex items-center justify-center font-bold text-base shadow-xs shrink-0">
-            GL
-          </div>
-          <div>
-            <h1 className="font-bold text-sm sm:text-base leading-tight tracking-tight flex items-center gap-2">
-              <span>GL BAJAJ</span>
-              <span className="text-[10px] bg-[#5C171B] text-[#FFFFFF] px-1.5 py-0.5 rounded font-mono hidden sm:inline-block">
-                ALUMNI CONNECT
-              </span>
-            </h1>
-            <p className="text-[11px] text-white/80 truncate max-w-[200px] sm:max-w-none">
-              "Once GLB, Always GLB."
-            </p>
+        <Link to="/" className="flex items-center space-x-3 group">
+          <img
+            src="/assets/glb-crest-clean.png"
+            alt="GL Bajaj Seal"
+            className="w-10 h-10 object-contain shrink-0"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "/assets/glb-crest.png";
+            }}
+          />
+          <div className="flex flex-col justify-center">
+            <span className="font-bold text-base sm:text-lg tracking-wide text-white leading-tight font-serif">
+              GL BAJAJ
+            </span>
+            <span className="text-[10px] font-semibold text-[#D6A34D] uppercase tracking-widest leading-none mt-0.5">
+              ALUMNI CONNECT
+            </span>
           </div>
         </Link>
 
@@ -57,8 +60,8 @@ export default function Navbar({ onOpenNotifications }) {
             to="/student"
             className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex items-center space-x-1.5 ${
               isStudentActive
-                ? "bg-[#5C171B] text-[#FFFFFF]"
-                : "text-white/90 hover:bg-[#5C171B] hover:text-white"
+                ? "bg-[#0B1724] text-[#FFFFFF]"
+                : "text-white/90 hover:bg-[#0B1724] hover:text-white"
             }`}
           >
             <GraduationCap className="w-4 h-4" />
@@ -69,8 +72,8 @@ export default function Navbar({ onOpenNotifications }) {
             to="/alumni"
             className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex items-center space-x-1.5 ${
               isAlumniActive
-                ? "bg-[#5C171B] text-[#FFFFFF]"
-                : "text-white/90 hover:bg-[#5C171B] hover:text-white"
+                ? "bg-[#0B1724] text-[#FFFFFF]"
+                : "text-white/90 hover:bg-[#0B1724] hover:text-white"
             }`}
           >
             <Briefcase className="w-4 h-4" />
@@ -81,8 +84,8 @@ export default function Navbar({ onOpenNotifications }) {
             to="/admin"
             className={`px-3 py-1.5 rounded-md text-xs font-semibold transition flex items-center space-x-1.5 ${
               isAdminActive
-                ? "bg-[#5C171B] text-[#FFFFFF]"
-                : "text-white/90 hover:bg-[#5C171B] hover:text-white"
+                ? "bg-[#0B1724] text-[#FFFFFF]"
+                : "text-white/90 hover:bg-[#0B1724] hover:text-white"
             }`}
           >
             <ShieldCheck className="w-4 h-4" />
@@ -96,18 +99,18 @@ export default function Navbar({ onOpenNotifications }) {
           {onOpenNotifications && (
             <button
               onClick={onOpenNotifications}
-              className="p-2 rounded-md hover:bg-[#5C171B] text-white transition relative"
+              className="p-2 rounded-md hover:bg-[#0B1724] text-white transition relative"
               title="Notifications"
             >
               <Bell className="w-4 h-4" />
-              <span className="absolute top-1.5 right-1.5 bg-[#B08A3E] w-2 h-2 rounded-full"></span>
+              <span className="absolute top-1.5 right-1.5 bg-[#D6A34D] w-2 h-2 rounded-full"></span>
             </button>
           )}
 
           {/* User Account State */}
           {user ? (
             <div className="flex items-center space-x-2">
-              <div className="flex items-center space-x-2 bg-[#5C171B] px-3 py-1.5 rounded-md border border-white/10 text-xs">
+              <div className="flex items-center space-x-2 bg-[#0B1724] px-3 py-1.5 rounded-md border border-white/10 text-xs">
                 {profile?.avatar_url ? (
                   <img
                     src={profile.avatar_url}
@@ -126,7 +129,7 @@ export default function Navbar({ onOpenNotifications }) {
               </div>
               <button
                 onClick={handleLogout}
-                className="p-2 rounded-md hover:bg-[#5C171B] text-white/80 hover:text-white transition"
+                className="p-2 rounded-md hover:bg-[#0B1724] text-white/80 hover:text-white transition"
                 title="Logout"
               >
                 <LogOut className="w-4 h-4" />
@@ -136,13 +139,13 @@ export default function Navbar({ onOpenNotifications }) {
             <div className="flex items-center space-x-2">
               <Link
                 to="/login"
-                className="px-3 py-1.5 rounded-md text-xs font-semibold text-white hover:bg-[#5C171B] transition"
+                className="px-3 py-1.5 rounded-md text-xs font-semibold text-white hover:bg-[#0B1724] transition"
               >
                 Sign In
               </Link>
               <Link
                 to="/register"
-                className="px-3.5 py-1.5 rounded-md text-xs font-semibold bg-[#FFFFFF] text-[#7A1F24] hover:bg-[#F7F3EA] transition shadow-xs"
+                className="px-3.5 py-1.5 rounded-md text-xs font-semibold bg-[#FFFFFF] text-[#102235] hover:bg-[#F7F5F0] transition shadow-xs"
               >
                 Join Network
               </Link>
@@ -155,14 +158,14 @@ export default function Navbar({ onOpenNotifications }) {
           {onOpenNotifications && (
             <button
               onClick={onOpenNotifications}
-              className="p-2 rounded-md hover:bg-[#5C171B] text-white"
+              className="p-2 rounded-md hover:bg-[#0B1724] text-white"
             >
               <Bell className="w-4 h-4" />
             </button>
           )}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-md text-white hover:bg-[#5C171B] transition"
+            className="p-2 rounded-md text-white hover:bg-[#0B1724] transition"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -171,7 +174,7 @@ export default function Navbar({ onOpenNotifications }) {
 
       {/* Mobile Dropdown Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#5C171B] border-t border-[#7A1F24] px-4 pt-3 pb-5 space-y-2">
+        <div className="md:hidden bg-[#0B1724] border-t border-[#102235] px-4 pt-3 pb-5 space-y-2">
           <div className="text-[10px] uppercase tracking-wider font-bold text-white/70 px-2">
             Select Portal
           </div>
@@ -179,7 +182,7 @@ export default function Navbar({ onOpenNotifications }) {
             to="/student"
             onClick={() => setMobileMenuOpen(false)}
             className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium ${
-              isStudentActive ? "bg-white text-[#7A1F24] font-bold" : "text-white hover:bg-white/10"
+              isStudentActive ? "bg-white text-[#102235] font-bold" : "text-white hover:bg-white/10"
             }`}
           >
             <GraduationCap className="w-4 h-4" />
@@ -190,7 +193,7 @@ export default function Navbar({ onOpenNotifications }) {
             to="/alumni"
             onClick={() => setMobileMenuOpen(false)}
             className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium ${
-              isAlumniActive ? "bg-white text-[#7A1F24] font-bold" : "text-white hover:bg-white/10"
+              isAlumniActive ? "bg-white text-[#102235] font-bold" : "text-white hover:bg-white/10"
             }`}
           >
             <Briefcase className="w-4 h-4" />
@@ -201,7 +204,7 @@ export default function Navbar({ onOpenNotifications }) {
             to="/admin"
             onClick={() => setMobileMenuOpen(false)}
             className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium ${
-              isAdminActive ? "bg-white text-[#7A1F24] font-bold" : "text-white hover:bg-white/10"
+              isAdminActive ? "bg-white text-[#102235] font-bold" : "text-white hover:bg-white/10"
             }`}
           >
             <ShieldCheck className="w-4 h-4" />
@@ -234,7 +237,7 @@ export default function Navbar({ onOpenNotifications }) {
                 <Link
                   to="/register"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-center py-2 rounded-md text-xs font-semibold bg-[#FFFFFF] text-[#7A1F24]"
+                  className="text-center py-2 rounded-md text-xs font-semibold bg-[#FFFFFF] text-[#102235]"
                 >
                   Join Network
                 </Link>

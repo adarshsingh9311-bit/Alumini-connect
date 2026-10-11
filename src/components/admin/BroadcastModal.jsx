@@ -49,14 +49,14 @@ export default function BroadcastModal({ isOpen, onClose, onSendBroadcast }) {
           <button
             type="button"
             onClick={() => handleTemplateSelect("wishes")}
-            className="text-[11px] bg-[#F7F3EA] text-[#7A1F24] hover:bg-[#D9DDE3]/50 px-2.5 py-1 rounded-lg font-bold border border-[#D9DDE3]"
+            className="text-[11px] bg-[#F7F5F0] text-[#102235] hover:bg-[#D9DDE3]/50 px-2.5 py-1 rounded-lg font-bold border border-[#D9DDE3]"
           >
             Festive Wishes
           </button>
           <button
             type="button"
             onClick={() => handleTemplateSelect("invitation")}
-            className="text-[11px] bg-[#F7F3EA] text-[#7A1F24] hover:bg-[#D9DDE3]/50 px-2.5 py-1 rounded-lg font-bold border border-[#D9DDE3]"
+            className="text-[11px] bg-[#F7F5F0] text-[#102235] hover:bg-[#D9DDE3]/50 px-2.5 py-1 rounded-lg font-bold border border-[#D9DDE3]"
           >
             Alumni Keynote Invite
           </button>
@@ -69,7 +69,7 @@ export default function BroadcastModal({ isOpen, onClose, onSendBroadcast }) {
           <select
             value={targetBatch}
             onChange={(e) => setTargetBatch(e.target.value)}
-            className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
+            className="w-full bg-[#F7F5F0]/30 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#102235] focus:border-[#102235]"
           >
             <option value="all">All Alumni Batches (2005 - 2026)</option>
             <option value="2024">Batch of 2024</option>
@@ -90,7 +90,7 @@ export default function BroadcastModal({ isOpen, onClose, onSendBroadcast }) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Heartiest Congratulations on Foundation Day!"
-            className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
+            className="w-full bg-[#F7F5F0]/30 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#102235] focus:border-[#102235]"
           />
         </div>
 
@@ -104,7 +104,7 @@ export default function BroadcastModal({ isOpen, onClose, onSendBroadcast }) {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Write your wishes or message from the college administration..."
-            className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg p-3 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24] leading-relaxed"
+            className="w-full bg-[#F7F5F0]/30 border border-[#D9DDE3] rounded-lg p-3 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#102235] focus:border-[#102235] leading-relaxed"
           ></textarea>
         </div>
 
@@ -119,7 +119,7 @@ export default function BroadcastModal({ isOpen, onClose, onSendBroadcast }) {
           <button
             type="submit"
             disabled={loading}
-            className="bg-[#7A1F24] hover:bg-[#5C171B] text-white text-xs font-bold px-5 py-2.5 rounded-lg transition shadow-2xs flex items-center space-x-1.5"
+            className="bg-[#102235] hover:bg-[#0B1724] text-white text-xs font-bold px-5 py-2.5 rounded-lg transition shadow-2xs flex items-center space-x-1.5"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
             <span>Broadcast to Alumni</span>

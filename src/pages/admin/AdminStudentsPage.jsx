@@ -82,7 +82,7 @@ export default function AdminStudentsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name, roll number, or email..."
-            className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg pl-10 pr-4 py-2 text-xs sm:text-sm text-[#202124] focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24] focus:outline-none"
+            className="w-full bg-[#F7F5F0]/30 border border-[#D9DDE3] rounded-lg pl-10 pr-4 py-2 text-xs sm:text-sm text-[#202124] focus:ring-1 focus:ring-[#102235] focus:border-[#102235] focus:outline-none"
           />
         </div>
 
@@ -90,7 +90,7 @@ export default function AdminStudentsPage() {
           <select
             value={branchFilter}
             onChange={(e) => setBranchFilter(e.target.value)}
-            className="bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24] focus:outline-none"
+            className="bg-[#F7F5F0]/30 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:ring-1 focus:ring-[#102235] focus:border-[#102235] focus:outline-none"
           >
             <option value="">All Branches</option>
             {BRANCH_CODES.map((b) => (
@@ -101,7 +101,7 @@ export default function AdminStudentsPage() {
           <select
             value={batchFilter}
             onChange={(e) => setBatchFilter(e.target.value)}
-            className="bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24] focus:outline-none"
+            className="bg-[#F7F5F0]/30 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:ring-1 focus:ring-[#102235] focus:border-[#102235] focus:outline-none"
           >
             <option value="">All Batches</option>
             {BATCH_YEARS.map((y) => (
@@ -114,7 +114,7 @@ export default function AdminStudentsPage() {
       {/* Students Table */}
       {loading ? (
         <div className="py-20 text-center text-[#667085]">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#7A1F24] mb-3" />
+          <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#102235] mb-3" />
           <p className="text-sm">Loading student records...</p>
         </div>
       ) : filtered.length === 0 ? (
@@ -130,7 +130,7 @@ export default function AdminStudentsPage() {
         <div className="bg-white rounded-xl border border-[#D9DDE3] shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-[#F7F3EA] text-[#667085] font-bold uppercase tracking-wider border-b border-[#D9DDE3]">
+              <thead className="bg-[#F7F5F0] text-[#667085] font-bold uppercase tracking-wider border-b border-[#D9DDE3]">
                 <tr>
                   <th className="p-4">Scholar Name</th>
                   <th className="p-4">Roll Number</th>
@@ -141,9 +141,9 @@ export default function AdminStudentsPage() {
               </thead>
               <tbody className="divide-y divide-[#D9DDE3]">
                 {filtered.map((s) => (
-                  <tr key={s.id} className="hover:bg-[#F7F3EA]/50 transition">
+                  <tr key={s.id} className="hover:bg-[#F7F5F0]/50 transition">
                     <td className="p-4 font-bold text-[#202124] font-serif">{s.full_name}</td>
-                    <td className="p-4 font-mono font-bold text-[#7A1F24]">{s.roll_number}</td>
+                    <td className="p-4 font-mono font-bold text-[#102235]">{s.roll_number}</td>
                     <td className="p-4 text-[#667085]">{s.branch} (Batch {s.batch_year})</td>
                     <td className="p-4 text-[#667085] font-mono">{s.email}</td>
                     <td className="p-4 text-[#667085]">

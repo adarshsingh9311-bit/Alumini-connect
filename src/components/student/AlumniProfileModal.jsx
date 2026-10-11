@@ -23,7 +23,7 @@ export default function AlumniProfileModal({ isOpen, onClose, alumni, onRequestM
           <img
             src={alumni.avatar_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80"}
             alt={alumni.full_name}
-            className="w-20 h-20 rounded-xl object-cover border-2 border-[#7A1F24] shadow-xs"
+            className="w-20 h-20 rounded-xl object-cover border-2 border-[#102235] shadow-xs"
             onError={(e) => {
               e.currentTarget.onerror = null;
               e.currentTarget.src = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80";
@@ -38,12 +38,12 @@ export default function AlumniProfileModal({ isOpen, onClose, alumni, onRequestM
                 </span>
               )}
             </div>
-            <p className="text-sm font-semibold text-[#7A1F24]">
+            <p className="text-sm font-semibold text-[#102235]">
               {alumni.current_designation || "Alumnus"} {alumni.current_company ? `at ${alumni.current_company}` : ""}
             </p>
             <p className="text-xs text-[#667085] flex items-center justify-center sm:justify-start gap-3 pt-1">
               {educationDisplay && (
-                <span><GraduationCap className="w-3.5 h-3.5 inline mr-1 text-[#7A1F24]" /> {educationDisplay}</span>
+                <span><GraduationCap className="w-3.5 h-3.5 inline mr-1 text-[#102235]" /> {educationDisplay}</span>
               )}
               {alumni.location && <span><MapPin className="w-3.5 h-3.5 inline mr-1 text-[#B42318]" /> {alumni.location}</span>}
             </p>
@@ -54,7 +54,7 @@ export default function AlumniProfileModal({ isOpen, onClose, alumni, onRequestM
         {alumni.bio && (
           <div className="space-y-1.5">
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#667085]">About / Bio</h4>
-            <p className="text-xs sm:text-sm text-[#202124] bg-[#F7F3EA] p-4 rounded-xl leading-relaxed border border-[#D9DDE3] italic">
+            <p className="text-xs sm:text-sm text-[#202124] bg-[#F7F5F0] p-4 rounded-xl leading-relaxed border border-[#D9DDE3] italic">
               "{alumni.bio}"
             </p>
           </div>
@@ -90,7 +90,7 @@ export default function AlumniProfileModal({ isOpen, onClose, alumni, onRequestM
           {alumni.is_available_for_mentorship && (
             <button
               onClick={() => onRequestMentorship(alumni)}
-              className="bg-[#7A1F24] hover:bg-[#5C171B] text-white font-bold text-xs px-5 py-2.5 rounded-lg transition shadow-2xs flex items-center space-x-1.5"
+              className="bg-[#102235] hover:bg-[#0B1724] text-white font-bold text-xs px-5 py-2.5 rounded-lg transition shadow-2xs flex items-center space-x-1.5"
             >
               <MessageSquare className="w-4 h-4" />
               <span>Request 1-on-1 Guidance</span>

@@ -92,12 +92,12 @@ export default function StudentProfilePage() {
 
       <form onSubmit={handleSave} className="bg-white rounded-xl p-6 sm:p-8 border border-[#D9DDE3] shadow-xs space-y-6">
         <div className="flex items-center space-x-4 pb-6 border-b border-[#D9DDE3]">
-          <div className="w-16 h-16 rounded-xl bg-[#7A1F24] text-white font-black text-xl flex items-center justify-center font-serif shadow-2xs">
+          <div className="w-16 h-16 rounded-xl bg-[#102235] text-white font-black text-xl flex items-center justify-center font-serif shadow-2xs">
             {(formData.full_name || "S")[0]}
           </div>
           <div>
             <h3 className="font-bold text-[#202124] text-lg font-serif">{formData.full_name || "Scholar"}</h3>
-            <p className="text-xs text-[#7A1F24] font-mono font-bold">
+            <p className="text-xs text-[#102235] font-mono font-bold">
               {formData.roll_number ? `Roll No: ${formData.roll_number} • ` : ""}{formData.branch} (Batch {formData.batch_year})
             </p>
           </div>
@@ -112,7 +112,7 @@ export default function StudentProfilePage() {
               name="full_name"
               value={formData.full_name}
               onChange={handleChange}
-              className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
+              className="w-full bg-[#F7F5F0]/30 border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#102235] focus:border-[#102235]"
             />
           </div>
 
@@ -122,7 +122,7 @@ export default function StudentProfilePage() {
               type="email"
               disabled
               value={formData.email}
-              className="w-full bg-[#F7F3EA] border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#667085] cursor-not-allowed"
+              className="w-full bg-[#F7F5F0] border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#667085] cursor-not-allowed"
             />
           </div>
 
@@ -132,7 +132,7 @@ export default function StudentProfilePage() {
               type="text"
               disabled
               value={formData.roll_number}
-              className="w-full bg-[#F7F3EA] border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#667085] font-mono cursor-not-allowed"
+              className="w-full bg-[#F7F5F0] border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#667085] font-mono cursor-not-allowed"
             />
           </div>
 
@@ -142,7 +142,7 @@ export default function StudentProfilePage() {
               name="batch_year"
               value={formData.batch_year}
               onChange={handleChange}
-              className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
+              className="w-full bg-[#F7F5F0]/30 border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#102235] focus:border-[#102235]"
             >
               {BATCH_YEARS.map((y) => (
                 <option key={y} value={y}>
@@ -161,7 +161,7 @@ export default function StudentProfilePage() {
             value={formData.skills}
             onChange={handleChange}
             placeholder="e.g. Python, React, Data Structures, Machine Learning"
-            className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
+            className="w-full bg-[#F7F5F0]/30 border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#102235] focus:border-[#102235]"
           />
         </div>
 
@@ -173,7 +173,7 @@ export default function StudentProfilePage() {
             value={formData.interests}
             onChange={handleChange}
             placeholder="What domains, companies or guidance are you seeking from alumni?"
-            className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg p-3 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
+            className="w-full bg-[#F7F5F0]/30 border border-[#D9DDE3] rounded-lg p-3 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#102235] focus:border-[#102235]"
           />
         </div>
 
@@ -181,7 +181,7 @@ export default function StudentProfilePage() {
           <button
             type="submit"
             disabled={saving}
-            className="bg-[#7A1F24] hover:bg-[#5C171B] text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-lg transition shadow-2xs flex items-center space-x-1.5 disabled:opacity-50"
+            className="bg-[#102235] hover:bg-[#0B1724] text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-lg transition shadow-2xs flex items-center space-x-1.5 disabled:opacity-50"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             <span>Save Profile Changes</span>

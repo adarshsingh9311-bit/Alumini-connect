@@ -144,10 +144,10 @@ export default function StudentDashboard() {
     <div className="max-w-7xl mx-auto space-y-6 font-sans">
       
       {/* 1. Student Institutional Welcome Card */}
-      <div className="bg-[#7A1F24] rounded-lg p-6 sm:p-8 text-white border border-[#5C171B] shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="bg-[#102235] rounded-lg p-6 sm:p-8 text-white border border-[#0B1724] shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="space-y-2">
-          <div className="inline-flex items-center space-x-1.5 bg-[#5C171B] border border-white/20 text-[#B08A3E] text-xs px-2.5 py-0.5 rounded font-semibold">
-            <GraduationCap className="w-3.5 h-3.5 text-[#B08A3E]" />
+          <div className="inline-flex items-center space-x-1.5 bg-[#0B1724] border border-white/20 text-[#D6A34D] text-xs px-2.5 py-0.5 rounded font-semibold">
+            <GraduationCap className="w-3.5 h-3.5 text-[#D6A34D]" />
             <span>Student Portal • {profile?.roll_number ? `Roll: ${profile.roll_number}` : (profile?.branch || "GL Bajaj")}</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
@@ -161,14 +161,14 @@ export default function StudentDashboard() {
         <div className="flex flex-wrap items-center gap-3">
           <Link
             to="/student/alumni"
-            className="bg-[#FFFFFF] hover:bg-[#F7F3EA] text-[#7A1F24] font-semibold text-xs sm:text-sm px-4 py-2 rounded-md transition shadow-xs flex items-center space-x-1.5"
+            className="bg-[#FFFFFF] hover:bg-[#F7F5F0] text-[#102235] font-semibold text-xs sm:text-sm px-4 py-2 rounded-md transition shadow-xs flex items-center space-x-1.5"
           >
             <Users className="w-4 h-4" />
             <span>Find Alumni Mentors</span>
           </Link>
           <Link
             to="/student/mentorship"
-            className="bg-[#5C171B] hover:bg-[#481115] text-white font-medium text-xs sm:text-sm px-4 py-2 rounded-md transition border border-white/20 flex items-center space-x-1.5"
+            className="bg-[#0B1724] hover:bg-[#481115] text-white font-medium text-xs sm:text-sm px-4 py-2 rounded-md transition border border-white/20 flex items-center space-x-1.5"
           >
             <MessageSquare className="w-4 h-4" />
             <span>My Mentorship ({mentorships.length})</span>
@@ -186,14 +186,14 @@ export default function StudentDashboard() {
         <div className="lg:col-span-7 bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-6 space-y-4">
           <div className="flex items-center justify-between border-b border-[#D9DDE3] pb-3">
             <div className="flex items-center space-x-2">
-              <MessageSquare className="w-4 h-4 text-[#7A1F24]" />
+              <MessageSquare className="w-4 h-4 text-[#102235]" />
               <h2 className="text-sm font-bold text-[#202124] uppercase tracking-wide">
                 My Mentorship
               </h2>
             </div>
             <Link
               to="/student/mentorship"
-              className="text-xs text-[#7A1F24] hover:underline font-semibold flex items-center space-x-1"
+              className="text-xs text-[#102235] hover:underline font-semibold flex items-center space-x-1"
             >
               <span>View all</span>
               <ArrowRight className="w-3 h-3" />
@@ -205,11 +205,11 @@ export default function StudentDashboard() {
               <Loader2 className="w-6 h-6 animate-spin" />
             </div>
           ) : mentorships.length === 0 ? (
-            <div className="py-8 text-center bg-[#F7F3EA] rounded-md border border-[#D9DDE3] p-6">
+            <div className="py-8 text-center bg-[#F7F5F0] rounded-md border border-[#D9DDE3] p-6">
               <p className="text-xs text-[#667085] font-medium">No mentorship requests yet.</p>
               <Link
                 to="/student/alumni"
-                className="mt-3 inline-block text-xs font-semibold text-[#7A1F24] hover:underline"
+                className="mt-3 inline-block text-xs font-semibold text-[#102235] hover:underline"
               >
                 Explore alumni directory to request guidance →
               </Link>
@@ -219,7 +219,7 @@ export default function StudentDashboard() {
               {mentorships.map((req) => (
                 <div
                   key={req.id}
-                  className="p-3.5 rounded-md border border-[#D9DDE3] bg-[#F7F3EA] flex items-center justify-between text-xs"
+                  className="p-3.5 rounded-md border border-[#D9DDE3] bg-[#F7F5F0] flex items-center justify-between text-xs"
                 >
                   <div className="space-y-1">
                     <div className="font-semibold text-[#202124]">
@@ -252,14 +252,14 @@ export default function StudentDashboard() {
         <div className="lg:col-span-5 bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-6 space-y-4">
           <div className="flex items-center justify-between border-b border-[#D9DDE3] pb-3">
             <div className="flex items-center space-x-2">
-              <Bell className="w-4 h-4 text-[#7A1F24]" />
+              <Bell className="w-4 h-4 text-[#102235]" />
               <h2 className="text-sm font-bold text-[#202124] uppercase tracking-wide">
                 Recent Notices
               </h2>
             </div>
             <Link
               to="/student/notices"
-              className="text-xs text-[#7A1F24] hover:underline font-semibold flex items-center space-x-1"
+              className="text-xs text-[#102235] hover:underline font-semibold flex items-center space-x-1"
             >
               <span>View all</span>
               <ArrowRight className="w-3 h-3" />
@@ -271,15 +271,15 @@ export default function StudentDashboard() {
               <Loader2 className="w-6 h-6 animate-spin" />
             </div>
           ) : notices.length === 0 ? (
-            <div className="py-8 text-center bg-[#F7F3EA] rounded-md border border-[#D9DDE3] p-6">
+            <div className="py-8 text-center bg-[#F7F5F0] rounded-md border border-[#D9DDE3] p-6">
               <p className="text-xs text-[#667085] font-medium">No notices published yet.</p>
             </div>
           ) : (
             <div className="space-y-3">
               {notices.map((n) => (
-                <div key={n.id} className="p-3 rounded-md border border-[#D9DDE3] bg-[#F7F3EA] space-y-1">
+                <div key={n.id} className="p-3 rounded-md border border-[#D9DDE3] bg-[#F7F5F0] space-y-1">
                   <div className="flex items-center justify-between text-[11px] text-[#667085]">
-                    <span className="font-semibold text-[#7A1F24]">{n.category || "Notice"}</span>
+                    <span className="font-semibold text-[#102235]">{n.category || "Notice"}</span>
                     <span>{new Date(n.created_at).toLocaleDateString()}</span>
                   </div>
                   <h3 className="font-semibold text-xs text-[#202124] leading-snug">{n.title}</h3>
@@ -295,14 +295,14 @@ export default function StudentDashboard() {
       <div className="bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-6 space-y-4">
         <div className="flex items-center justify-between border-b border-[#D9DDE3] pb-3">
           <div className="flex items-center space-x-2">
-            <Calendar className="w-4 h-4 text-[#7A1F24]" />
+            <Calendar className="w-4 h-4 text-[#102235]" />
             <h2 className="text-sm font-bold text-[#202124] uppercase tracking-wide">
               Upcoming Events
             </h2>
           </div>
           <Link
             to="/student/events"
-            className="text-xs text-[#7A1F24] hover:underline font-semibold flex items-center space-x-1"
+            className="text-xs text-[#102235] hover:underline font-semibold flex items-center space-x-1"
           >
             <span>View all events</span>
             <ArrowRight className="w-3 h-3" />
@@ -314,15 +314,15 @@ export default function StudentDashboard() {
             <Loader2 className="w-6 h-6 animate-spin" />
           </div>
         ) : events.length === 0 ? (
-          <div className="py-8 text-center bg-[#F7F3EA] rounded-md border border-[#D9DDE3] p-6">
+          <div className="py-8 text-center bg-[#F7F5F0] rounded-md border border-[#D9DDE3] p-6">
             <p className="text-xs text-[#667085] font-medium">No upcoming events scheduled.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {events.map((ev) => (
-              <div key={ev.id} className="p-4 rounded-md border border-[#D9DDE3] bg-[#F7F3EA] space-y-2">
+              <div key={ev.id} className="p-4 rounded-md border border-[#D9DDE3] bg-[#F7F5F0] space-y-2">
                 <div className="flex items-center justify-between text-[11px] text-[#667085]">
-                  <span className="font-semibold text-[#7A1F24] capitalize">{ev.event_type || "Event"}</span>
+                  <span className="font-semibold text-[#102235] capitalize">{ev.event_type || "Event"}</span>
                   <span className="flex items-center gap-1">
                     <Clock className="w-3 h-3" />
                     {ev.date}
@@ -332,7 +332,7 @@ export default function StudentDashboard() {
                 <p className="text-[11px] text-[#667085] line-clamp-2">{ev.description}</p>
                 {ev.location && (
                   <p className="text-[11px] text-[#202124] flex items-center gap-1 font-medium pt-1">
-                    <MapPin className="w-3 h-3 text-[#7A1F24]" />
+                    <MapPin className="w-3 h-3 text-[#102235]" />
                     {ev.location}
                   </p>
                 )}
@@ -346,14 +346,14 @@ export default function StudentDashboard() {
       <div className="bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-6 space-y-4">
         <div className="flex items-center justify-between border-b border-[#D9DDE3] pb-3">
           <div className="flex items-center space-x-2">
-            <Users className="w-4 h-4 text-[#7A1F24]" />
+            <Users className="w-4 h-4 text-[#102235]" />
             <h2 className="text-sm font-bold text-[#202124] uppercase tracking-wide">
               Alumni Recommendations
             </h2>
           </div>
           <Link
             to="/student/alumni"
-            className="text-xs text-[#7A1F24] hover:underline font-semibold flex items-center space-x-1"
+            className="text-xs text-[#102235] hover:underline font-semibold flex items-center space-x-1"
           >
             <span>Explore directory</span>
             <ArrowRight className="w-3 h-3" />
@@ -365,7 +365,7 @@ export default function StudentDashboard() {
             <Loader2 className="w-6 h-6 animate-spin" />
           </div>
         ) : alumniList.length === 0 ? (
-          <div className="py-12 text-center bg-[#F7F3EA] rounded-md border border-[#D9DDE3] p-6">
+          <div className="py-12 text-center bg-[#F7F5F0] rounded-md border border-[#D9DDE3] p-6">
             <p className="text-xs text-[#667085] font-medium">No verified alumni records available yet.</p>
           </div>
         ) : (

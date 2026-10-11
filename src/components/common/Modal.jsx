@@ -27,7 +27,7 @@ export default function Modal({ isOpen, onClose, title, children, maxWidth = "ma
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#D9DDE3] bg-[#F7F3EA]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#D9DDE3] bg-[#F7F5F0]">
           <h3 className="font-bold text-[#202124] text-base sm:text-lg leading-tight font-serif">{title}</h3>
           <button
             onClick={onClose}

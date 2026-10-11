@@ -89,10 +89,10 @@ export default function AdminDashboard() {
     <div className="max-w-7xl mx-auto space-y-6 font-sans">
       
       {/* 1. Admin Institutional Header */}
-      <div className="bg-[#7A1F24] rounded-lg p-6 sm:p-8 text-white border border-[#5C171B] shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div className="bg-[#102235] rounded-lg p-6 sm:p-8 text-white border border-[#0B1724] shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div className="space-y-1.5">
-          <div className="inline-flex items-center space-x-1.5 bg-[#5C171B] text-[#B08A3E] text-xs px-2.5 py-0.5 rounded font-semibold border border-white/10">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#B08A3E]" />
+          <div className="inline-flex items-center space-x-1.5 bg-[#0B1724] text-[#D6A34D] text-xs px-2.5 py-0.5 rounded font-semibold border border-white/10">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#D6A34D]" />
             <span>Central Administration Portal</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
@@ -106,16 +106,16 @@ export default function AdminDashboard() {
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={() => setIsBroadcastModalOpen(true)}
-            className="bg-[#FFFFFF] hover:bg-[#F7F3EA] text-[#7A1F24] text-xs sm:text-sm font-semibold px-4 py-2 rounded-md transition shadow-xs flex items-center space-x-1.5 cursor-pointer"
+            className="bg-[#FFFFFF] hover:bg-[#F7F5F0] text-[#102235] text-xs sm:text-sm font-semibold px-4 py-2 rounded-md transition shadow-xs flex items-center space-x-1.5 cursor-pointer"
           >
             <Send className="w-3.5 h-3.5" />
             <span>Publish Notice</span>
           </button>
           <Link
             to="/admin/import"
-            className="bg-[#5C171B] hover:bg-[#481115] text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-md transition border border-white/20 flex items-center space-x-1.5"
+            className="bg-[#0B1724] hover:bg-[#481115] text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-md transition border border-white/20 flex items-center space-x-1.5"
           >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-[#B08A3E]" />
+            <FileSpreadsheet className="w-3.5 h-3.5 text-[#D6A34D]" />
             <span>Import Excel / CSV</span>
           </Link>
         </div>
@@ -125,11 +125,11 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Link
           to="/admin/students"
-          className="bg-[#FFFFFF] p-4 rounded-lg border border-[#D9DDE3] hover:border-[#7A1F24] transition shadow-xs"
+          className="bg-[#FFFFFF] p-4 rounded-lg border border-[#D9DDE3] hover:border-[#102235] transition shadow-xs"
         >
           <div className="text-[11px] font-semibold uppercase text-[#667085]">Student Records</div>
           <div className="text-xl font-bold text-[#202124] mt-1">{students.length}</div>
-          <div className="text-[11px] text-[#7A1F24] font-medium mt-0.5 flex items-center gap-1">
+          <div className="text-[11px] text-[#102235] font-medium mt-0.5 flex items-center gap-1">
             <span>View directory</span>
             <ArrowRight className="w-3 h-3" />
           </div>
@@ -137,11 +137,11 @@ export default function AdminDashboard() {
 
         <Link
           to="/admin/alumni"
-          className="bg-[#FFFFFF] p-4 rounded-lg border border-[#D9DDE3] hover:border-[#7A1F24] transition shadow-xs"
+          className="bg-[#FFFFFF] p-4 rounded-lg border border-[#D9DDE3] hover:border-[#102235] transition shadow-xs"
         >
           <div className="text-[11px] font-semibold uppercase text-[#667085]">Alumni Records</div>
           <div className="text-xl font-bold text-[#202124] mt-1">{alumni.length}</div>
-          <div className="text-[11px] text-[#7A1F24] font-medium mt-0.5 flex items-center gap-1">
+          <div className="text-[11px] text-[#102235] font-medium mt-0.5 flex items-center gap-1">
             <span>View directory</span>
             <ArrowRight className="w-3 h-3" />
           </div>
@@ -149,7 +149,7 @@ export default function AdminDashboard() {
 
         <Link
           to="/admin/verification"
-          className="bg-[#FFFFFF] p-4 rounded-lg border border-[#D9DDE3] hover:border-[#7A1F24] transition shadow-xs"
+          className="bg-[#FFFFFF] p-4 rounded-lg border border-[#D9DDE3] hover:border-[#102235] transition shadow-xs"
         >
           <div className="text-[11px] font-semibold uppercase text-[#667085]">Pending Verification</div>
           <div className="text-xl font-bold text-[#A66A00] mt-1">{pendingAlumniCount + achievements.length}</div>
@@ -161,11 +161,11 @@ export default function AdminDashboard() {
 
         <Link
           to="/admin/mentorship"
-          className="bg-[#FFFFFF] p-4 rounded-lg border border-[#D9DDE3] hover:border-[#7A1F24] transition shadow-xs"
+          className="bg-[#FFFFFF] p-4 rounded-lg border border-[#D9DDE3] hover:border-[#102235] transition shadow-xs"
         >
           <div className="text-[11px] font-semibold uppercase text-[#667085]">Mentorship Requests</div>
           <div className="text-xl font-bold text-[#202124] mt-1">{mentorships.length}</div>
-          <div className="text-[11px] text-[#7A1F24] font-medium mt-0.5 flex items-center gap-1">
+          <div className="text-[11px] text-[#102235] font-medium mt-0.5 flex items-center gap-1">
             <span>Supervise requests</span>
             <ArrowRight className="w-3 h-3" />
           </div>
@@ -176,14 +176,14 @@ export default function AdminDashboard() {
       <div className="bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-5 space-y-4 shadow-xs">
         <div className="flex items-center justify-between border-b border-[#D9DDE3] pb-3">
           <div className="flex items-center space-x-2">
-            <MessageSquare className="w-4 h-4 text-[#7A1F24]" />
+            <MessageSquare className="w-4 h-4 text-[#102235]" />
             <h2 className="text-xs font-bold uppercase tracking-wider text-[#202124]">
               Recent Mentorship Activity
             </h2>
           </div>
           <Link
             to="/admin/mentorship"
-            className="text-xs text-[#7A1F24] hover:underline font-semibold flex items-center space-x-1"
+            className="text-xs text-[#102235] hover:underline font-semibold flex items-center space-x-1"
           >
             <span>View all</span>
             <ArrowRight className="w-3 h-3" />
@@ -195,7 +195,7 @@ export default function AdminDashboard() {
             <Loader2 className="w-5 h-5 animate-spin" />
           </div>
         ) : mentorships.length === 0 ? (
-          <div className="py-8 text-center bg-[#F7F3EA] rounded border border-[#D9DDE3] p-4">
+          <div className="py-8 text-center bg-[#F7F5F0] rounded border border-[#D9DDE3] p-4">
             <p className="text-xs text-[#667085] font-medium">No mentorship records available yet.</p>
           </div>
         ) : (
@@ -212,7 +212,7 @@ export default function AdminDashboard() {
               </thead>
               <tbody className="divide-y divide-[#D9DDE3]">
                 {mentorships.map((m) => (
-                  <tr key={m.id} className="hover:bg-[#F7F3EA] transition">
+                  <tr key={m.id} className="hover:bg-[#F7F5F0] transition">
                     <td className="py-2.5 px-3 font-semibold text-[#202124]">{m.student?.full_name || "Student"}</td>
                     <td className="py-2.5 px-3 text-[#202124]">{m.alumni?.full_name || "Alumnus"}</td>
                     <td className="py-2.5 px-3 text-[#667085]">{m.topic || "Career Guidance"}</td>
@@ -242,35 +242,35 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Link
           to="/admin/verification"
-          className="bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-4 flex items-center justify-between hover:border-[#7A1F24] transition shadow-xs"
+          className="bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-4 flex items-center justify-between hover:border-[#102235] transition shadow-xs"
         >
           <div>
             <h4 className="font-bold text-xs text-[#202124]">Verification Queue</h4>
             <p className="text-[11px] text-[#667085]">Review unverified alumni & achievements</p>
           </div>
-          <CheckCircle2 className="w-4 h-4 text-[#7A1F24]" />
+          <CheckCircle2 className="w-4 h-4 text-[#102235]" />
         </Link>
 
         <Link
           to="/admin/events"
-          className="bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-4 flex items-center justify-between hover:border-[#7A1F24] transition shadow-xs"
+          className="bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-4 flex items-center justify-between hover:border-[#102235] transition shadow-xs"
         >
           <div>
             <h4 className="font-bold text-xs text-[#202124]">College Events</h4>
             <p className="text-[11px] text-[#667085]">Manage upcoming meets & reunions</p>
           </div>
-          <Calendar className="w-4 h-4 text-[#7A1F24]" />
+          <Calendar className="w-4 h-4 text-[#102235]" />
         </Link>
 
         <Link
           to="/admin/import"
-          className="bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-4 flex items-center justify-between hover:border-[#7A1F24] transition shadow-xs"
+          className="bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-4 flex items-center justify-between hover:border-[#102235] transition shadow-xs"
         >
           <div>
             <h4 className="font-bold text-xs text-[#202124]">Excel/CSV Roster Import</h4>
             <p className="text-[11px] text-[#667085]">Bulk import student & alumni records</p>
           </div>
-          <FileSpreadsheet className="w-4 h-4 text-[#7A1F24]" />
+          <FileSpreadsheet className="w-4 h-4 text-[#102235]" />
         </Link>
       </div>
 

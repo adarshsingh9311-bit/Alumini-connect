@@ -189,30 +189,36 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F3EA] flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#F7F5F0] flex items-center justify-center p-4 sm:p-6 lg:p-8">
       {/* Container - Two Column Academic Card */}
       <div className="w-full max-w-5xl bg-[#FFFFFF] border border-[#D9DDE3] rounded-xl shadow-sm overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[640px]">
         
         {/* LEFT COLUMN: Academic Identity & Visual Context */}
-        <div className="lg:col-span-5 bg-[#F7F3EA] p-8 sm:p-10 border-b lg:border-b-0 lg:border-r border-[#D9DDE3] flex flex-col justify-between">
+        <div className="lg:col-span-5 bg-[#F7F5F0] p-8 sm:p-10 border-b lg:border-b-0 lg:border-r border-[#D9DDE3] flex flex-col justify-between">
           <div>
             {/* College Crest & Name */}
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-11 h-11 bg-[#7A1F24] text-white rounded-lg flex items-center justify-center font-bold text-lg shadow-sm shrink-0">
-                GL
-              </div>
-              <div>
-                <h1 className="font-extrabold text-[#7A1F24] text-base leading-tight tracking-tight">
+              <img
+                src="/assets/glb-crest-clean.png"
+                alt="GL Bajaj Seal"
+                className="w-11 h-11 object-contain shrink-0"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/assets/glb-crest.png";
+                }}
+              />
+              <div className="flex flex-col justify-center">
+                <span className="font-bold text-lg tracking-wide text-[#102235] leading-tight font-serif">
                   GL BAJAJ
-                </h1>
-                <p className="text-[11px] font-semibold text-[#202124] tracking-wide">
-                  Alumni Connect
-                </p>
+                </span>
+                <span className="text-[10px] font-semibold text-[#D6A34D] uppercase tracking-widest leading-none mt-0.5">
+                  ALUMNI CONNECT
+                </span>
               </div>
             </div>
 
             {/* Academic Motto */}
-            <div className="inline-block px-3 py-1 bg-[#FFFFFF] border border-[#D9DDE3] rounded-md text-[11px] font-bold text-[#B08A3E] tracking-widest uppercase mb-4">
+            <div className="inline-block px-3 py-1 bg-[#FFFFFF] border border-[#D9DDE3] rounded-md text-[11px] font-bold text-[#D6A34D] tracking-widest uppercase mb-4 font-serif">
               "Once GLB, Always GLB."
             </div>
 
@@ -236,19 +242,19 @@ export default function LoginPage() {
             {/* Institutional Highlights with Simple Line Icons */}
             <div className="space-y-3">
               <div className="flex items-center space-x-3 text-xs text-[#202124]">
-                <div className="w-7 h-7 rounded-md bg-[#FFFFFF] border border-[#D9DDE3] flex items-center justify-center text-[#7A1F24] shrink-0">
+                <div className="w-7 h-7 rounded-md bg-[#FFFFFF] border border-[#D9DDE3] flex items-center justify-center text-[#102235] shrink-0">
                   <Users className="w-3.5 h-3.5" />
                 </div>
                 <span>One-on-one alumni mentorship & advice</span>
               </div>
               <div className="flex items-center space-x-3 text-xs text-[#202124]">
-                <div className="w-7 h-7 rounded-md bg-[#FFFFFF] border border-[#D9DDE3] flex items-center justify-center text-[#7A1F24] shrink-0">
+                <div className="w-7 h-7 rounded-md bg-[#FFFFFF] border border-[#D9DDE3] flex items-center justify-center text-[#102235] shrink-0">
                   <Network className="w-3.5 h-3.5" />
                 </div>
                 <span>Verified GL Bajaj graduate directory</span>
               </div>
               <div className="flex items-center space-x-3 text-xs text-[#202124]">
-                <div className="w-7 h-7 rounded-md bg-[#FFFFFF] border border-[#D9DDE3] flex items-center justify-center text-[#7A1F24] shrink-0">
+                <div className="w-7 h-7 rounded-md bg-[#FFFFFF] border border-[#D9DDE3] flex items-center justify-center text-[#102235] shrink-0">
                   <TrendingUp className="w-3.5 h-3.5" />
                 </div>
                 <span>Career opportunities & campus events</span>
@@ -265,13 +271,13 @@ export default function LoginPage() {
         <div className="lg:col-span-7 bg-[#FFFFFF] p-8 sm:p-12 flex flex-col justify-between">
           <div>
             {/* Role Selector Tabs */}
-            <div className="grid grid-cols-3 gap-2 p-1 bg-[#F7F3EA] border border-[#D9DDE3] rounded-lg mb-8">
+            <div className="grid grid-cols-3 gap-2 p-1 bg-[#F7F5F0] border border-[#D9DDE3] rounded-lg mb-8">
               <button
                 type="button"
                 onClick={() => handleRoleChange(USER_ROLES.STUDENT)}
                 className={`py-2 text-xs font-semibold rounded-md flex items-center justify-center gap-1.5 transition ${
                   selectedRole === USER_ROLES.STUDENT
-                    ? "bg-[#7A1F24] text-[#FFFFFF] shadow-sm"
+                    ? "bg-[#102235] text-[#FFFFFF] shadow-sm"
                     : "text-[#202124] hover:bg-[#FFFFFF]/70"
                 }`}
               >
@@ -284,7 +290,7 @@ export default function LoginPage() {
                 onClick={() => handleRoleChange(USER_ROLES.ALUMNI)}
                 className={`py-2 text-xs font-semibold rounded-md flex items-center justify-center gap-1.5 transition ${
                   selectedRole === USER_ROLES.ALUMNI
-                    ? "bg-[#7A1F24] text-[#FFFFFF] shadow-sm"
+                    ? "bg-[#102235] text-[#FFFFFF] shadow-sm"
                     : "text-[#202124] hover:bg-[#FFFFFF]/70"
                 }`}
               >
@@ -297,7 +303,7 @@ export default function LoginPage() {
                 onClick={() => handleRoleChange(USER_ROLES.ADMIN)}
                 className={`py-2 text-xs font-semibold rounded-md flex items-center justify-center gap-1.5 transition ${
                   selectedRole === USER_ROLES.ADMIN
-                    ? "bg-[#7A1F24] text-[#FFFFFF] shadow-sm"
+                    ? "bg-[#102235] text-[#FFFFFF] shadow-sm"
                     : "text-[#202124] hover:bg-[#FFFFFF]/70"
                 }`}
               >
@@ -308,7 +314,7 @@ export default function LoginPage() {
 
             {/* Unconfigured Alert */}
             {!isSupabaseConfigured && (
-              <div className="p-3 bg-[#F7F3EA] border border-[#B08A3E] rounded-lg text-[#202124] text-xs font-medium mb-6">
+              <div className="p-3 bg-[#F7F5F0] border border-[#D6A34D] rounded-lg text-[#202124] text-xs font-medium mb-6">
                 Supabase is not configured. Please contact the administrator.
               </div>
             )}
@@ -337,7 +343,7 @@ export default function LoginPage() {
                   type="button"
                   onClick={handleResendVerification}
                   disabled={resendingVerification || loginResendCooldown > 0}
-                  className="text-xs font-bold text-[#7A1F24] hover:underline inline-flex items-center gap-1.5 pt-1 disabled:opacity-50 disabled:no-underline"
+                  className="text-xs font-bold text-[#102235] hover:underline inline-flex items-center gap-1.5 pt-1 disabled:opacity-50 disabled:no-underline"
                 >
                   {resendingVerification ? <Loader2 className="w-3 h-3 animate-spin" /> : null}
                   <span>
@@ -374,7 +380,7 @@ export default function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={roleMeta.emailPlaceholder}
-                    className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg pl-9 pr-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                    className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg pl-9 pr-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#102235] focus:ring-1 focus:ring-[#102235]"
                   />
                 </div>
                 <p className="text-[11px] text-[#667085] mt-1">
@@ -396,7 +402,7 @@ export default function LoginPage() {
                       value={rollNumber}
                       onChange={(e) => setRollNumber(e.target.value)}
                       placeholder={roleMeta.rollPlaceholder}
-                      className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg pl-9 pr-3 py-2 text-xs sm:text-sm font-mono text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                      className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg pl-9 pr-3 py-2 text-xs sm:text-sm font-mono text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#102235] focus:ring-1 focus:ring-[#102235]"
                     />
                   </div>
                 </div>
@@ -411,7 +417,7 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={() => setForgotModalOpen(true)}
-                    className="text-[11px] font-semibold text-[#7A1F24] hover:underline"
+                    className="text-[11px] font-semibold text-[#102235] hover:underline"
                   >
                     Forgot Password?
                   </button>
@@ -424,7 +430,7 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg pl-9 pr-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                    className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg pl-9 pr-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#102235] focus:ring-1 focus:ring-[#102235]"
                   />
                 </div>
               </div>
@@ -433,7 +439,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#7A1F24] hover:bg-[#5C171B] text-[#FFFFFF] font-semibold py-2.5 px-4 rounded-lg text-xs sm:text-sm transition flex items-center justify-center space-x-1.5 disabled:opacity-50 mt-2 shadow-xs cursor-pointer"
+                className="w-full bg-[#D6A34D] hover:bg-[#C2933E] text-[#102235] font-bold py-2.5 px-4 rounded-lg text-xs sm:text-sm transition flex items-center justify-center space-x-1.5 disabled:opacity-50 mt-2 shadow-xs cursor-pointer"
               >
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -454,7 +460,7 @@ export default function LoginPage() {
                 Don't have an account?{" "}
                 <Link
                   to={roleMeta.registerLink}
-                  className="text-[#7A1F24] font-semibold hover:underline"
+                  className="text-[#102235] font-bold hover:text-[#D6A34D] hover:underline"
                 >
                   {roleMeta.registerText}
                 </Link>
@@ -497,7 +503,7 @@ export default function LoginPage() {
               value={forgotEmail}
               onChange={(e) => setForgotEmail(e.target.value)}
               placeholder="e.g. adarsh@glbitm.ac.in"
-              className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+              className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#202124] focus:outline-none focus:border-[#102235] focus:ring-1 focus:ring-[#102235]"
             />
             <p className="text-[11px] text-[#667085] mt-1">
               Use your official @glbitm.ac.in email address.
@@ -507,14 +513,14 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => setForgotModalOpen(false)}
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold text-[#667085] hover:bg-[#F7F3EA]"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold text-[#667085] hover:bg-[#F7F5F0]"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={forgotLoading}
-              className="bg-[#7A1F24] hover:bg-[#5C171B] text-white text-xs font-semibold px-4 py-2 rounded-lg transition"
+              className="bg-[#102235] hover:bg-[#0B1724] text-white text-xs font-semibold px-4 py-2 rounded-lg transition"
             >
               {forgotLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <span>Send Recovery Link</span>}
             </button>

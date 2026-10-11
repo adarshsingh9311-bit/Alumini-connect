@@ -134,8 +134,8 @@ export default function StudentMentorshipPage() {
             onClick={() => setStatusFilter(tab)}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-bold capitalize transition ${
               statusFilter === tab
-                ? "bg-[#7A1F24] text-white shadow-2xs"
-                : "bg-[#F7F3EA] text-[#667085] hover:text-[#202124] border border-[#D9DDE3]"
+                ? "bg-[#102235] text-white shadow-2xs"
+                : "bg-[#F7F5F0] text-[#667085] hover:text-[#202124] border border-[#D9DDE3]"
             }`}
           >
             {tab}
@@ -154,7 +154,7 @@ export default function StudentMentorshipPage() {
 
           {loading ? (
             <div className="p-12 text-center text-[#667085]">
-              <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#7A1F24] mb-2" />
+              <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#102235] mb-2" />
               <p className="text-xs">Loading mentorship requests...</p>
             </div>
           ) : filteredRequests.length === 0 ? (
@@ -180,14 +180,14 @@ export default function StudentMentorshipPage() {
                     }}
                     className={`p-4 rounded-xl border transition cursor-pointer ${
                       isSelected
-                        ? "border-[#7A1F24] bg-[#F7F3EA]/70 shadow-2xs"
-                        : "border-[#D9DDE3] bg-white hover:border-[#7A1F24]/50"
+                        ? "border-[#102235] bg-[#F7F5F0]/70 shadow-2xs"
+                        : "border-[#D9DDE3] bg-white hover:border-[#102235]/50"
                     }`}
                   >
                     <div className="flex items-start justify-between">
                       <div>
                         <h4 className="font-bold text-[#202124] text-sm font-serif">{req.alumni_name}</h4>
-                        <p className="text-xs font-semibold text-[#7A1F24]">{req.topic}</p>
+                        <p className="text-xs font-semibold text-[#102235]">{req.topic}</p>
                       </div>
                       <span
                         className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase flex items-center gap-1 ${
@@ -205,7 +205,7 @@ export default function StudentMentorshipPage() {
                       </span>
                     </div>
 
-                    <p className="text-xs text-[#202124] bg-[#F7F3EA] p-2.5 rounded-lg mt-3 line-clamp-2 italic border border-[#D9DDE3]">
+                    <p className="text-xs text-[#202124] bg-[#F7F5F0] p-2.5 rounded-lg mt-3 line-clamp-2 italic border border-[#D9DDE3]">
                       "{req.message}"
                     </p>
 
@@ -218,7 +218,7 @@ export default function StudentMentorshipPage() {
                     <div className="mt-3 pt-2 border-t border-[#D9DDE3] flex items-center justify-between text-[11px] text-[#667085]">
                       <span>{req.created_at ? new Date(req.created_at).toLocaleDateString() : ""}</span>
                       {isAccepted && (
-                        <span className="text-[#7A1F24] font-bold flex items-center gap-1">
+                        <span className="text-[#102235] font-bold flex items-center gap-1">
                           <MessageCircle className="w-3.5 h-3.5" />
                           <span>Click to Chat</span>
                         </span>

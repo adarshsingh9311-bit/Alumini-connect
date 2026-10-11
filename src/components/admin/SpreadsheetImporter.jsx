@@ -596,8 +596,8 @@ export default function SpreadsheetImporter({ onImportComplete }) {
       ============================================================ */}
       <div className="bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg p-6 space-y-5 shadow-xs">
         <div>
-          <div className="flex items-center space-x-2 text-[#7A1F24] text-xs font-bold uppercase tracking-wider mb-1">
-            <FileSpreadsheet className="w-4 h-4 text-[#7A1F24]" />
+          <div className="flex items-center space-x-2 text-[#102235] text-xs font-bold uppercase tracking-wider mb-1">
+            <FileSpreadsheet className="w-4 h-4 text-[#102235]" />
             <span>Database Schema Importer</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-bold text-[#202124] font-serif">
@@ -615,13 +615,13 @@ export default function SpreadsheetImporter({ onImportComplete }) {
           <div 
             className={`p-5 rounded-lg border transition ${
               targetType === "student"
-                ? "border-[#7A1F24] bg-[#F7F3EA]/50 ring-1 ring-[#7A1F24]"
-                : "border-[#D9DDE3] bg-white hover:border-[#7A1F24]/50"
+                ? "border-[#102235] bg-[#F7F5F0]/50 ring-1 ring-[#102235]"
+                : "border-[#D9DDE3] bg-white hover:border-[#102235]/50"
             }`}
           >
             <div className="flex items-start justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-lg bg-[#7A1F24] text-white flex items-center justify-center font-bold text-base shadow-xs">
+                <div className="w-10 h-10 rounded-lg bg-[#102235] text-white flex items-center justify-center font-bold text-base shadow-xs">
                   <GraduationCap className="w-5 h-5" />
                 </div>
                 <div>
@@ -629,22 +629,22 @@ export default function SpreadsheetImporter({ onImportComplete }) {
                   <p className="text-xs text-[#667085]">Enrolled scholars, roll numbers, branches</p>
                 </div>
               </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white text-[#7A1F24] border border-[#D9DDE3]">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white text-[#102235] border border-[#D9DDE3]">
                 9 Schema Fields
               </span>
             </div>
 
             <p className="text-xs text-[#667085] mt-3 leading-relaxed">
-              Required: <code className="text-[#7A1F24] font-semibold">roll_number</code>, <code className="text-[#7A1F24] font-semibold">full_name</code>, <code className="text-[#7A1F24] font-semibold">email</code>, <code className="text-[#7A1F24] font-semibold">branch</code>, <code className="text-[#7A1F24] font-semibold">batch</code>.
+              Required: <code className="text-[#102235] font-semibold">roll_number</code>, <code className="text-[#102235] font-semibold">full_name</code>, <code className="text-[#102235] font-semibold">email</code>, <code className="text-[#102235] font-semibold">branch</code>, <code className="text-[#102235] font-semibold">batch</code>.
             </p>
 
             <div className="mt-4 pt-3 border-t border-[#D9DDE3] flex flex-wrap items-center gap-2">
               <button
                 type="button"
                 onClick={downloadStudentTemplate}
-                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-md bg-white border border-[#D9DDE3] hover:border-[#7A1F24] hover:text-[#7A1F24] text-xs font-semibold text-[#202124] transition shadow-xs cursor-pointer"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-md bg-white border border-[#D9DDE3] hover:border-[#102235] hover:text-[#102235] text-xs font-semibold text-[#202124] transition shadow-xs cursor-pointer"
               >
-                <Download className="w-3.5 h-3.5 text-[#7A1F24]" />
+                <Download className="w-3.5 h-3.5 text-[#102235]" />
                 <span>Download Student CSV Template</span>
               </button>
 
@@ -656,8 +656,8 @@ export default function SpreadsheetImporter({ onImportComplete }) {
                 }}
                 className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer ${
                   targetType === "student"
-                    ? "bg-[#7A1F24] text-white"
-                    : "bg-[#F7F3EA] text-[#202124] hover:bg-white border border-[#D9DDE3]"
+                    ? "bg-[#102235] text-white"
+                    : "bg-[#F7F5F0] text-[#202124] hover:bg-white border border-[#D9DDE3]"
                 }`}
               >
                 <Upload className="w-3.5 h-3.5" />
@@ -670,36 +670,36 @@ export default function SpreadsheetImporter({ onImportComplete }) {
           <div 
             className={`p-5 rounded-lg border transition ${
               targetType === "alumni"
-                ? "border-[#7A1F24] bg-[#F7F3EA]/50 ring-1 ring-[#7A1F24]"
-                : "border-[#D9DDE3] bg-white hover:border-[#7A1F24]/50"
+                ? "border-[#102235] bg-[#F7F5F0]/50 ring-1 ring-[#102235]"
+                : "border-[#D9DDE3] bg-white hover:border-[#102235]/50"
             }`}
           >
             <div className="flex items-start justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-lg bg-[#5C171B] text-white flex items-center justify-center font-bold text-base shadow-xs">
-                  <Briefcase className="w-5 h-5 text-[#B08A3E]" />
+                <div className="w-10 h-10 rounded-lg bg-[#0B1724] text-white flex items-center justify-center font-bold text-base shadow-xs">
+                  <Briefcase className="w-5 h-5 text-[#D6A34D]" />
                 </div>
                 <div>
                   <h3 className="font-bold text-sm text-[#202124]">Alumni Directory</h3>
                   <p className="text-xs text-[#667085]">Graduates, companies, designations, cities</p>
                 </div>
               </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white text-[#7A1F24] border border-[#D9DDE3]">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white text-[#102235] border border-[#D9DDE3]">
                 14 Schema Fields
               </span>
             </div>
 
             <p className="text-xs text-[#667085] mt-3 leading-relaxed">
-              Required: <code className="text-[#7A1F24] font-semibold">roll_number</code>, <code className="text-[#7A1F24] font-semibold">full_name</code>, <code className="text-[#7A1F24] font-semibold">email</code>, <code className="text-[#7A1F24] font-semibold">branch</code>, <code className="text-[#7A1F24] font-semibold">batch</code>.
+              Required: <code className="text-[#102235] font-semibold">roll_number</code>, <code className="text-[#102235] font-semibold">full_name</code>, <code className="text-[#102235] font-semibold">email</code>, <code className="text-[#102235] font-semibold">branch</code>, <code className="text-[#102235] font-semibold">batch</code>.
             </p>
 
             <div className="mt-4 pt-3 border-t border-[#D9DDE3] flex flex-wrap items-center gap-2">
               <button
                 type="button"
                 onClick={downloadAlumniTemplate}
-                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-md bg-white border border-[#D9DDE3] hover:border-[#7A1F24] hover:text-[#7A1F24] text-xs font-semibold text-[#202124] transition shadow-xs cursor-pointer"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-md bg-white border border-[#D9DDE3] hover:border-[#102235] hover:text-[#102235] text-xs font-semibold text-[#202124] transition shadow-xs cursor-pointer"
               >
-                <Download className="w-3.5 h-3.5 text-[#7A1F24]" />
+                <Download className="w-3.5 h-3.5 text-[#102235]" />
                 <span>Download Alumni CSV Template</span>
               </button>
 
@@ -711,8 +711,8 @@ export default function SpreadsheetImporter({ onImportComplete }) {
                 }}
                 className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer ${
                   targetType === "alumni"
-                    ? "bg-[#7A1F24] text-white"
-                    : "bg-[#F7F3EA] text-[#202124] hover:bg-white border border-[#D9DDE3]"
+                    ? "bg-[#102235] text-white"
+                    : "bg-[#F7F5F0] text-[#202124] hover:bg-white border border-[#D9DDE3]"
                 }`}
               >
                 <Upload className="w-3.5 h-3.5" />
@@ -730,7 +730,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
       {!file && (
         <div className="bg-white border border-[#D9DDE3] rounded-lg p-6 sm:p-8 space-y-4 text-center">
           <div className="max-w-md mx-auto space-y-3">
-            <div className="w-12 h-12 rounded-lg bg-[#F7F3EA] text-[#7A1F24] border border-[#D9DDE3] flex items-center justify-center mx-auto shadow-xs">
+            <div className="w-12 h-12 rounded-lg bg-[#F7F5F0] text-[#102235] border border-[#D9DDE3] flex items-center justify-center mx-auto shadow-xs">
               <Upload className="w-6 h-6" />
             </div>
 
@@ -743,7 +743,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
               </p>
             </div>
 
-            <label className="inline-block bg-[#7A1F24] hover:bg-[#5C171B] text-white text-xs font-semibold px-5 py-2.5 rounded-md transition shadow-xs cursor-pointer">
+            <label className="inline-block bg-[#102235] hover:bg-[#0B1724] text-white text-xs font-semibold px-5 py-2.5 rounded-md transition shadow-xs cursor-pointer">
               <span>Browse & Select File</span>
               <input
                 type="file"
@@ -770,13 +770,13 @@ export default function SpreadsheetImporter({ onImportComplete }) {
           {/* File Header Bar */}
           <div className="bg-white border border-[#D9DDE3] rounded-lg p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-lg bg-[#F7F3EA] text-[#7A1F24] border border-[#D9DDE3] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-lg bg-[#F7F5F0] text-[#102235] border border-[#D9DDE3] flex items-center justify-center">
                 <FileSpreadsheet className="w-5 h-5" />
               </div>
               <div>
                 <div className="font-bold text-sm text-[#202124]">{file.name}</div>
                 <div className="text-xs text-[#667085]">
-                  {(file.size / 1024).toFixed(1)} KB • Target: <span className="font-semibold text-[#7A1F24] uppercase">{targetType}</span>
+                  {(file.size / 1024).toFixed(1)} KB • Target: <span className="font-semibold text-[#102235] uppercase">{targetType}</span>
                 </div>
               </div>
             </div>
@@ -785,7 +785,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
               <button
                 type="button"
                 onClick={handleReset}
-                className="px-3 py-1.5 rounded-md border border-[#D9DDE3] bg-white hover:bg-[#F7F3EA] text-xs font-semibold text-[#202124] transition cursor-pointer"
+                className="px-3 py-1.5 rounded-md border border-[#D9DDE3] bg-white hover:bg-[#F7F5F0] text-xs font-semibold text-[#202124] transition cursor-pointer"
               >
                 Choose Different File
               </button>
@@ -796,7 +796,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
           <div className="bg-white border border-[#D9DDE3] rounded-lg p-5 space-y-4 shadow-xs">
             <div className="flex items-center justify-between border-b border-[#D9DDE3] pb-3">
               <div className="flex items-center space-x-2">
-                <SlidersHorizontal className="w-4 h-4 text-[#7A1F24]" />
+                <SlidersHorizontal className="w-4 h-4 text-[#102235]" />
                 <h3 className="font-bold text-sm text-[#202124]">
                   Header Verification & Field Mapping
                 </h3>
@@ -812,7 +812,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
                 return (
                   <div
                     key={colIdx}
-                    className="p-3 rounded-md border border-[#D9DDE3] bg-[#F7F3EA]/30 space-y-1.5 text-xs"
+                    className="p-3 rounded-md border border-[#D9DDE3] bg-[#F7F5F0]/30 space-y-1.5 text-xs"
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-mono text-[10px] text-[#667085]">Col {colIdx + 1}</span>
@@ -833,7 +833,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
                     <select
                       value={currentField}
                       onChange={(e) => handleMappingChange(colIdx, e.target.value)}
-                      className="w-full bg-white border border-[#D9DDE3] rounded px-2.5 py-1.5 text-xs text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24]"
+                      className="w-full bg-white border border-[#D9DDE3] rounded px-2.5 py-1.5 text-xs text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#102235]"
                     >
                       <option value="skip">— Skip this column —</option>
                       {currentSchemaFields.map((f) => (
@@ -888,15 +888,15 @@ export default function SpreadsheetImporter({ onImportComplete }) {
           <div className="bg-white border border-[#D9DDE3] rounded-lg shadow-xs overflow-hidden">
             
             {/* Filter Tabs & Commit Action */}
-            <div className="px-5 py-3.5 border-b border-[#D9DDE3] bg-[#F7F3EA] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="px-5 py-3.5 border-b border-[#D9DDE3] bg-[#F7F5F0] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div className="flex items-center space-x-2">
                 <button
                   type="button"
                   onClick={() => setActiveTab("all")}
                   className={`px-3 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer ${
                     activeTab === "all"
-                      ? "bg-[#7A1F24] text-white"
-                      : "bg-white text-[#202124] border border-[#D9DDE3] hover:bg-[#F7F3EA]"
+                      ? "bg-[#102235] text-white"
+                      : "bg-white text-[#202124] border border-[#D9DDE3] hover:bg-[#F7F5F0]"
                   }`}
                 >
                   All Records ({parsedRecords.length})
@@ -908,7 +908,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
                   className={`px-3 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer ${
                     activeTab === "valid"
                       ? "bg-[#2E6B4A] text-white"
-                      : "bg-white text-[#202124] border border-[#D9DDE3] hover:bg-[#F7F3EA]"
+                      : "bg-white text-[#202124] border border-[#D9DDE3] hover:bg-[#F7F5F0]"
                   }`}
                 >
                   Valid & Ready ({validationReport?.valid || 0})
@@ -920,7 +920,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
                   className={`px-3 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer ${
                     activeTab === "errors"
                       ? "bg-[#B42318] text-white"
-                      : "bg-white text-[#202124] border border-[#D9DDE3] hover:bg-[#F7F3EA]"
+                      : "bg-white text-[#202124] border border-[#D9DDE3] hover:bg-[#F7F5F0]"
                   }`}
                 >
                   Errors & Conflicts ({validationReport?.invalid || 0})
@@ -933,7 +933,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
                   type="button"
                   disabled={importing || !validationReport || validationReport.valid === 0}
                   onClick={handleCommitImport}
-                  className="bg-[#7A1F24] hover:bg-[#5C171B] text-white text-xs font-bold px-5 py-2 rounded-md transition shadow-xs flex items-center space-x-1.5 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  className="bg-[#102235] hover:bg-[#0B1724] text-white text-xs font-bold px-5 py-2 rounded-md transition shadow-xs flex items-center space-x-1.5 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {importing ? (
                     <>
@@ -953,7 +953,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
             {/* Table Content */}
             <div className="overflow-x-auto max-h-96">
               <table className="w-full text-left text-xs border-collapse">
-                <thead className="bg-[#F7F3EA] text-[#667085] font-bold uppercase tracking-wider border-b border-[#D9DDE3] sticky top-0 z-10">
+                <thead className="bg-[#F7F5F0] text-[#667085] font-bold uppercase tracking-wider border-b border-[#D9DDE3] sticky top-0 z-10">
                   <tr>
                     <th className="px-4 py-3 text-center">Row</th>
                     <th className="px-4 py-3">Status</th>
@@ -975,7 +975,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
                     displayedRows.map((r) => (
                       <tr 
                         key={r.rowIndex}
-                        className={`transition ${r.isValid ? "hover:bg-[#F7F3EA]/40" : "bg-red-50/40 hover:bg-red-50/70"}`}
+                        className={`transition ${r.isValid ? "hover:bg-[#F7F5F0]/40" : "bg-red-50/40 hover:bg-red-50/70"}`}
                       >
                         <td className="px-4 py-3 text-center font-mono text-[#667085]">
                           #{r.rowIndex}
@@ -993,7 +993,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
                             </span>
                           )}
                         </td>
-                        <td className="px-4 py-3 font-mono font-bold text-[#7A1F24]">
+                        <td className="px-4 py-3 font-mono font-bold text-[#102235]">
                           {r.data.roll_number || "—"}
                         </td>
                         <td className="px-4 py-3 font-bold text-[#202124]">

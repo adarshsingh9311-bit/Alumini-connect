@@ -125,8 +125,8 @@ export default function AdminVerificationPage() {
           onClick={() => setActiveTab("alumni")}
           className={`px-4 py-2 rounded-lg text-xs font-bold transition flex items-center space-x-1.5 ${
             activeTab === "alumni"
-              ? "bg-[#7A1F24] text-white shadow-2xs"
-              : "bg-[#F7F3EA] text-[#667085] hover:text-[#202124] border border-[#D9DDE3]"
+              ? "bg-[#102235] text-white shadow-2xs"
+              : "bg-[#F7F5F0] text-[#667085] hover:text-[#202124] border border-[#D9DDE3]"
           }`}
         >
           <Briefcase className="w-4 h-4" />
@@ -137,8 +137,8 @@ export default function AdminVerificationPage() {
           onClick={() => setActiveTab("achievements")}
           className={`px-4 py-2 rounded-lg text-xs font-bold transition flex items-center space-x-1.5 ${
             activeTab === "achievements"
-              ? "bg-[#7A1F24] text-white shadow-2xs"
-              : "bg-[#F7F3EA] text-[#667085] hover:text-[#202124] border border-[#D9DDE3]"
+              ? "bg-[#102235] text-white shadow-2xs"
+              : "bg-[#F7F5F0] text-[#667085] hover:text-[#202124] border border-[#D9DDE3]"
           }`}
         >
           <Award className="w-4 h-4" />
@@ -148,7 +148,7 @@ export default function AdminVerificationPage() {
 
       {loading ? (
         <div className="py-20 text-center text-[#667085]">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#7A1F24] mb-3" />
+          <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#102235] mb-3" />
           <p className="text-sm">Loading verification queue...</p>
         </div>
       ) : activeTab === "alumni" ? (
@@ -167,7 +167,7 @@ export default function AdminVerificationPage() {
                 <div className="space-y-1">
                   <div className="flex items-center space-x-2">
                     <h3 className="font-bold text-base text-[#202124] font-serif">{a.full_name}</h3>
-                    <span className="text-[10px] font-mono font-bold bg-[#F7F3EA] text-[#7A1F24] border border-[#D9DDE3] px-2 py-0.5 rounded">
+                    <span className="text-[10px] font-mono font-bold bg-[#F7F5F0] text-[#102235] border border-[#D9DDE3] px-2 py-0.5 rounded">
                       Roll No: {a.roll_number}
                     </span>
                   </div>
@@ -210,7 +210,7 @@ export default function AdminVerificationPage() {
               className="bg-white rounded-xl p-5 border border-[#D9DDE3] shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
             >
               <div className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-[#F7F3EA] text-[#7A1F24] px-2 py-0.5 rounded border border-[#D9DDE3]">
+                <span className="text-[10px] font-bold uppercase tracking-wider bg-[#F7F5F0] text-[#102235] px-2 py-0.5 rounded border border-[#D9DDE3]">
                   {ach.category || "Career Milestone"}
                 </span>
                 <h3 className="font-bold text-base text-[#202124] font-serif">{ach.title}</h3>
@@ -230,7 +230,7 @@ export default function AdminVerificationPage() {
                 </button>
                 <button
                   onClick={() => verifyAchievement(ach.id)}
-                  className="p-2 px-4 rounded-lg bg-[#7A1F24] hover:bg-[#5C171B] text-white text-xs font-bold flex items-center gap-1.5 shadow-2xs transition"
+                  className="p-2 px-4 rounded-lg bg-[#102235] hover:bg-[#0B1724] text-white text-xs font-bold flex items-center gap-1.5 shadow-2xs transition"
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   <span>Approve & Publish</span>

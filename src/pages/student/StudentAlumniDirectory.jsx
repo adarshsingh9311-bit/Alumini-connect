@@ -153,7 +153,7 @@ export default function StudentAlumniDirectory() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by name, company (Google, Microsoft), job role, or skills (React, Cloud, VLSI)..."
-            className="w-full pl-11 pr-4 py-2.5 bg-[#F7F3EA]/40 border border-[#D9DDE3] rounded-lg text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
+            className="w-full pl-11 pr-4 py-2.5 bg-[#F7F5F0]/40 border border-[#D9DDE3] rounded-lg text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#102235] focus:border-[#102235]"
           />
         </div>
 
@@ -163,7 +163,7 @@ export default function StudentAlumniDirectory() {
           <select
             value={selectedBranch}
             onChange={(e) => setSelectedBranch(e.target.value)}
-            className="bg-[#F7F3EA]/40 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
+            className="bg-[#F7F5F0]/40 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#102235] focus:border-[#102235]"
           >
             <option value="">All Branches</option>
             {BRANCH_CODES.map((b) => (
@@ -175,7 +175,7 @@ export default function StudentAlumniDirectory() {
           <select
             value={selectedBatch}
             onChange={(e) => setSelectedBatch(e.target.value)}
-            className="bg-[#F7F3EA]/40 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
+            className="bg-[#F7F5F0]/40 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#102235] focus:border-[#102235]"
           >
             <option value="">All Batch Years</option>
             {BATCH_YEARS.map((y) => (
@@ -187,7 +187,7 @@ export default function StudentAlumniDirectory() {
           <select
             value={selectedCompany}
             onChange={(e) => setSelectedCompany(e.target.value)}
-            className="bg-[#F7F3EA]/40 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
+            className="bg-[#F7F5F0]/40 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#102235] focus:border-[#102235]"
           >
             <option value="">All Companies</option>
             {companies.map((c) => (
@@ -199,7 +199,7 @@ export default function StudentAlumniDirectory() {
           <select
             value={selectedLocation}
             onChange={(e) => setSelectedLocation(e.target.value)}
-            className="bg-[#F7F3EA]/40 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
+            className="bg-[#F7F5F0]/40 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#102235] focus:border-[#102235]"
           >
             <option value="">All Locations</option>
             {locations.map((loc) => (
@@ -208,12 +208,12 @@ export default function StudentAlumniDirectory() {
           </select>
 
           {/* Mentors Only Toggle */}
-          <label className="flex items-center space-x-2 bg-[#F7F3EA]/40 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs font-semibold text-[#202124] cursor-pointer select-none">
+          <label className="flex items-center space-x-2 bg-[#F7F5F0]/40 border border-[#D9DDE3] rounded-lg px-3 py-2 text-xs font-semibold text-[#202124] cursor-pointer select-none">
             <input
               type="checkbox"
               checked={mentorsOnly}
               onChange={(e) => setMentorsOnly(e.target.checked)}
-              className="rounded text-[#7A1F24] focus:ring-[#7A1F24]"
+              className="rounded text-[#102235] focus:ring-[#102235]"
             />
             <span>Open for Mentorship</span>
           </label>
@@ -227,7 +227,7 @@ export default function StudentAlumniDirectory() {
             </span>
             <button
               onClick={resetFilters}
-              className="text-[#7A1F24] hover:underline font-semibold flex items-center space-x-1"
+              className="text-[#102235] hover:underline font-semibold flex items-center space-x-1"
             >
               <X className="w-3.5 h-3.5" />
               <span>Reset all filters</span>
@@ -239,7 +239,7 @@ export default function StudentAlumniDirectory() {
       {/* Alumni Results Grid */}
       {loading ? (
         <div className="py-20 text-center text-[#667085]">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#7A1F24] mb-3" />
+          <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#102235] mb-3" />
           <p className="text-sm font-semibold text-[#202124]">Loading Alumni Directory...</p>
         </div>
       ) : filteredAlumni.length === 0 ? (

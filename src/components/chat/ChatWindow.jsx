@@ -20,7 +20,7 @@ export default function ChatWindow({ mentorship, messages = [], onSendMessage })
 
   if (!mentorship) {
     return (
-      <div className="h-96 flex flex-col items-center justify-center text-[#667085] bg-[#F7F3EA] rounded-xl border border-dashed border-[#D9DDE3] p-6 text-center">
+      <div className="h-96 flex flex-col items-center justify-center text-[#667085] bg-[#F7F5F0] rounded-xl border border-dashed border-[#D9DDE3] p-6 text-center">
         <MessageSquare className="w-10 h-10 mb-2 text-[#667085]/60" />
         <p className="text-sm font-semibold text-[#202124]">No active conversation selected</p>
         <p className="text-xs text-[#667085] mt-1">Select an accepted mentorship connection to chat</p>
@@ -31,7 +31,7 @@ export default function ChatWindow({ mentorship, messages = [], onSendMessage })
   return (
     <div className="bg-white rounded-xl border border-[#D9DDE3] shadow-xs flex flex-col h-[520px] overflow-hidden font-sans">
       {/* Chat Header */}
-      <div className="px-5 py-3.5 border-b border-[#D9DDE3] bg-[#7A1F24] text-white flex items-center justify-between">
+      <div className="px-5 py-3.5 border-b border-[#D9DDE3] bg-[#102235] text-white flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center text-white font-bold text-sm font-serif">
             {(mentorship.alumni_name || mentorship.student_name || "M")[0]}
@@ -40,7 +40,7 @@ export default function ChatWindow({ mentorship, messages = [], onSendMessage })
             <h4 className="font-bold text-sm leading-tight text-white font-serif">
               {mentorship.alumni_name || mentorship.student_name}
             </h4>
-            <p className="text-[11px] text-[#F7F3EA]/80 truncate">
+            <p className="text-[11px] text-[#F7F5F0]/80 truncate">
               {mentorship.topic || "Mentorship Session"}
             </p>
           </div>
@@ -51,7 +51,7 @@ export default function ChatWindow({ mentorship, messages = [], onSendMessage })
       </div>
 
       {/* Messages Scroll Area */}
-      <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#F7F3EA]/30">
+      <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#F7F5F0]/30">
         {messages.length === 0 ? (
           <div className="text-center py-12 text-[#667085] text-xs">
             Start the conversation! Share your questions or scheduling preferences.
@@ -68,7 +68,7 @@ export default function ChatWindow({ mentorship, messages = [], onSendMessage })
                   <div
                     className={`p-3 rounded-xl text-xs sm:text-sm leading-relaxed ${
                       isMe
-                        ? "bg-[#7A1F24] text-white rounded-br-none"
+                        ? "bg-[#102235] text-white rounded-br-none"
                         : "bg-white text-[#202124] border border-[#D9DDE3] rounded-bl-none shadow-2xs"
                     }`}
                   >
@@ -92,12 +92,12 @@ export default function ChatWindow({ mentorship, messages = [], onSendMessage })
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           placeholder="Type your message..."
-          className="flex-1 bg-[#F7F3EA]/40 border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
+          className="flex-1 bg-[#F7F5F0]/40 border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#102235] focus:border-[#102235]"
         />
         <button
           type="submit"
           disabled={!inputText.trim()}
-          className="bg-[#7A1F24] hover:bg-[#5C171B] text-white p-2.5 rounded-lg transition shadow-2xs disabled:opacity-40"
+          className="bg-[#102235] hover:bg-[#0B1724] text-white p-2.5 rounded-lg transition shadow-2xs disabled:opacity-40"
         >
           <Send className="w-4 h-4" />
         </button>

@@ -54,18 +54,34 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F3EA] flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#F7F5F0] flex items-center justify-center p-4 sm:p-6 lg:p-8">
       <div className="w-full max-w-md bg-[#FFFFFF] border border-[#D9DDE3] rounded-xl shadow-sm p-6 sm:p-10">
         
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-12 h-12 bg-[#7A1F24] text-white rounded-lg flex items-center justify-center font-bold text-xl mx-auto mb-3 shadow-xs">
-            GL
-          </div>
+          <Link to="/" className="inline-flex items-center space-x-3 mb-3 group">
+            <img
+              src="/assets/glb-crest-clean.png"
+              alt="GL Bajaj Seal"
+              className="w-12 h-12 object-contain"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/assets/glb-crest.png";
+              }}
+            />
+            <div className="flex flex-col text-left">
+              <span className="font-bold text-xl tracking-wide text-[#102235] leading-tight font-serif">
+                GL BAJAJ
+              </span>
+              <span className="text-[10px] font-semibold text-[#D6A34D] uppercase tracking-widest leading-none mt-0.5">
+                ALUMNI CONNECT
+              </span>
+            </div>
+          </Link>
           <h1 className="text-2xl font-bold text-[#202124] tracking-tight">
             Reset Password
           </h1>
-          <p className="text-xs text-[#B08A3E] font-bold tracking-widest uppercase mt-1">
+          <p className="text-xs text-[#D6A34D] font-bold tracking-widest uppercase mt-1 font-serif">
             "Once GLB, Always GLB."
           </p>
           <p className="text-xs text-[#667085] mt-1">
@@ -86,7 +102,7 @@ export default function ResetPasswordPage() {
             </p>
             <Link
               to="/login"
-              className="inline-flex items-center justify-center gap-2 bg-[#7A1F24] hover:bg-[#5C171B] text-white py-2.5 px-4 rounded-lg font-semibold text-xs transition"
+              className="inline-flex items-center justify-center gap-2 bg-[#D6A34D] hover:bg-[#C2933E] text-[#102235] py-2.5 px-4 rounded-lg font-bold text-xs transition"
             >
               <span>Go to Login</span>
               <ArrowRight className="w-4 h-4" />
@@ -106,7 +122,7 @@ export default function ResetPasswordPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Minimum 6 characters"
-                  className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg pl-9 pr-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                  className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg pl-9 pr-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#102235] focus:ring-1 focus:ring-[#102235]"
                 />
               </div>
             </div>
@@ -123,7 +139,7 @@ export default function ResetPasswordPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm your new password"
-                  className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg pl-9 pr-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#7A1F24] focus:ring-1 focus:ring-[#7A1F24]"
+                  className="w-full bg-[#FFFFFF] border border-[#D9DDE3] rounded-lg pl-9 pr-3 py-2 text-xs sm:text-sm text-[#202124] placeholder-[#667085]/60 focus:outline-none focus:border-[#102235] focus:ring-1 focus:ring-[#102235]"
                 />
               </div>
             </div>
@@ -131,7 +147,7 @@ export default function ResetPasswordPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#7A1F24] hover:bg-[#5C171B] text-white py-2.5 px-4 rounded-lg font-semibold text-xs sm:text-sm flex items-center justify-center space-x-2 transition shadow-xs disabled:opacity-50 mt-2"
+              className="w-full bg-[#D6A34D] hover:bg-[#C2933E] text-[#102235] py-2.5 px-4 rounded-lg font-bold text-xs sm:text-sm flex items-center justify-center space-x-2 transition shadow-xs disabled:opacity-50 mt-2"
             >
               {loading ? (
                 <>
@@ -149,7 +165,7 @@ export default function ResetPasswordPage() {
             <div className="text-center pt-2">
               <Link
                 to="/login"
-                className="text-xs text-[#7A1F24] hover:underline font-semibold inline-flex items-center gap-1"
+                className="text-xs text-[#102235] hover:text-[#D6A34D] hover:underline font-bold inline-flex items-center gap-1"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Back to Login</span>

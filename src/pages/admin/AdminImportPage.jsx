@@ -64,8 +64,8 @@ export default function AdminImportPage() {
       
       {/* Header */}
       <div>
-        <div className="flex items-center space-x-2 text-[#7A1F24] text-xs font-bold uppercase tracking-wider mb-1">
-          <FileSpreadsheet className="w-4 h-4 text-[#7A1F24]" />
+        <div className="flex items-center space-x-2 text-[#102235] text-xs font-bold uppercase tracking-wider mb-1">
+          <FileSpreadsheet className="w-4 h-4 text-[#102235]" />
           <span>Central Administration • Record Enrollment</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold text-[#202124] font-serif">
@@ -81,9 +81,9 @@ export default function AdminImportPage() {
 
       {/* Import History Audit Log */}
       <div className="bg-white rounded-lg border border-[#D9DDE3] shadow-xs overflow-hidden">
-        <div className="px-5 py-3.5 border-b border-[#D9DDE3] flex justify-between items-center bg-[#F7F3EA]">
+        <div className="px-5 py-3.5 border-b border-[#D9DDE3] flex justify-between items-center bg-[#F7F5F0]">
           <div className="flex items-center space-x-2">
-            <History className="w-4 h-4 text-[#7A1F24]" />
+            <History className="w-4 h-4 text-[#102235]" />
             <h3 className="font-bold text-[#202124] text-xs sm:text-sm uppercase tracking-wide">
               Import History & Audit Log
             </h3>
@@ -93,17 +93,17 @@ export default function AdminImportPage() {
 
         {loading ? (
           <div className="p-8 text-center text-[#667085]">
-            <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#7A1F24] mb-2" />
+            <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#102235] mb-2" />
             <p className="text-xs">Loading import history from database...</p>
           </div>
         ) : history.length === 0 ? (
-          <div className="p-8 text-center text-[#667085] text-xs bg-[#F7F3EA]/30">
+          <div className="p-8 text-center text-[#667085] text-xs bg-[#F7F5F0]/30">
             No batch imports recorded yet. Select a roster above to download the template and import records.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
-              <thead className="bg-[#F7F3EA] text-[#667085] font-bold uppercase tracking-wider border-b border-[#D9DDE3]">
+              <thead className="bg-[#F7F5F0] text-[#667085] font-bold uppercase tracking-wider border-b border-[#D9DDE3]">
                 <tr>
                   <th className="px-4 py-3">File Name</th>
                   <th className="px-4 py-3">Roster Type</th>
@@ -116,7 +116,7 @@ export default function AdminImportPage() {
               </thead>
               <tbody className="divide-y divide-[#D9DDE3]">
                 {history.map((log) => (
-                  <tr key={log.id} className="hover:bg-[#F7F3EA]/50 transition">
+                  <tr key={log.id} className="hover:bg-[#F7F5F0]/50 transition">
                     <td className="px-4 py-3 font-mono font-bold text-[#202124]">{log.filename}</td>
                     <td className="px-4 py-3 text-[#667085] uppercase font-semibold text-[11px]">
                       {log.file_type}
