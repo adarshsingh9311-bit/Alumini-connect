@@ -35,15 +35,35 @@ export default function LoginPage() {
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotLoading, setForgotLoading] = useState(false);
 
-  const { login, resetPassword } = useAuth();
+  // Unconfirmed email state
+  const [unconfirmedEmail, setUnconfirmedEmail] = useState(null);
+  const [resendingVerification, setResendingVerification] = useState(false);
+
+  const { login, resetPassword, resendConfirmationEmail } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
+
+  const isVerifiedParam = searchParams.get("verified") === "true";
 
   function handleRoleChange(newRole) {
     setSelectedRole(newRole);
     setEmail("");
     setRollNumber("");
     setPassword("");
+    setUnconfirmedEmail(null);
+  }
+
+  async function handleResendVerification() {
+    if (!unconfirmedEmail) return;
+    setResendingVerification(true);
+    try {
+      await resendConfirmationEmail(unconfirmedEmail);
+      addToast(`Verification email has been re-dispatched to ${unconfirmedEmail}. Please check your inbox.`, "success");
+    } catch (err) {
+      addToast(err.message || "Failed to resend verification email.", "error");
+    } finally {
+      setResendingVerification(false);
+    }
   }
 
   async function handleSubmit(e) {
@@ -60,7 +80,7 @@ export default function LoginPage() {
     }
 
     if (selectedRole !== USER_ROLES.ADMIN && !rollNumber.trim()) {
-      addToast("The college email and roll number do not match our records.", "error");
+      addToast("College Roll Number is required for login.", "error");
       return;
     }
 
@@ -79,6 +99,9 @@ export default function LoginPage() {
       else if (selectedRole === USER_ROLES.ADMIN) navigate("/admin");
       else navigate("/");
     } catch (err) {
+      if (err.message?.toLowerCase().includes("not been verified")) {
+        setUnconfirmedEmail(cleanEmail);
+      }
       addToast(err.message || "Invalid login credentials.", "error");
     } finally {
       setLoading(false);
@@ -268,6 +291,38 @@ export default function LoginPage() {
             {!isSupabaseConfigured && (
               <div className="p-3 bg-[#F7F3EA] border border-[#B08A3E] rounded-lg text-[#202124] text-xs font-medium mb-6">
                 Supabase is not configured. Please contact the administrator.
+              </div>
+            )}
+
+            {/* Email Verified Success Banner */}
+            {isVerifiedParam && (
+              <div className="p-3 bg-[#2E6B4A]/10 border border-[#2E6B4A]/30 rounded-lg text-[#2E6B4A] text-xs font-medium mb-6 flex items-start gap-2">
+                <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5 text-[#2E6B4A]" />
+                <span>Your college email has been verified successfully. Please log in with your credentials below.</span>
+              </div>
+            )}
+
+            {/* Email Unconfirmed Action Box */}
+            {unconfirmedEmail && (
+              <div className="p-4 bg-[#A66A00]/10 border border-[#A66A00]/30 rounded-lg text-[#202124] text-xs font-medium mb-6 space-y-2">
+                <div className="flex items-start gap-2">
+                  <Mail className="w-4 h-4 shrink-0 mt-0.5 text-[#A66A00]" />
+                  <div className="space-y-1">
+                    <p className="font-bold text-[#A66A00]">Email Verification Required</p>
+                    <p className="text-[#667085]">
+                      A confirmation link was dispatched to <strong className="text-[#202124]">{unconfirmedEmail}</strong>. Please verify your email before logging in.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleResendVerification}
+                  disabled={resendingVerification}
+                  className="text-xs font-bold text-[#7A1F24] hover:underline inline-flex items-center gap-1.5 pt-1"
+                >
+                  {resendingVerification ? <Loader2 className="w-3 h-3 animate-spin" /> : null}
+                  <span>Resend verification email to this address</span>
+                </button>
               </div>
             )}
 

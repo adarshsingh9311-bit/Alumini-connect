@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import { supabase, isSupabaseConfigured } from "../../lib/supabase";
@@ -23,7 +23,7 @@ export default function AlumniCareerJourneyPage() {
         const { data: alumRec } = await supabase
           .from("alumni")
           .select("id")
-          .eq("user_id", user.id)
+          .eq("id", user.id)
           .single();
 
         if (alumRec) {
@@ -53,7 +53,7 @@ export default function AlumniCareerJourneyPage() {
       const { data: alumRec } = await supabase
         .from("alumni")
         .select("id")
-        .eq("user_id", user.id)
+        .eq("id", user.id)
         .single();
 
       if (alumRec) {

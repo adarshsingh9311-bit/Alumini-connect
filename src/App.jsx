@@ -16,6 +16,7 @@ import AdminLayout from "./components/layout/AdminLayout";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import GLBFamilyNetwork from "./pages/common/GLBFamilyNetwork";
 
 // Student Portal Pages
@@ -117,6 +118,7 @@ function AppContent() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login/:role" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
 
         {/* 1. STUDENT PORTAL (Nested under StudentLayout with Sidebar) */}
         <Route

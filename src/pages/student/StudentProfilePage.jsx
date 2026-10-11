@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import { supabase, isSupabaseConfigured } from "../../lib/supabase";
+import { BATCH_YEARS } from "../../lib/constants";
 import { User, GraduationCap, Save, Loader2 } from "lucide-react";
 
 export default function StudentProfilePage() {
@@ -27,7 +28,7 @@ export default function StudentProfilePage() {
         roll_number: profile.roll_number || "",
         email: profile.email || "",
         branch: profile.branch || "CSE",
-        batch_year: profile.batch_year || "2025",
+        batch_year: String(profile.graduation_year || profile.batch || profile.batch_year || "2026"),
         skills: profile.skills ? (Array.isArray(profile.skills) ? profile.skills.join(", ") : profile.skills) : "",
         interests: profile.interests || "",
         bio: profile.bio || ""
@@ -56,17 +57,19 @@ export default function StudentProfilePage() {
           ? formData.skills.split(",").map((s) => s.trim()).filter(Boolean)
           : [];
 
-        // Update student record
+        const gradYearInt = parseInt(formData.batch_year, 10);
+
+        // Update student record using live schema columns (id, branch, batch, graduation_year, skills, bio)
         await supabase
           .from("students")
           .update({
             branch: formData.branch,
-            batch_year: formData.batch_year,
+            batch: formData.batch_year,
+            graduation_year: isNaN(gradYearInt) ? null : gradYearInt,
             skills: skillsArray,
-            interests: formData.interests,
             bio: formData.bio
           })
-          .eq("user_id", user.id);
+          .eq("id", user.id);
 
         if (fetchUserProfile) await fetchUserProfile(user.id);
       }
@@ -135,13 +138,18 @@ export default function StudentProfilePage() {
 
           <div>
             <label className="block text-xs font-bold text-[#202124] uppercase mb-1">Graduation Batch Year</label>
-            <input
-              type="text"
+            <select
               name="batch_year"
               value={formData.batch_year}
               onChange={handleChange}
               className="w-full bg-[#F7F3EA]/30 border border-[#D9DDE3] rounded-lg px-4 py-2.5 text-xs sm:text-sm text-[#202124] focus:outline-none focus:ring-1 focus:ring-[#7A1F24] focus:border-[#7A1F24]"
-            />
+            >
+              {BATCH_YEARS.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 

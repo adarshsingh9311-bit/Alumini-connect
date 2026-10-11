@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { useToast } from "../../context/ToastContext";
 import { useAuth } from "../../context/AuthContext";
-import { BRANCH_CODES } from "../../lib/constants";
+import { BRANCH_CODES, MIN_GRADUATION_YEAR, MAX_GRADUATION_YEAR } from "../../lib/constants";
 import { supabase, isSupabaseConfigured } from "../../lib/supabase";
 import { cleanEncodingArtifacts } from "../../lib/formatters";
 
@@ -165,7 +165,7 @@ export function downloadStudentTemplate() {
   const sampleRows = [
     ["2300001", "Adarsh Kumar Singh", "adarsh.23@glbitm.ac.in", "CSE", "2023-2027", "2027", "9876543210", "Java, Python, Data Structures", "Computer Science scholar"],
     ["2300002", "Pooja Sharma", "pooja.23@glbitm.ac.in", "IT", "2023-2027", "2027", "9876543211", "React, Node.js, Web Development", "Information Technology undergraduate"],
-    ["2300003", "Rahul Verma", "rahul.23@glbitm.ac.in", "ECE", "2023-2027", "2027", "9876543212", "C++, Embedded Systems, IoT", "Electronics & Communication scholar"]
+    ["2300003", "Rahul Verma", "rahul.23@glbitm.ac.in", "ECE", "2046-2050", "2050", "9876543212", "C++, Embedded Systems, IoT", "Electronics & Communication scholar"]
   ];
 
   const csvContent = "\uFEFF" + [
@@ -398,7 +398,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
         errors.push("Missing Branch / Department");
       }
 
-      // 5. Graduation Year integer check if provided
+      // 5. Graduation Year integer check if provided (supports up to 2050 inclusive)
       let parsedGradYear = null;
       if (gradYearRaw) {
         const match = String(gradYearRaw).match(/\d{4}/);
@@ -406,6 +406,11 @@ export default function SpreadsheetImporter({ onImportComplete }) {
           parsedGradYear = parseInt(match[0], 10);
         } else if (!isNaN(Number(gradYearRaw))) {
           parsedGradYear = parseInt(gradYearRaw, 10);
+        }
+        if (parsedGradYear !== null) {
+          if (parsedGradYear < MIN_GRADUATION_YEAR || parsedGradYear > MAX_GRADUATION_YEAR) {
+            errors.push(`Graduation Year (${parsedGradYear}) must be between ${MIN_GRADUATION_YEAR} and ${MAX_GRADUATION_YEAR}`);
+          }
         }
       }
 

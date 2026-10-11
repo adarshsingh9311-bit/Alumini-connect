@@ -61,25 +61,25 @@ export default function LandingPage() {
         const { data: alumData, count: totalAlum } = await supabase
           .from("alumni")
           .select("*, profiles(*)", { count: "exact" })
-          .eq("is_verified", true)
+          .eq("verified", true)
           .limit(6);
 
         if (alumData) {
           setAlumniList(alumData.map((a) => ({
             id: a.id,
-            user_id: a.user_id,
+            user_id: a.id,
             name: a.profiles?.full_name || "GLB Alumnus",
             email: a.profiles?.email || "",
-            avatar_url: a.profiles?.avatar_url || "",
+            avatar_url: a.profiles?.profile_photo_url || "",
             branch: a.branch,
-            batch_year: a.graduation_year || a.batch_year,
+            batch_year: a.graduation_year || a.batch || "",
             current_company: a.current_company || "",
             current_designation: a.current_designation || "",
             location: a.location || "",
             skills: Array.isArray(a.skills) ? a.skills : [],
             bio: a.bio || "",
-            is_available_for_mentorship: a.is_available_for_mentorship,
-            is_verified: a.is_verified
+            is_available_for_mentorship: a.mentorship_available !== false,
+            is_verified: a.verified !== false
           })));
         }
 

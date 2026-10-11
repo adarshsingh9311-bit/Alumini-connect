@@ -79,41 +79,59 @@ export function AuthProvider({ children }) {
         .from("profiles")
         .select("*")
         .eq("id", userId)
-        .single();
+        .maybeSingle();
 
-      if (profileError || !baseProfile) {
+      let effectiveRole = baseProfile?.role;
+      let detailedProfile = baseProfile ? { ...baseProfile } : null;
+
+      // If base profile record is missing from profiles table, fallback to user metadata
+      if (!detailedProfile && user?.user_metadata) {
+        effectiveRole = user.user_metadata.role || USER_ROLES.STUDENT;
+        detailedProfile = {
+          id: userId,
+          email: user.email,
+          full_name: user.user_metadata.full_name || "GLB Member",
+          role: effectiveRole,
+          roll_number: user.user_metadata.roll_number || "",
+          branch: user.user_metadata.branch || "CSE",
+          batch: user.user_metadata.batch || "2023-2027",
+          graduation_year: user.user_metadata.graduation_year || 2027,
+          phone: user.user_metadata.phone || "",
+          skills: user.user_metadata.skills || [],
+          bio: user.user_metadata.bio || ""
+        };
+      }
+
+      if (!detailedProfile) {
         console.warn("Could not find profile for user:", userId, profileError);
         return null;
       }
 
-      const userRole = baseProfile.role;
-      setRole(userRole);
+      setRole(effectiveRole);
 
-      let detailedProfile = { ...baseProfile };
-
-      if (userRole === USER_ROLES.STUDENT) {
+      if (effectiveRole === USER_ROLES.STUDENT) {
         const { data: studentData } = await supabase
           .from("students")
           .select("*")
-          .eq("user_id", userId)
+          .eq("id", userId)
           .maybeSingle();
         if (studentData) {
           detailedProfile = { ...detailedProfile, ...studentData };
         }
-      } else if (userRole === USER_ROLES.ALUMNI) {
+      } else if (effectiveRole === USER_ROLES.ALUMNI) {
         const { data: alumniData } = await supabase
           .from("alumni")
           .select("*")
-          .eq("user_id", userId)
+          .eq("id", userId)
           .maybeSingle();
         if (alumniData) {
           detailedProfile = { ...detailedProfile, ...alumniData };
         }
-      } else if (userRole === USER_ROLES.ADMIN) {
+      } else if (effectiveRole === USER_ROLES.ADMIN) {
         const { data: adminData } = await supabase
           .from("admins")
           .select("*")
-          .eq("user_id", userId)
+          .eq("id", userId)
           .maybeSingle();
         if (adminData) {
           detailedProfile = { ...detailedProfile, ...adminData };
@@ -161,94 +179,50 @@ export function AuthProvider({ children }) {
     });
 
     if (authError || !authData?.user) {
-      throw new Error("Invalid login credentials.");
+      const errMsg = authError?.message || "";
+      if (errMsg.toLowerCase().includes("email not confirmed")) {
+        throw new Error("Your college email has not been verified yet. Please check your inbox for the verification link before logging in.");
+      }
+      if (errMsg.toLowerCase().includes("invalid login credentials")) {
+        throw new Error("Invalid college email or password.");
+      }
+      throw new Error(errMsg || "Invalid login credentials.");
     }
 
     const userId = authData.user.id;
+    const userMeta = authData.user.user_metadata || {};
 
     // 4. Fetch user's registered profile from database
-    const { data: profileRecord, error: profileErr } = await supabase
+    const { data: profileRecord } = await supabase
       .from("profiles")
       .select("*")
       .eq("id", userId)
       .maybeSingle();
 
-    if (profileErr || !profileRecord) {
-      await supabase.auth.signOut();
-      setUser(null);
-      setProfile(null);
-      setRole(null);
-      throw new Error("Invalid login credentials.");
+    // Determine role (database profile takes precedence, falling back to user metadata)
+    let registeredRole = profileRecord?.role;
+
+    // Self-healing: If user metadata specifies 'alumni' but database profile was defaulted to 'student' by initial trigger,
+    // sync the profile table using the authenticated user's session (strictly protecting admin role)
+    if (userMeta.role === USER_ROLES.ALUMNI && registeredRole !== USER_ROLES.ALUMNI && registeredRole !== USER_ROLES.ADMIN) {
+      try {
+        await supabase.from("profiles").update({ role: USER_ROLES.ALUMNI }).eq("id", userId);
+        registeredRole = USER_ROLES.ALUMNI;
+        if (profileRecord) profileRecord.role = USER_ROLES.ALUMNI;
+      } catch (e) {
+        console.warn("Could not sync profile role:", e);
+      }
+    } else if (!registeredRole) {
+      registeredRole = userMeta.role;
     }
 
-    // 5. Role and roll-number relationship validation
-    if (targetRole === USER_ROLES.STUDENT) {
-      // Must have student role
-      if (profileRecord.role !== USER_ROLES.STUDENT) {
-        await supabase.auth.signOut();
-        setUser(null);
-        setProfile(null);
-        setRole(null);
-        throw new Error("The college email and roll number do not match our records.");
-      }
+    if (!registeredRole) {
+      throw new Error("Your college profile is being set up. Please contact admin if this persists.");
+    }
 
-      // Roll number verification
-      const { data: studentRecord } = await supabase
-        .from("students")
-        .select("*")
-        .eq("user_id", userId)
-        .maybeSingle();
-
-      const dbRoll = (studentRecord?.roll_number || "").trim().toLowerCase();
-      if (!studentRecord || dbRoll !== cleanRoll.toLowerCase()) {
-        await supabase.auth.signOut();
-        setUser(null);
-        setProfile(null);
-        setRole(null);
-        throw new Error("The college email and roll number do not match our records.");
-      }
-
-      const fullProfile = { ...profileRecord, ...studentRecord };
-      setUser(authData.user);
-      setProfile(fullProfile);
-      setRole(USER_ROLES.STUDENT);
-      return { user: authData.user, profile: fullProfile };
-
-    } else if (targetRole === USER_ROLES.ALUMNI) {
-      // Must have alumni role
-      if (profileRecord.role !== USER_ROLES.ALUMNI) {
-        await supabase.auth.signOut();
-        setUser(null);
-        setProfile(null);
-        setRole(null);
-        throw new Error("The college email and roll number do not match our records.");
-      }
-
-      // Roll number / Alumni identifier verification
-      const { data: alumniRecord } = await supabase
-        .from("alumni")
-        .select("*")
-        .eq("user_id", userId)
-        .maybeSingle();
-
-      const dbRoll = (alumniRecord?.roll_number || "").trim().toLowerCase();
-      if (!alumniRecord || dbRoll !== cleanRoll.toLowerCase()) {
-        await supabase.auth.signOut();
-        setUser(null);
-        setProfile(null);
-        setRole(null);
-        throw new Error("The college email and roll number do not match our records.");
-      }
-
-      const fullProfile = { ...profileRecord, ...alumniRecord };
-      setUser(authData.user);
-      setProfile(fullProfile);
-      setRole(USER_ROLES.ALUMNI);
-      return { user: authData.user, profile: fullProfile };
-
-    } else if (targetRole === USER_ROLES.ADMIN) {
-      // Must have admin role in profile
-      if (profileRecord.role !== USER_ROLES.ADMIN) {
+    // 5. Strict Portal & Role Authorization Checks
+    if (targetRole === USER_ROLES.ADMIN) {
+      if (registeredRole !== USER_ROLES.ADMIN) {
         await supabase.auth.signOut();
         setUser(null);
         setProfile(null);
@@ -256,48 +230,136 @@ export function AuthProvider({ children }) {
         throw new Error("You are not authorized to access the Admin Portal.");
       }
 
-      // Must exist in admins table
+      // Admins table lookup
       const { data: adminRecord } = await supabase
         .from("admins")
         .select("*")
-        .eq("user_id", userId)
+        .eq("id", userId)
         .maybeSingle();
 
-      if (!adminRecord) {
+      const fullAdminProfile = {
+        id: userId,
+        email: cleanEmail,
+        full_name: profileRecord?.full_name || userMeta.full_name || "GL Bajaj Administrator",
+        role: USER_ROLES.ADMIN,
+        ...(profileRecord || {}),
+        ...(adminRecord || {})
+      };
+
+      setUser(authData.user);
+      setProfile(fullAdminProfile);
+      setRole(USER_ROLES.ADMIN);
+      return { user: authData.user, profile: fullAdminProfile, role: USER_ROLES.ADMIN };
+
+    } else if (targetRole === USER_ROLES.STUDENT) {
+      if (registeredRole === USER_ROLES.ALUMNI) {
         await supabase.auth.signOut();
         setUser(null);
         setProfile(null);
         setRole(null);
-        throw new Error("You are not authorized to access the Admin Portal.");
+        throw new Error("This account is registered as Alumni. Please log in through the Alumni Portal.");
+      }
+      if (registeredRole === USER_ROLES.ADMIN) {
+        await supabase.auth.signOut();
+        setUser(null);
+        setProfile(null);
+        setRole(null);
+        throw new Error("This account is an Administrator. Please log in through the Admin Portal.");
       }
 
-      const fullProfile = { ...profileRecord, ...adminRecord };
+      // Fetch student record
+      const { data: studentRecord } = await supabase
+        .from("students")
+        .select("*")
+        .eq("id", userId)
+        .maybeSingle();
+
+      // Check roll number against registered records
+      const registeredRoll = (studentRecord?.roll_number || userMeta.roll_number || "").trim().toLowerCase();
+      if (registeredRoll && cleanRoll.toLowerCase() !== registeredRoll) {
+        await supabase.auth.signOut();
+        setUser(null);
+        setProfile(null);
+        setRole(null);
+        throw new Error("The roll number entered does not match this college account.");
+      }
+
+      const fullStudentProfile = {
+        id: userId,
+        email: cleanEmail,
+        full_name: profileRecord?.full_name || userMeta.full_name || "GLB Scholar",
+        role: USER_ROLES.STUDENT,
+        roll_number: cleanRoll || registeredRoll,
+        branch: studentRecord?.branch || userMeta.branch || "CSE",
+        batch: studentRecord?.batch || userMeta.batch || "2023-2027",
+        graduation_year: studentRecord?.graduation_year || userMeta.graduation_year || 2027,
+        ...(profileRecord || {}),
+        ...(studentRecord || {})
+      };
+
       setUser(authData.user);
-      setProfile(fullProfile);
-      setRole(USER_ROLES.ADMIN);
-      return { user: authData.user, profile: fullProfile };
+      setProfile(fullStudentProfile);
+      setRole(USER_ROLES.STUDENT);
+      return { user: authData.user, profile: fullStudentProfile, role: USER_ROLES.STUDENT };
+
+    } else if (targetRole === USER_ROLES.ALUMNI) {
+      if (registeredRole === USER_ROLES.STUDENT) {
+        await supabase.auth.signOut();
+        setUser(null);
+        setProfile(null);
+        setRole(null);
+        throw new Error("This account is registered as a Student. Please log in through the Student Portal.");
+      }
+      if (registeredRole === USER_ROLES.ADMIN) {
+        await supabase.auth.signOut();
+        setUser(null);
+        setProfile(null);
+        setRole(null);
+        throw new Error("This account is an Administrator. Please log in through the Admin Portal.");
+      }
+
+      // Fetch alumni record
+      const { data: alumniRecord } = await supabase
+        .from("alumni")
+        .select("*")
+        .eq("id", userId)
+        .maybeSingle();
+
+      // Check roll number / alumni identifier
+      const registeredRoll = (alumniRecord?.roll_number || userMeta.roll_number || "").trim().toLowerCase();
+      if (registeredRoll && cleanRoll.toLowerCase() !== registeredRoll) {
+        await supabase.auth.signOut();
+        setUser(null);
+        setProfile(null);
+        setRole(null);
+        throw new Error("The roll number or alumni identifier entered does not match this college account.");
+      }
+
+      const fullAlumniProfile = {
+        id: userId,
+        email: cleanEmail,
+        full_name: profileRecord?.full_name || userMeta.full_name || "GLB Alumnus",
+        role: USER_ROLES.ALUMNI,
+        roll_number: cleanRoll || registeredRoll,
+        branch: alumniRecord?.branch || userMeta.branch || "CSE",
+        batch: alumniRecord?.batch || userMeta.batch || "2019-2023",
+        graduation_year: alumniRecord?.graduation_year || userMeta.graduation_year || 2023,
+        mentorship_available: alumniRecord?.mentorship_available ?? true,
+        verified: alumniRecord?.verified ?? false,
+        ...(profileRecord || {}),
+        ...(alumniRecord || {})
+      };
+
+      setUser(authData.user);
+      setProfile(fullAlumniProfile);
+      setRole(USER_ROLES.ALUMNI);
+      return { user: authData.user, profile: fullAlumniProfile, role: USER_ROLES.ALUMNI };
 
     } else {
-      // If no specific role portal was chosen, check the user's registered role
-      if (profileRecord.role === USER_ROLES.ADMIN) {
-        const { data: adminRecord } = await supabase
-          .from("admins")
-          .select("*")
-          .eq("user_id", userId)
-          .maybeSingle();
-
-        if (!adminRecord) {
-          await supabase.auth.signOut();
-          setUser(null);
-          setProfile(null);
-          setRole(null);
-          throw new Error("You are not authorized to access the Admin Portal.");
-        }
-      }
-
+      // General portal login: role auto-detected
       const fullProfile = await fetchUserProfile(userId);
       setUser(authData.user);
-      return { user: authData.user, profile: fullProfile };
+      return { user: authData.user, profile: fullProfile, role: registeredRole };
     }
   }
 
@@ -327,7 +389,13 @@ export function AuthProvider({ children }) {
       throw new Error("Password must be at least 6 characters long.");
     }
 
-    // 3. Verify user against existing student/alumni database records where applicable
+    // 3. Graduation year validation
+    const gradYearNum = parseInt(data.batch_year || data.graduation_year || "2027", 10);
+    if (isNaN(gradYearNum) || gradYearNum < 2005 || gradYearNum > 2050) {
+      throw new Error("Graduation year must be between 2005 and 2050 inclusive.");
+    }
+
+    // 4. Verify user against existing student/alumni database records where applicable
     if (targetRole === USER_ROLES.STUDENT) {
       const { data: existingStudent } = await supabase
         .from("students")
@@ -350,15 +418,36 @@ export function AuthProvider({ children }) {
       }
     }
 
-    // 4. Create user in Supabase Auth
+    // 5. Create user in Supabase Auth with complete metadata and email redirect URL
+    const skillsArray = data.skills
+      ? (Array.isArray(data.skills) ? data.skills : data.skills.split(",").map((s) => s.trim()).filter(Boolean))
+      : [];
+
+    const redirectOrigin = typeof window !== "undefined" ? window.location.origin : "https://glbajaj-alumni-connect.vercel.app";
+
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: cleanEmail,
       password: data.password,
       options: {
+        emailRedirectTo: `${redirectOrigin}/login?verified=true`,
         data: {
-          full_name: data.full_name,
+          full_name: data.full_name || "GLB Member",
           roll_number: cleanRoll,
           role: targetRole,
+          branch: data.branch || "CSE",
+          batch: data.batch_year || data.batch || String(gradYearNum),
+          graduation_year: gradYearNum,
+          phone: data.phone || "",
+          skills: skillsArray,
+          bio: data.bio || "",
+          ...(targetRole === USER_ROLES.ALUMNI && {
+            current_company: data.current_company || "",
+            current_designation: data.current_designation || "",
+            industry: data.industry || "",
+            location: data.location || "",
+            mentorship_available: true,
+            verified: false
+          })
         },
       },
     });
@@ -367,61 +456,85 @@ export function AuthProvider({ children }) {
       throw new Error(authError.message || "Registration failed.");
     }
 
+    const emailConfirmationRequired = !authData?.session;
     const newUserId = authData.user?.id;
-    if (!newUserId) {
-      return authData;
+
+    // 6. If immediate session exists (email confirmation disabled in Supabase), ensure DB records exist
+    if (authData.session && newUserId) {
+      try {
+        await supabase.from("profiles").upsert({
+          id: newUserId,
+          full_name: data.full_name || "GLB Member",
+          email: cleanEmail,
+          role: targetRole,
+          phone: data.phone || "",
+        });
+
+        if (targetRole === USER_ROLES.STUDENT) {
+          await supabase.from("students").upsert({
+            id: newUserId,
+            roll_number: cleanRoll,
+            branch: data.branch || "CSE",
+            batch: data.batch_year || data.batch || String(gradYearNum),
+            graduation_year: gradYearNum,
+            skills: skillsArray,
+            bio: data.bio || ""
+          });
+        } else if (targetRole === USER_ROLES.ALUMNI) {
+          await supabase.from("alumni").upsert({
+            id: newUserId,
+            roll_number: cleanRoll,
+            branch: data.branch || "CSE",
+            batch: data.batch_year || data.batch || String(gradYearNum),
+            graduation_year: gradYearNum,
+            current_company: data.current_company || "",
+            current_designation: data.current_designation || "",
+            industry: data.industry || "",
+            location: data.location || "",
+            skills: skillsArray,
+            bio: data.bio || "",
+            mentorship_available: true,
+            verified: false
+          });
+        }
+      } catch (err) {
+        console.warn("Non-fatal profile setup notice:", err);
+      }
     }
 
-    // 5. Insert Base Profile
-    const { error: profileErr } = await supabase.from("profiles").upsert({
-      id: newUserId,
-      full_name: data.full_name || "GLB Member",
+    return {
+      ...authData,
+      emailConfirmationRequired,
+      email: cleanEmail
+    };
+  }
+
+  // Resend Email Confirmation Link
+  async function resendConfirmationEmail(emailInput) {
+    if (!emailInput) throw new Error("College Email is required.");
+    if (!isSupabaseConfigured || !supabase) {
+      throw new Error("Supabase is not configured. Please contact the administrator.");
+    }
+
+    const cleanEmail = emailInput.trim().toLowerCase();
+    if (!isCollegeEmail(cleanEmail)) {
+      throw new Error("Please use your official @glbitm.ac.in college email.");
+    }
+
+    const redirectOrigin = typeof window !== "undefined" ? window.location.origin : "https://glbajaj-alumni-connect.vercel.app";
+
+    const { error } = await supabase.auth.resend({
+      type: "signup",
       email: cleanEmail,
-      role: targetRole,
-      phone: data.phone || "",
+      options: {
+        emailRedirectTo: `${redirectOrigin}/login?verified=true`
+      }
     });
 
-    if (profileErr) {
-      console.warn("Error upserting profile:", profileErr);
+    if (error) {
+      throw new Error(error.message || "Failed to resend confirmation email.");
     }
-
-    // 6. Insert Role-specific Record
-    if (targetRole === USER_ROLES.STUDENT) {
-      const skillsArray = data.skills
-        ? (Array.isArray(data.skills) ? data.skills : data.skills.split(",").map((s) => s.trim()).filter(Boolean))
-        : [];
-
-      await supabase.from("students").upsert({
-        user_id: newUserId,
-        roll_number: cleanRoll,
-        branch: data.branch || "CSE",
-        batch_year: data.batch_year || "2024",
-        skills: skillsArray,
-        interests: data.interests || "",
-        bio: data.bio || "",
-      });
-    } else if (targetRole === USER_ROLES.ALUMNI) {
-      const skillsArray = data.skills
-        ? (Array.isArray(data.skills) ? data.skills : data.skills.split(",").map((s) => s.trim()).filter(Boolean))
-        : [];
-
-      await supabase.from("alumni").upsert({
-        user_id: newUserId,
-        roll_number: cleanRoll,
-        branch: data.branch || "CSE",
-        graduation_year: data.batch_year || data.graduation_year || "2022",
-        current_company: data.current_company || "",
-        current_designation: data.current_designation || "",
-        industry: data.industry || "",
-        location: data.location || "",
-        skills: skillsArray,
-        bio: data.bio || "",
-        is_available_for_mentorship: true,
-        is_verified: false, // New alumni requires verification by Admin
-      });
-    }
-
-    return authData;
+    return true;
   }
 
   // Password Recovery for official college email
@@ -436,8 +549,10 @@ export function AuthProvider({ children }) {
       throw new Error("Please use your official @glbitm.ac.in college email.");
     }
 
+    const redirectOrigin = typeof window !== "undefined" ? window.location.origin : "https://glbajaj-alumni-connect.vercel.app";
+
     const { error } = await supabase.auth.resetPasswordForEmail(cleanEmail, {
-      redirectTo: `${window.location.origin}/login`,
+      redirectTo: `${redirectOrigin}/reset-password`,
     });
 
     if (error) {
@@ -469,6 +584,7 @@ export function AuthProvider({ children }) {
         loading,
         login,
         register,
+        resendConfirmationEmail,
         resetPassword,
         logout,
         fetchUserProfile,

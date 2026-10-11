@@ -22,7 +22,14 @@ export const BRANCHES = [
 
 export const BRANCH_CODES = ["CSE", "IT", "ECE", "ME", "CE", "AI-ML", "DS", "MCA", "MBA"];
 
-export const BATCH_YEARS = Array.from({ length: 18 }, (_, i) => String(2027 - i));
+export const MIN_GRADUATION_YEAR = 2005;
+export const MAX_GRADUATION_YEAR = 2050;
+
+// Graduation years from 2050 descending to 2005 (covers all current, future through 2050, and alumni historical years)
+export const BATCH_YEARS = Array.from(
+  { length: MAX_GRADUATION_YEAR - MIN_GRADUATION_YEAR + 1 },
+  (_, i) => String(MAX_GRADUATION_YEAR - i)
+);
 
 export const MENTORSHIP_TOPICS = [
   "Career Mentorship & Guidance",

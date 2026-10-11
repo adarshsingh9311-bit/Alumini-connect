@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import { supabase, isSupabaseConfigured } from "../../lib/supabase";
@@ -50,7 +50,7 @@ export default function AlumniProfilePage() {
         const { data: alumRec } = await supabase
           .from("alumni")
           .select("id")
-          .eq("user_id", user.id)
+          .eq("id", user.id)
           .single();
 
         if (alumRec) {
@@ -91,7 +91,7 @@ export default function AlumniProfilePage() {
           ? formData.skills.split(",").map((s) => s.trim()).filter(Boolean)
           : [];
 
-        // Update alumni
+        // Update alumni with valid database columns
         await supabase
           .from("alumni")
           .update({
@@ -100,12 +100,9 @@ export default function AlumniProfilePage() {
             industry: formData.industry,
             location: formData.location,
             skills: skillsArray,
-            bio: formData.bio,
-            linkedin_url: formData.linkedin_url,
-            github_url: formData.github_url,
-            website_url: formData.website_url
+            bio: formData.bio
           })
-          .eq("user_id", user.id);
+          .eq("id", user.id);
 
         if (fetchUserProfile) await fetchUserProfile(user.id);
       }
@@ -125,7 +122,7 @@ export default function AlumniProfilePage() {
       const { data: alumRec } = await supabase
         .from("alumni")
         .select("id")
-        .eq("user_id", user.id)
+        .eq("id", user.id)
         .single();
 
       if (alumRec) {

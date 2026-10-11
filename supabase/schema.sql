@@ -323,12 +323,12 @@ CREATE POLICY "Students directory viewable by authenticated users"
 CREATE POLICY "Student can insert own record"
   ON students FOR INSERT
   TO authenticated
-  WITH CHECK (auth.uid() = user_id OR is_admin());
+  WITH CHECK (auth.uid() = id OR is_admin());
 
 CREATE POLICY "Student can update own record"
   ON students FOR UPDATE
   TO authenticated
-  USING (auth.uid() = user_id OR is_admin());
+  USING (auth.uid() = id OR is_admin());
 
 -- ALUMNI POLICIES
 CREATE POLICY "Alumni directory viewable by all (anon sees verified)"
@@ -338,12 +338,12 @@ CREATE POLICY "Alumni directory viewable by all (anon sees verified)"
 CREATE POLICY "Alumni can insert own record"
   ON alumni FOR INSERT
   TO authenticated
-  WITH CHECK (auth.uid() = user_id OR is_admin());
+  WITH CHECK (auth.uid() = id OR is_admin());
 
 CREATE POLICY "Alumni can update own record, Admin can verify"
   ON alumni FOR UPDATE
   TO authenticated
-  USING (auth.uid() = user_id OR is_admin());
+  USING (auth.uid() = id OR is_admin());
 
 -- ADMINS POLICIES
 CREATE POLICY "Admins viewable by authenticated"

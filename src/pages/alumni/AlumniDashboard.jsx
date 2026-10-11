@@ -91,8 +91,8 @@ export default function AlumniDashboard() {
       try {
         await supabase
           .from("alumni")
-          .update({ is_available_for_mentorship: next })
-          .eq("user_id", user.id);
+          .update({ mentorship_available: next })
+          .eq("id", user.id);
 
         if (fetchUserProfile) await fetchUserProfile(user.id);
         addToast(`Mentorship status updated to ${next ? "Available" : "Busy"}.`, "success");

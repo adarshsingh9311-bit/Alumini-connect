@@ -32,16 +32,16 @@ export default function AdminAlumniPage() {
         if (!error && data) {
           setAlumniList(data.map(a => ({
             id: a.id,
-            user_id: a.user_id,
+            user_id: a.id,
             full_name: a.profiles?.full_name || "Alumnus",
             email: a.profiles?.email || "",
             roll_number: a.roll_number,
             branch: a.branch,
-            batch_year: a.graduation_year || a.batch_year,
+            batch_year: a.graduation_year || a.batch || "",
             current_company: a.current_company || "",
             current_designation: a.current_designation || "",
-            is_verified: a.is_verified,
-            is_available_for_mentorship: a.is_available_for_mentorship
+            is_verified: a.verified !== false,
+            is_available_for_mentorship: a.mentorship_available !== false
           })));
         }
       } catch (err) {

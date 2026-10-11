@@ -28,14 +28,14 @@ export default function AdminStudentsPage() {
         if (!error && data) {
           setStudents(data.map(s => ({
             id: s.id,
-            user_id: s.user_id,
+            user_id: s.id,
             full_name: s.profiles?.full_name || "Scholar",
             email: s.profiles?.email || "",
             roll_number: s.roll_number,
             branch: s.branch,
-            batch_year: s.batch_year,
+            batch_year: s.batch || (s.graduation_year ? String(s.graduation_year) : ""),
             skills: Array.isArray(s.skills) ? s.skills : [],
-            interests: s.interests
+            bio: s.bio || ""
           })));
         }
       } catch (err) {
