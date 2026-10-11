@@ -47,20 +47,32 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [confirmationSentEmail, setConfirmationSentEmail] = useState(null);
   const [resending, setResending] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(60);
 
   const { register, resendConfirmationEmail } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    let timer = null;
+    if (resendCooldown > 0) {
+      timer = setTimeout(() => {
+        setResendCooldown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [resendCooldown]);
 
   function handleChange(e) {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
   async function handleResend() {
-    if (!confirmationSentEmail) return;
+    if (!confirmationSentEmail || resendCooldown > 0 || resending) return;
     setResending(true);
     try {
       await resendConfirmationEmail(confirmationSentEmail);
+      setResendCooldown(60);
       addToast(`Verification email re-dispatched to ${confirmationSentEmail}.`, "success");
     } catch (err) {
       addToast(err.message || "Failed to resend email.", "error");
@@ -160,11 +172,19 @@ export default function RegisterPage() {
             <button
               type="button"
               onClick={handleResend}
-              disabled={resending}
+              disabled={resending || resendCooldown > 0}
               className="w-full inline-flex items-center justify-center gap-2 border border-[#D9DDE3] hover:bg-[#F7F3EA] text-[#202124] py-2.5 px-4 rounded-lg font-semibold text-xs transition disabled:opacity-50"
             >
-              {resending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
-              <span>Resend Verification Email</span>
+              {resending ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <RefreshCw className="w-3.5 h-3.5" />
+              )}
+              <span>
+                {resendCooldown > 0
+                  ? `Resend Verification Email (wait ${resendCooldown}s)`
+                  : "Resend Verification Email"}
+              </span>
             </button>
           </div>
         </div>

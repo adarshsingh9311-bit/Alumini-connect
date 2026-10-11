@@ -38,12 +38,23 @@ export default function LoginPage() {
   // Unconfirmed email state
   const [unconfirmedEmail, setUnconfirmedEmail] = useState(null);
   const [resendingVerification, setResendingVerification] = useState(false);
+  const [loginResendCooldown, setLoginResendCooldown] = useState(0);
 
   const { login, resetPassword, resendConfirmationEmail } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
 
   const isVerifiedParam = searchParams.get("verified") === "true";
+
+  React.useEffect(() => {
+    let timer = null;
+    if (loginResendCooldown > 0) {
+      timer = setTimeout(() => {
+        setLoginResendCooldown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [loginResendCooldown]);
 
   function handleRoleChange(newRole) {
     setSelectedRole(newRole);
@@ -54,10 +65,11 @@ export default function LoginPage() {
   }
 
   async function handleResendVerification() {
-    if (!unconfirmedEmail) return;
+    if (!unconfirmedEmail || loginResendCooldown > 0 || resendingVerification) return;
     setResendingVerification(true);
     try {
       await resendConfirmationEmail(unconfirmedEmail);
+      setLoginResendCooldown(60);
       addToast(`Verification email has been re-dispatched to ${unconfirmedEmail}. Please check your inbox.`, "success");
     } catch (err) {
       addToast(err.message || "Failed to resend verification email.", "error");
@@ -317,11 +329,15 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={handleResendVerification}
-                  disabled={resendingVerification}
-                  className="text-xs font-bold text-[#7A1F24] hover:underline inline-flex items-center gap-1.5 pt-1"
+                  disabled={resendingVerification || loginResendCooldown > 0}
+                  className="text-xs font-bold text-[#7A1F24] hover:underline inline-flex items-center gap-1.5 pt-1 disabled:opacity-50 disabled:no-underline"
                 >
                   {resendingVerification ? <Loader2 className="w-3 h-3 animate-spin" /> : null}
-                  <span>Resend verification email to this address</span>
+                  <span>
+                    {loginResendCooldown > 0
+                      ? `Resend verification email (wait ${loginResendCooldown}s)`
+                      : "Resend verification email to this address"}
+                  </span>
                 </button>
               </div>
             )}

@@ -453,7 +453,15 @@ export function AuthProvider({ children }) {
     });
 
     if (authError) {
-      throw new Error(authError.message || "Registration failed.");
+      const errMsg = authError.message || "";
+      const errCode = authError.code || "";
+      if (errCode === "over_email_send_rate_limit" || errMsg.toLowerCase().includes("rate limit") || errMsg.toLowerCase().includes("over_email_send_rate_limit")) {
+        throw new Error("College verification email limit reached. Please wait a few minutes before trying again or contact the administrator.");
+      }
+      if (errMsg.toLowerCase().includes("user already registered")) {
+        throw new Error("An account is already registered with this college email. If you have not verified your email, please use the resend verification option on the login page.");
+      }
+      throw new Error(errMsg || "Registration failed.");
     }
 
     const emailConfirmationRequired = !authData?.session;
@@ -532,6 +540,11 @@ export function AuthProvider({ children }) {
     });
 
     if (error) {
+      const errMsg = error.message || "";
+      const errCode = error.code || "";
+      if (errCode === "over_email_send_rate_limit" || errMsg.toLowerCase().includes("rate limit") || errMsg.toLowerCase().includes("over_email_send_rate_limit")) {
+        throw new Error("College verification email limit reached. Please wait a few minutes before requesting another verification email.");
+      }
       throw new Error(error.message || "Failed to resend confirmation email.");
     }
     return true;
