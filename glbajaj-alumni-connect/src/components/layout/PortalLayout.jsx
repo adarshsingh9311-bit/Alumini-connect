@@ -106,11 +106,8 @@ export default function PortalLayout({ portalTitle, portalRole, navItems, onOpen
         </div>
 
         {/* Portal Identifier Badge */}
-        <div className="px-5 py-3 bg-[#241006] border-b border-[#ffcc4e]/20 flex items-center justify-between">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-amber-200/70">
-            Active Workspace
-          </span>
-          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${roleTheme.badge}`}>
+        <div className="px-5 py-2.5 bg-[#241006] border-b border-[#ffcc4e]/20 flex items-center justify-center">
+          <span className={`text-[11px] font-bold px-3 py-1 rounded-full border ${roleTheme.badge} w-full text-center`}>
             {portalTitle}
           </span>
         </div>
