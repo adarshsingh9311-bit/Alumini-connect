@@ -80,21 +80,23 @@ export default function PortalLayout({ portalTitle, portalRole, navItems, onOpen
         {/* Brand Header */}
         <div className="h-20 px-5 flex items-center justify-between border-b border-[#ffcc4e]/20 bg-[#1e0e05]">
           <Link to="/" className="flex items-center space-x-3 group">
-            <img
-              src="/assets/glb-gold-crest.png"
-              alt="GL Bajaj Seal"
-              className="w-10 h-10 object-contain drop-shadow group-hover:scale-105 transition shrink-0"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-            <div>
-              <h1 className="font-extrabold text-sm sm:text-base leading-tight tracking-wide text-white flex items-center gap-1.5">
-                <span>GL BAJAJ</span>
-              </h1>
-              <p className="text-[10px] text-[#ffcc4e] font-bold tracking-widest uppercase">
-                "Once GLB, Always GLB."
-              </p>
+            <div className="w-10 h-10 rounded-xl bg-[#ffcc4e]/10 border border-[#ffcc4e]/30 flex items-center justify-center p-1 shadow-sm shrink-0 group-hover:border-[#ffcc4e] transition">
+              <img
+                src="/assets/glb-gold-crest.png"
+                alt="GL Bajaj Seal"
+                className="w-full h-full object-contain drop-shadow"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-black text-sm tracking-wide text-white uppercase group-hover:text-[#ffcc4e] transition">
+                GL BAJAJ
+              </span>
+              <span className="text-[10px] text-[#ffcc4e] font-semibold tracking-wider italic opacity-90">
+                Alumni Network
+              </span>
             </div>
           </Link>
           <button
