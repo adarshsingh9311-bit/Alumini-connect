@@ -135,25 +135,12 @@ export default function UniversityHeader({ onOpenAuthModal }) {
           </button>
         </nav>
 
-        {/* RIGHT: College Logo + Login + Join Family on Exact Same Baseline */}
-        <div className="hidden sm:flex items-center space-x-4 shrink-0 h-10">
-          {/* Right Logo from Screenshot */}
-          <div className="hidden xl:flex items-center pr-2 border-r border-[#E7E1D4]">
-            <img
-              src="/assets/glb-right-logo-clean.png"
-              alt="GL Bajaj Institute of Technology & Management"
-              className="h-9 w-auto object-contain"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = "/assets/glb-right-logo.png";
-              }}
-            />
-          </div>
-
+        {/* RIGHT: Login + Join Family on Exact Same Baseline */}
+        <div className="hidden sm:flex items-center space-x-3 shrink-0 h-10">
           {/* Login Button */}
           <button
             onClick={onOpenAuthModal}
-            className="h-10 px-5 rounded-lg border border-[#CBD5E1] bg-white text-xs sm:text-sm font-semibold text-[#1A2838] hover:bg-[#FAF8F5] hover:border-[#C2853B] transition flex items-center justify-center shadow-xs"
+            className="h-10 px-5 rounded-lg border border-[#CBD5E1] bg-white text-xs sm:text-sm font-semibold text-[#1A2838] hover:bg-[#FAF8F5] hover:border-[#C2853B] transition flex items-center justify-center shadow-xs cursor-pointer"
           >
             Login
           </button>
