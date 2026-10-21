@@ -1,10 +1,60 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Heart, MapPin, GraduationCap, Menu, X, ArrowRight } from "lucide-react";
-import { COLLEGE_NAME, COLLEGE_LOCATION } from "../../lib/constants";
+import { useAuth } from "../../context/AuthContext";
+import { USER_ROLES, COLLEGE_NAME, COLLEGE_LOCATION } from "../../lib/constants";
 
 export default function UniversityHeader({ onOpenAuthModal }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, role } = useAuth();
+  const navigate = useNavigate();
+
+  function handleProtectedNav(targetSection, studentFallback, alumniFallback) {
+    if (user && role) {
+      if (role === USER_ROLES.STUDENT) {
+        navigate(studentFallback || "/student/dashboard");
+      } else if (role === USER_ROLES.ALUMNI) {
+        navigate(alumniFallback || "/alumni/dashboard");
+      } else if (role === USER_ROLES.ADMIN) {
+        navigate("/admin/dashboard");
+      } else {
+        navigate(studentFallback || "/student/dashboard");
+      }
+    } else {
+      // User is not logged in: prompt for login / portal selection
+      if (onOpenAuthModal) {
+        onOpenAuthModal();
+      } else {
+        navigate("/login");
+      }
+    }
+  }
+
+  function handleAnchorNav(e, anchorId) {
+    e.preventDefault();
+    if (user && role) {
+      // If logged in, navigate directly to corresponding portal features
+      if (anchorId === "mentorship") {
+        navigate(role === USER_ROLES.ALUMNI ? "/alumni/mentorship" : "/student/mentorship");
+      } else if (anchorId === "events") {
+        navigate(role === USER_ROLES.ALUMNI ? "/alumni/events" : "/student/events");
+      } else if (anchorId === "notable-alumni" || anchorId === "stories") {
+        navigate(role === USER_ROLES.ALUMNI ? "/alumni/stories" : "/student/stories");
+      } else if (anchorId === "resources") {
+        navigate(role === USER_ROLES.ALUMNI ? "/alumni/give-back" : "/student/opportunities");
+      } else {
+        const el = document.getElementById(anchorId);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      // Prompt user to login first
+      if (onOpenAuthModal) {
+        onOpenAuthModal();
+      } else {
+        navigate("/login");
+      }
+    }
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-[#E7E1D4] shadow-[0_1px_3px_rgba(0,0,0,0.03)] font-sans">
@@ -49,40 +99,40 @@ export default function UniversityHeader({ onOpenAuthModal }) {
             Home
           </Link>
 
-          <Link
-            to="/student/alumni"
-            className="text-[#4A5568] hover:text-[#C2853B] transition pb-1 h-full flex items-center"
+          <button
+            onClick={() => handleProtectedNav("alumni", "/student/alumni", "/alumni/dashboard")}
+            className="text-[#4A5568] hover:text-[#C2853B] transition pb-1 h-full flex items-center cursor-pointer font-medium"
           >
             Alumni
-          </Link>
+          </button>
 
-          <a
-            href="#mentorship"
-            className="text-[#4A5568] hover:text-[#C2853B] transition pb-1 h-full flex items-center"
+          <button
+            onClick={(e) => handleAnchorNav(e, "mentorship")}
+            className="text-[#4A5568] hover:text-[#C2853B] transition pb-1 h-full flex items-center cursor-pointer font-medium"
           >
             Mentorship
-          </a>
+          </button>
 
-          <a
-            href="#events"
-            className="text-[#4A5568] hover:text-[#C2853B] transition pb-1 h-full flex items-center"
+          <button
+            onClick={(e) => handleAnchorNav(e, "events")}
+            className="text-[#4A5568] hover:text-[#C2853B] transition pb-1 h-full flex items-center cursor-pointer font-medium"
           >
             Events
-          </a>
+          </button>
 
-          <a
-            href="#notable-alumni"
-            className="text-[#4A5568] hover:text-[#C2853B] transition pb-1 h-full flex items-center"
+          <button
+            onClick={(e) => handleAnchorNav(e, "notable-alumni")}
+            className="text-[#4A5568] hover:text-[#C2853B] transition pb-1 h-full flex items-center cursor-pointer font-medium"
           >
             Stories
-          </a>
+          </button>
 
-          <a
-            href="#resources"
-            className="text-[#4A5568] hover:text-[#C2853B] transition pb-1 h-full flex items-center"
+          <button
+            onClick={(e) => handleAnchorNav(e, "resources")}
+            className="text-[#4A5568] hover:text-[#C2853B] transition pb-1 h-full flex items-center cursor-pointer font-medium"
           >
             Resources
-          </a>
+          </button>
         </nav>
 
         {/* RIGHT: College Logo + Login + Join Family on Exact Same Baseline */}
@@ -146,41 +196,51 @@ export default function UniversityHeader({ onOpenAuthModal }) {
           >
             Home
           </Link>
-          <Link
-            to="/student/alumni"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block py-1.5 text-sm font-medium text-[#2B3442] hover:text-[#C2853B]"
+          <button
+            onClick={() => {
+              setMobileMenuOpen(false);
+              handleProtectedNav("alumni", "/student/alumni", "/alumni/dashboard");
+            }}
+            className="block w-full text-left py-1.5 text-sm font-medium text-[#2B3442] hover:text-[#C2853B]"
           >
             Alumni
-          </Link>
-          <a
-            href="#mentorship"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block py-1.5 text-sm font-medium text-[#2B3442] hover:text-[#C2853B]"
+          </button>
+          <button
+            onClick={(e) => {
+              setMobileMenuOpen(false);
+              handleAnchorNav(e, "mentorship");
+            }}
+            className="block w-full text-left py-1.5 text-sm font-medium text-[#2B3442] hover:text-[#C2853B]"
           >
             Mentorship
-          </a>
-          <a
-            href="#events"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block py-1.5 text-sm font-medium text-[#2B3442] hover:text-[#C2853B]"
+          </button>
+          <button
+            onClick={(e) => {
+              setMobileMenuOpen(false);
+              handleAnchorNav(e, "events");
+            }}
+            className="block w-full text-left py-1.5 text-sm font-medium text-[#2B3442] hover:text-[#C2853B]"
           >
             Events
-          </a>
-          <a
-            href="#notable-alumni"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block py-1.5 text-sm font-medium text-[#2B3442] hover:text-[#C2853B]"
+          </button>
+          <button
+            onClick={(e) => {
+              setMobileMenuOpen(false);
+              handleAnchorNav(e, "notable-alumni");
+            }}
+            className="block w-full text-left py-1.5 text-sm font-medium text-[#2B3442] hover:text-[#C2853B]"
           >
             Stories
-          </a>
-          <a
-            href="#resources"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block py-1.5 text-sm font-medium text-[#2B3442] hover:text-[#C2853B]"
+          </button>
+          <button
+            onClick={(e) => {
+              setMobileMenuOpen(false);
+              handleAnchorNav(e, "resources");
+            }}
+            className="block w-full text-left py-1.5 text-sm font-medium text-[#2B3442] hover:text-[#C2853B]"
           >
             Resources
-          </a>
+          </button>
           <div className="pt-3 border-t border-[#E7E1D4]">
             <Link
               to="/register"

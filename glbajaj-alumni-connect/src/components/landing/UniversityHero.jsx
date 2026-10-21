@@ -4,13 +4,36 @@ import { ArrowRight, Users, HeartHandshake, MessageSquare, Heart } from "lucide-
 import { useAuth } from "../../context/AuthContext";
 import { USER_ROLES } from "../../lib/constants";
 
-export default function UniversityHero() {
-  const { setDemoPortal } = useAuth();
+export default function UniversityHero({ onOpenAuthModal }) {
+  const { user, role, setDemoPortal } = useAuth();
   const navigate = useNavigate();
 
   function handleFindMentor() {
-    setDemoPortal(USER_ROLES.STUDENT);
-    navigate("/student/alumni");
+    if (user && role) {
+      if (role === USER_ROLES.STUDENT) {
+        navigate("/student/alumni");
+      } else if (role === USER_ROLES.ALUMNI) {
+        navigate("/alumni/mentorship");
+      } else {
+        navigate("/admin/mentorship");
+      }
+    } else {
+      if (onOpenAuthModal) onOpenAuthModal();
+      else navigate("/login");
+    }
+  }
+
+  function handleExploreFamily() {
+    if (user && role) {
+      if (role === USER_ROLES.ALUMNI) {
+        navigate("/alumni/stories");
+      } else {
+        navigate("/student/stories");
+      }
+    } else {
+      if (onOpenAuthModal) onOpenAuthModal();
+      else navigate("/login");
+    }
   }
 
   const pillars = [
@@ -102,10 +125,7 @@ export default function UniversityHero() {
 
               {/* Explore GLB Family button (Dark rounded pill with thin white border) */}
               <button
-                onClick={() => {
-                  setDemoPortal(USER_ROLES.STUDENT);
-                  navigate("/student/stories");
-                }}
+                onClick={handleExploreFamily}
                 className="bg-black/40 hover:bg-black/60 text-white border border-white/60 text-xs sm:text-sm font-medium px-6 py-3 rounded-full transition backdrop-blur-xs flex items-center space-x-2 group cursor-pointer"
               >
                 <span>Explore GLB Family</span>

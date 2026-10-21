@@ -59,7 +59,7 @@ export default function LandingPage() {
       <UniversityHeader onOpenAuthModal={() => setAuthModalOpen(true)} />
 
       {/* 2. Hero: Authentic GL Bajaj Campus Photograph with Natural Navy Overlay */}
-      <UniversityHero />
+      <UniversityHero onOpenAuthModal={() => setAuthModalOpen(true)} />
 
       {/* 3. Notable GLB Alumni Showcase & Carousel */}
       <NotableAlumniSection onSelectAlumnus={(alumnus) => setSelectedAlumnus(alumnus)} />
