@@ -21,12 +21,8 @@ export default function UniversityHeader({ onOpenAuthModal }) {
         navigate(studentFallback || "/student/dashboard");
       }
     } else {
-      // User is not logged in: prompt for login / portal selection
-      if (onOpenAuthModal) {
-        onOpenAuthModal();
-      } else {
-        navigate("/login");
-      }
+      // User is not logged in: navigate directly to login page with portal parameter
+      navigate(`/login?role=${targetSection === "alumni" ? "alumni" : "student"}`);
     }
   }
 
@@ -47,12 +43,8 @@ export default function UniversityHeader({ onOpenAuthModal }) {
         if (el) el.scrollIntoView({ behavior: "smooth" });
       }
     } else {
-      // Prompt user to login first
-      if (onOpenAuthModal) {
-        onOpenAuthModal();
-      } else {
-        navigate("/login");
-      }
+      // Navigate directly to login page
+      navigate(`/login?role=student`);
     }
   }
 
@@ -138,12 +130,12 @@ export default function UniversityHeader({ onOpenAuthModal }) {
         {/* RIGHT: Login + Join Family on Exact Same Baseline */}
         <div className="hidden sm:flex items-center space-x-3 shrink-0 h-10">
           {/* Login Button */}
-          <button
-            onClick={onOpenAuthModal}
+          <Link
+            to="/login"
             className="h-10 px-5 rounded-lg border border-[#CBD5E1] bg-white text-xs sm:text-sm font-semibold text-[#1A2838] hover:bg-[#FAF8F5] hover:border-[#C2853B] transition flex items-center justify-center shadow-xs cursor-pointer"
           >
             Login
-          </button>
+          </Link>
 
           {/* Join Family Button (Warm Caramel / Gold) */}
           <Link
@@ -156,12 +148,12 @@ export default function UniversityHeader({ onOpenAuthModal }) {
 
         {/* Mobile Hamburger Toggle */}
         <div className="flex items-center space-x-2 sm:hidden">
-          <button
-            onClick={onOpenAuthModal}
+          <Link
+            to="/login"
             className="text-xs font-semibold text-[#1A2838] px-3 py-1.5 rounded border border-[#CBD5E1]"
           >
             Login
-          </button>
+          </Link>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 rounded-lg text-[#1A2838] hover:bg-[#FAF8F5]"

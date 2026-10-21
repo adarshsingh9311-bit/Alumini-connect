@@ -37,9 +37,8 @@ export default function LandingPage() {
   const [connectMessage, setConnectMessage] = useState("");
 
   function handleDirectPortal(role, path) {
-    setDemoPortal(role);
     setAuthModalOpen(false);
-    navigate(path);
+    navigate(`/login?role=${role}`);
   }
 
   function handleSendConnect(e) {

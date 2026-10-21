@@ -18,8 +18,7 @@ export default function UniversityHero({ onOpenAuthModal }) {
         navigate("/admin/mentorship");
       }
     } else {
-      if (onOpenAuthModal) onOpenAuthModal();
-      else navigate("/login");
+      navigate("/login?role=student");
     }
   }
 
@@ -31,8 +30,7 @@ export default function UniversityHero({ onOpenAuthModal }) {
         navigate("/student/stories");
       }
     } else {
-      if (onOpenAuthModal) onOpenAuthModal();
-      else navigate("/login");
+      navigate("/login?role=student");
     }
   }
 
