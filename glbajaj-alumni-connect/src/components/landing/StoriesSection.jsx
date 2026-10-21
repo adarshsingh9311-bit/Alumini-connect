@@ -85,8 +85,8 @@ export default function StoriesSection() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center space-x-2 text-glgold font-bold text-xs uppercase tracking-widest bg-glgold/10 px-3 py-1 rounded-full border border-glgold/30">
-            <Award className="w-3.5 h-3.5 text-glgold" />
+          <div className="inline-flex items-center space-x-2 text-[#ffcc4e] font-bold text-xs uppercase tracking-widest bg-[#ffcc4e]/10 px-3 py-1 rounded-full border border-[#ffcc4e]/30">
+            <Award className="w-3.5 h-3.5 text-[#ffcc4e]" />
             <span>Alumni Hall of Inspiration</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
@@ -99,19 +99,19 @@ export default function StoriesSection() {
 
         {/* Featured Story Hero Card */}
         {featuredStory && (
-          <div className="bg-gradient-to-br from-slate-950 via-teal-950/40 to-slate-950 border border-glgold/30 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden group">
-            <div className="absolute -top-24 -right-24 w-96 h-96 bg-glgold/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="bg-gradient-to-br from-slate-950 via-teal-950/40 to-slate-950 border border-[#ffcc4e]/30 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden group">
+            <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#ffcc4e]/10 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
               <div className="lg:col-span-5">
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/10 group-hover:border-glgold/50 transition duration-300">
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/10 group-hover:border-[#ffcc4e]/50 transition duration-300">
                   <img
                     src={featuredStory.image}
                     alt={featuredStory.name}
                     className="w-full h-80 sm:h-96 object-cover group-hover:scale-105 transition duration-500"
                   />
                   <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent p-4">
-                    <div className="text-glgold font-extrabold text-xs uppercase tracking-wider">
+                    <div className="text-[#ffcc4e] font-extrabold text-xs uppercase tracking-wider">
                       Featured Spotlight
                     </div>
                     <div className="text-white font-bold text-base">
@@ -126,7 +126,7 @@ export default function StoriesSection() {
 
               <div className="lg:col-span-7 space-y-5">
                 <div className="flex items-center space-x-3">
-                  <span className="text-xs font-mono font-bold bg-glgold text-slate-950 px-2.5 py-1 rounded-lg">
+                  <span className="text-xs font-mono font-bold bg-[#ffcc4e] text-slate-950 px-2.5 py-1 rounded-lg">
                     {featuredStory.batch}
                   </span>
                   <span className="text-xs text-slate-400 font-semibold">
@@ -138,8 +138,8 @@ export default function StoriesSection() {
                   {featuredStory.headline}
                 </h3>
 
-                <div className="relative pl-6 border-l-2 border-glgold text-slate-300 italic text-sm sm:text-base leading-relaxed">
-                  <Quote className="w-6 h-6 text-glgold/40 absolute -left-3 -top-2 fill-glgold/20" />
+                <div className="relative pl-6 border-l-2 border-[#ffcc4e] text-slate-300 italic text-sm sm:text-base leading-relaxed">
+                  <Quote className="w-6 h-6 text-[#ffcc4e]/40 absolute -left-3 -top-2 fill-glgold/20" />
                   "{featuredStory.quote}"
                 </div>
 
@@ -151,7 +151,7 @@ export default function StoriesSection() {
 
                   <button
                     onClick={() => setActiveStory(featuredStory)}
-                    className="bg-glgold hover:bg-glgold-dark text-slate-950 font-black text-xs px-5 py-2.5 rounded-xl transition shadow-lg shadow-glgold/20 flex items-center space-x-1.5 group/btn"
+                    className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-slate-950 font-black text-xs px-5 py-2.5 rounded-xl transition shadow-lg shadow-glgold/20 flex items-center space-x-1.5 group/btn"
                   >
                     <span>Read Full Journey</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition" />
@@ -167,7 +167,7 @@ export default function StoriesSection() {
           {supportingStories.map((item) => (
             <div
               key={item.id}
-              className="bg-slate-950/80 border border-white/10 rounded-3xl p-6 hover:border-glgold/40 transition duration-300 hover:-translate-y-1 shadow-xl flex flex-col justify-between group"
+              className="bg-slate-950/80 border border-white/10 rounded-3xl p-6 hover:border-[#ffcc4e]/40 transition duration-300 hover:-translate-y-1 shadow-xl flex flex-col justify-between group"
             >
               <div>
                 <div className="relative rounded-2xl overflow-hidden mb-4 border border-white/10 h-48">
@@ -176,13 +176,13 @@ export default function StoriesSection() {
                     alt={item.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                   />
-                  <div className="absolute top-3 right-3 bg-slate-950/80 backdrop-blur-md px-2.5 py-0.5 rounded-md text-[11px] font-mono text-glgold font-bold border border-white/10">
+                  <div className="absolute top-3 right-3 bg-slate-950/80 backdrop-blur-md px-2.5 py-0.5 rounded-md text-[11px] font-mono text-[#ffcc4e] font-bold border border-white/10">
                     {item.batch}
                   </div>
                 </div>
 
                 <div className="space-y-1 mb-3">
-                  <h4 className="font-black text-lg text-white group-hover:text-glgold transition">
+                  <h4 className="font-black text-lg text-white group-hover:text-[#ffcc4e] transition">
                     {item.name}
                   </h4>
                   <p className="text-xs font-bold text-teal-400">
@@ -204,7 +204,7 @@ export default function StoriesSection() {
                 </span>
                 <button
                   onClick={() => setActiveStory(item)}
-                  className="text-xs font-bold text-glgold hover:text-white transition flex items-center space-x-1"
+                  className="text-xs font-bold text-[#ffcc4e] hover:text-white transition flex items-center space-x-1"
                 >
                   <span>Read</span>
                   <ArrowRight className="w-3 h-3" />
@@ -231,7 +231,7 @@ export default function StoriesSection() {
               <img
                 src={activeStory.image}
                 alt={activeStory.name}
-                className="w-16 h-16 rounded-2xl object-cover border-2 border-glgold"
+                className="w-16 h-16 rounded-2xl object-cover border-2 border-[#ffcc4e]"
               />
               <div>
                 <h3 className="text-xl font-black text-white">{activeStory.name}</h3>
@@ -240,7 +240,7 @@ export default function StoriesSection() {
               </div>
             </div>
 
-            <div className="bg-glgold/10 border border-glgold/30 rounded-2xl p-4 text-xs sm:text-sm text-slate-200 italic mb-5 leading-relaxed">
+            <div className="bg-[#ffcc4e]/10 border border-[#ffcc4e]/30 rounded-2xl p-4 text-xs sm:text-sm text-slate-200 italic mb-5 leading-relaxed">
               "{activeStory.quote}"
             </div>
 
@@ -253,7 +253,7 @@ export default function StoriesSection() {
               </div>
 
               <div>
-                <h5 className="text-xs font-extrabold uppercase tracking-wider text-glgold mb-1">
+                <h5 className="text-xs font-extrabold uppercase tracking-wider text-[#ffcc4e] mb-1">
                   Words of Advice for GLB Students
                 </h5>
                 <p className="bg-white/5 p-3 rounded-xl border border-white/5 text-slate-200">

@@ -41,7 +41,7 @@ export default function AdminOpportunitiesPage() {
         </p>
       </div>
 
-      <div className="bg-white rounded-3xl border border-teal-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
           <h3 className="font-bold text-slate-900 text-sm">Active Job & Internship Postings</h3>
           <span className="text-xs text-slate-500 font-medium">Total: {opportunities.length}</span>
@@ -62,9 +62,9 @@ export default function AdminOpportunitiesPage() {
               {opportunities.map((opp) => (
                 <tr key={opp.id} className="hover:bg-slate-50 transition">
                   <td className="px-6 py-4 font-bold text-slate-900">{opp.title}</td>
-                  <td className="px-6 py-4 text-slate-700">{opp.company} • {opp.location}</td>
+                  <td className="px-6 py-4 text-slate-700">{opp.company} â€¢ {opp.location}</td>
                   <td className="px-6 py-4">
-                    <span className="bg-teal-50 text-glblue-750 font-bold text-[10px] px-2 py-0.5 rounded-full border border-teal-200">
+                    <span className="bg-[#faf6eb] text-[#592106] font-bold text-[10px] px-2 py-0.5 rounded-full border border-teal-200">
                       {opp.type}
                     </span>
                   </td>

@@ -119,8 +119,8 @@ export default function CommunitiesSection() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center space-x-2 text-glgold font-bold text-xs uppercase tracking-widest bg-glgold/10 px-3 py-1 rounded-full border border-glgold/30">
-            <Users className="w-3.5 h-3.5 text-glgold" />
+          <div className="inline-flex items-center space-x-2 text-[#ffcc4e] font-bold text-xs uppercase tracking-widest bg-[#ffcc4e]/10 px-3 py-1 rounded-full border border-[#ffcc4e]/30">
+            <Users className="w-3.5 h-3.5 text-[#ffcc4e]" />
             <span>Affinity Circles & Regional Chapters</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
@@ -140,19 +140,19 @@ export default function CommunitiesSection() {
             return (
               <div
                 key={circle.id}
-                className="bg-slate-900/80 border border-white/10 rounded-3xl p-6 hover:border-glgold/40 transition-all duration-300 hover:-translate-y-1 shadow-xl flex flex-col justify-between group"
+                className="bg-slate-900/80 border border-white/10 rounded-3xl p-6 hover:border-[#ffcc4e]/40 transition-all duration-300 hover:-translate-y-1 shadow-xl flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-4">
                     <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${circle.color} flex items-center justify-center text-white shadow-md group-hover:scale-105 transition`}>
                       <Icon className="w-6 h-6" />
                     </div>
-                    <span className="text-[11px] font-mono text-teal-300 font-bold bg-teal-950/60 border border-teal-500/30 px-2.5 py-0.5 rounded-full">
+                    <span className="text-[11px] font-mono text-teal-300 font-bold bg-[#1e0e05]/60 border border-teal-500/30 px-2.5 py-0.5 rounded-full">
                       {circle.members}
                     </span>
                   </div>
 
-                  <h3 className="font-bold text-base text-white group-hover:text-glgold transition mb-1.5">
+                  <h3 className="font-bold text-base text-white group-hover:text-[#ffcc4e] transition mb-1.5">
                     {circle.name}
                   </h3>
 

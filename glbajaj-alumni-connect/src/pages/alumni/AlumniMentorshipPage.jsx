@@ -75,7 +75,7 @@ export default function AlumniMentorshipPage() {
             onClick={() => setStatusFilter(tab)}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-bold capitalize transition ${
               statusFilter === tab
-                ? "bg-glblue-750 text-white shadow-sm"
+                ? "bg-[#592106] text-white shadow-sm"
                 : "bg-slate-100 text-slate-600 hover:bg-slate-200"
             }`}
           >
@@ -113,14 +113,14 @@ export default function AlumniMentorshipPage() {
                     }}
                     className={`p-4 rounded-2xl border transition ${
                       isSelected
-                        ? "border-glblue-750 bg-teal-50/40 shadow-sm cursor-pointer"
+                        ? "border-glblue-750 bg-[#faf6eb]/40 shadow-sm cursor-pointer"
                         : "border-slate-200 bg-white hover:border-slate-300"
                     }`}
                   >
                     <div className="flex items-start justify-between">
                       <div>
                         <h4 className="font-bold text-slate-900 text-sm">{req.student_name}</h4>
-                        <p className="text-xs text-glblue-750 font-semibold">{req.student_branch} • Roll: {req.student_roll}</p>
+                        <p className="text-xs text-[#592106] font-semibold">{req.student_branch} â€¢ Roll: {req.student_roll}</p>
                         <p className="text-xs font-semibold text-slate-800 mt-1">Topic: {req.topic}</p>
                       </div>
                       <span
@@ -152,7 +152,7 @@ export default function AlumniMentorshipPage() {
                         </button>
                         <button
                           onClick={() => handleAccept(req.id)}
-                          className="bg-glgold hover:bg-glgold-dark text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition shadow-sm flex items-center space-x-1"
+                          className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] text-xs font-bold px-3.5 py-1.5 rounded-lg transition shadow-sm flex items-center space-x-1"
                         >
                           <CheckCircle2 className="w-3.5 h-3.5" />
                           <span>Accept Request</span>
@@ -162,7 +162,7 @@ export default function AlumniMentorshipPage() {
                       <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
                         <span>{new Date(req.created_at).toLocaleDateString()}</span>
                         {isAccepted && (
-                          <span className="text-glgold font-bold flex items-center gap-1 cursor-pointer">
+                          <span className="text-[#ffcc4e] font-bold flex items-center gap-1 cursor-pointer">
                             <MessageCircle className="w-3.5 h-3.5" />
                             <span>Select to Chat</span>
                           </span>

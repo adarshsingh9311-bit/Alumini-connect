@@ -34,7 +34,7 @@ export default function StudentNoticesPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search notices by keyword or department..."
-          className="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-glblue-750 shadow-sm"
+          className="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#592106] shadow-sm"
         />
       </div>
 
@@ -44,10 +44,10 @@ export default function StudentNoticesPage() {
           <div
             key={notice.id}
             onClick={() => setActiveNotice(notice)}
-            className="bg-white rounded-2xl p-5 border border-teal-100 hover:border-glgold/60 shadow-sm hover:shadow-md transition cursor-pointer space-y-3"
+            className="bg-white rounded-2xl p-5 border border-slate-200 hover:border-[#ffcc4e]/60 shadow-sm hover:shadow-md transition cursor-pointer space-y-3"
           >
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider bg-teal-50 text-glblue-750 px-2.5 py-1 rounded-md border border-teal-200">
+              <span className="text-[10px] font-bold uppercase tracking-wider bg-[#faf6eb] text-[#592106] px-2.5 py-1 rounded-md border border-teal-200">
                 {notice.category}
               </span>
               <span className="text-xs text-slate-400 flex items-center gap-1">
@@ -62,10 +62,10 @@ export default function StudentNoticesPage() {
             </p>
 
             <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
-              <span className="font-medium text-glblue-750">
+              <span className="font-medium text-[#592106]">
                 Issued by: <strong>{notice.published_by}</strong>
               </span>
-              <span className="text-glgold font-bold hover:underline">Read Complete Notice ?</span>
+              <span className="text-[#ffcc4e] font-bold hover:underline">Read Complete Notice ?</span>
             </div>
           </div>
         ))}
@@ -81,7 +81,7 @@ export default function StudentNoticesPage() {
         {activeNotice && (
           <div className="space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <span className="text-xs font-bold text-glblue-750 bg-teal-50 px-2.5 py-1 rounded">
+              <span className="text-xs font-bold text-[#592106] bg-[#faf6eb] px-2.5 py-1 rounded">
                 {activeNotice.category}
               </span>
               <span className="text-xs text-slate-400">

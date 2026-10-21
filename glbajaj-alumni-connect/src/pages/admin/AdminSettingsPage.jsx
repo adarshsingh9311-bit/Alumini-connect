@@ -22,9 +22,9 @@ export default function AdminSettingsPage() {
         </p>
       </div>
 
-      <form onSubmit={handleSave} className="bg-white rounded-3xl p-6 sm:p-8 border border-teal-100 shadow-sm space-y-6">
+      <form onSubmit={handleSave} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
         <h3 className="font-extrabold text-slate-900 text-base flex items-center gap-2 border-b border-slate-100 pb-3">
-          <Shield className="w-4 h-4 text-glblue-750" />
+          <Shield className="w-4 h-4 text-[#592106]" />
           <span>Institutional Policies & Identity Verification</span>
         </h3>
 
@@ -36,7 +36,7 @@ export default function AdminSettingsPage() {
               required
               value={academicYear}
               onChange={(e) => setAcademicYear(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-[#592106] focus:outline-none"
             />
           </div>
 
@@ -49,7 +49,7 @@ export default function AdminSettingsPage() {
               type="checkbox"
               checked={autoVerifyStudents}
               onChange={(e) => setAutoVerifyStudents(e.target.checked)}
-              className="rounded text-glgold focus:ring-glgold cursor-pointer"
+              className="rounded text-[#ffcc4e] focus:ring-glgold cursor-pointer"
             />
           </label>
 
@@ -62,7 +62,7 @@ export default function AdminSettingsPage() {
               type="checkbox"
               checked={alumniSelfRegister}
               onChange={(e) => setAlumniSelfRegister(e.target.checked)}
-              className="rounded text-glgold focus:ring-glgold cursor-pointer"
+              className="rounded text-[#ffcc4e] focus:ring-glgold cursor-pointer"
             />
           </label>
         </div>
@@ -70,7 +70,7 @@ export default function AdminSettingsPage() {
         <div className="flex justify-end pt-2 border-t border-slate-100">
           <button
             type="submit"
-            className="bg-glgold hover:bg-glgold-dark text-white font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm transition shadow-md flex items-center space-x-1.5"
+            className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm transition shadow-md flex items-center space-x-1.5"
           >
             <Save className="w-4 h-4" />
             <span>Save Platform Settings</span>

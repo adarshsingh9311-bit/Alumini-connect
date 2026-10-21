@@ -36,15 +36,15 @@ export default function AlumniVoicesSection() {
   ];
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#F5F1E8] border-t border-b border-[#E7E1D4] font-sans">
+    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#F9F6F0] border-t border-b border-[#EAE5DC] font-sans">
       <div className="max-w-7xl mx-auto space-y-12">
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center space-x-2 text-[#8C7138] text-xs font-semibold uppercase tracking-widest font-serif">
+          <div className="inline-flex items-center space-x-2 text-[#974319] text-xs font-semibold uppercase tracking-widest font-serif">
             <span>Alumni Reflections</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-bold text-[#0C1929] font-serif tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-bold text-[#521321] font-serif tracking-tight">
             Voices From Our GLB Family
           </h2>
           <p className="text-sm sm:text-base text-[#4A5568] leading-relaxed">
@@ -57,17 +57,17 @@ export default function AlumniVoicesSection() {
           {testimonials.map((item) => (
             <div
               key={item.id}
-              className="bg-white rounded-xl border border-[#E7E1D4] p-7 shadow-[0_2px_8px_rgba(0,0,0,0.03)] flex flex-col justify-between space-y-6"
+              className="bg-white rounded-xl border border-[#EAE5DC] p-7 shadow-[0_2px_8px_rgba(0,0,0,0.03)] flex flex-col justify-between space-y-6"
             >
               <div className="space-y-4">
-                <Quote className="w-8 h-8 text-[#C29B38]/40 fill-[#C29B38]/10" />
+                <Quote className="w-8 h-8 text-[#fac850]/40 fill-[#fac850]/10" />
                 <p className="text-xs sm:text-sm text-[#2B3442] italic leading-relaxed font-serif">
                   "{item.quote}"
                 </p>
               </div>
 
               {/* Author Info */}
-              <div className="pt-4 border-t border-[#F5F1E8] flex items-center space-x-3.5">
+              <div className="pt-4 border-t border-[#F9F6F0] flex items-center space-x-3.5">
                 <img
                   src={item.image}
                   alt={item.name}
@@ -75,13 +75,13 @@ export default function AlumniVoicesSection() {
                     e.currentTarget.onerror = null;
                     e.currentTarget.src = item.fallbackImage;
                   }}
-                  className="w-12 h-12 rounded-full object-cover object-top border border-[#C29B38]/40 shadow-xs shrink-0"
+                  className="w-12 h-12 rounded-full object-cover object-top border border-[#fac850]/40 shadow-xs shrink-0"
                 />
                 <div>
-                  <h3 className="font-bold text-sm text-[#0C1929] leading-tight">
+                  <h3 className="font-bold text-sm text-[#521321] leading-tight">
                     {item.name}
                   </h3>
-                  <p className="text-[11px] font-semibold text-[#8C7138]">
+                  <p className="text-[11px] font-semibold text-[#974319]">
                     {item.batch}
                   </p>
                   <p className="text-[11px] text-[#718096] font-medium leading-tight mt-0.5">

@@ -57,7 +57,7 @@ export default function AdminEventsPage() {
 
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-glgold hover:bg-glgold-dark text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5"
+          className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5"
         >
           <Plus className="w-4 h-4" />
           <span>Schedule New Event</span>
@@ -68,11 +68,11 @@ export default function AdminEventsPage() {
         {events.map((ev) => (
           <div
             key={ev.id}
-            className="bg-white rounded-2xl p-6 border border-teal-100 shadow-sm flex flex-col justify-between space-y-4"
+            className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between space-y-4"
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-teal-50 text-glblue-750 px-2.5 py-1 rounded">
+                <span className="text-[10px] font-bold uppercase tracking-wider bg-[#faf6eb] text-[#592106] px-2.5 py-1 rounded">
                   {ev.category}
                 </span>
                 <button
@@ -89,11 +89,11 @@ export default function AdminEventsPage() {
 
               <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-1.5">
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-3.5 h-3.5 text-glgold" />
+                  <Calendar className="w-3.5 h-3.5 text-[#ffcc4e]" />
                   <strong>{ev.date}</strong>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5 text-glblue-750" />
+                  <Clock className="w-3.5 h-3.5 text-[#592106]" />
                   <span>{ev.time}</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -105,7 +105,7 @@ export default function AdminEventsPage() {
 
             <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
               <span className="text-slate-500 flex items-center gap-1">
-                <Users className="w-3.5 h-3.5 text-glblue-750" />
+                <Users className="w-3.5 h-3.5 text-[#592106]" />
                 <strong>{ev.rsvps?.length || 0}</strong> Registered Attendees
               </span>
               <span className="text-emerald-600 font-bold">Active Registration</span>
@@ -127,7 +127,7 @@ export default function AdminEventsPage() {
             <select
               value={newEvent.category}
               onChange={(e) => setNewEvent({ ...newEvent, category: e.target.value })}
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
             >
               {EVENT_CATEGORIES.map((cat, idx) => (
                 <option key={idx} value={cat}>{cat}</option>
@@ -143,7 +143,7 @@ export default function AdminEventsPage() {
               value={newEvent.title}
               onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
               placeholder="e.g. GL Bajaj Annual Alumni Gala 2026"
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
             />
           </div>
 
@@ -155,7 +155,7 @@ export default function AdminEventsPage() {
                 required
                 value={newEvent.date}
                 onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
               />
             </div>
             <div>
@@ -166,7 +166,7 @@ export default function AdminEventsPage() {
                 value={newEvent.time}
                 onChange={(e) => setNewEvent({ ...newEvent, time: e.target.value })}
                 placeholder="e.g. 10:30 AM IST"
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
               />
             </div>
           </div>
@@ -179,7 +179,7 @@ export default function AdminEventsPage() {
               value={newEvent.venue}
               onChange={(e) => setNewEvent({ ...newEvent, venue: e.target.value })}
               placeholder="e.g. Main Open-Air Auditorium, Greater Noida Campus / Virtual Zoom"
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
             />
           </div>
 
@@ -191,7 +191,7 @@ export default function AdminEventsPage() {
               value={newEvent.description}
               onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
               placeholder="Provide event details, itinerary, or guest of honor..."
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs leading-relaxed focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs leading-relaxed focus:ring-2 focus:ring-[#592106] focus:outline-none"
             ></textarea>
           </div>
 
@@ -205,7 +205,7 @@ export default function AdminEventsPage() {
             </button>
             <button
               type="submit"
-              className="bg-glgold hover:bg-glgold-dark text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md"
+              className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md"
             >
               Save & Broadcast Event
             </button>

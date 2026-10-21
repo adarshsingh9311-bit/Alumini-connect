@@ -77,8 +77,8 @@ export default function ResourcesSection() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center space-x-2 text-glgold font-bold text-xs uppercase tracking-widest bg-glgold/10 px-3 py-1 rounded-full border border-glgold/30">
-            <BookOpen className="w-3.5 h-3.5 text-glgold" />
+          <div className="inline-flex items-center space-x-2 text-[#ffcc4e] font-bold text-xs uppercase tracking-widest bg-[#ffcc4e]/10 px-3 py-1 rounded-full border border-[#ffcc4e]/30">
+            <BookOpen className="w-3.5 h-3.5 text-[#ffcc4e]" />
             <span>Alumni Privileges & Support</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
@@ -106,11 +106,11 @@ export default function ResourcesSection() {
             return (
               <div
                 key={res.id}
-                className="bg-slate-950/80 border border-white/10 rounded-3xl p-6 hover:border-glgold/40 transition-all duration-300 hover:-translate-y-1 shadow-xl flex flex-col justify-between group"
+                className="bg-slate-950/80 border border-white/10 rounded-3xl p-6 hover:border-[#ffcc4e]/40 transition-all duration-300 hover:-translate-y-1 shadow-xl flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-glblue-750/70 border border-teal-500/30 flex items-center justify-center text-teal-300 shadow-md group-hover:scale-105 transition">
+                    <div className="w-12 h-12 rounded-2xl bg-[#592106]/70 border border-teal-500/30 flex items-center justify-center text-teal-300 shadow-md group-hover:scale-105 transition">
                       <Icon className="w-6 h-6" />
                     </div>
                     <span className="text-[10px] font-bold uppercase tracking-wider bg-white/5 text-slate-300 px-2.5 py-1 rounded-full border border-white/10">
@@ -118,7 +118,7 @@ export default function ResourcesSection() {
                     </span>
                   </div>
 
-                  <h3 className="font-bold text-base text-white group-hover:text-glgold transition mb-2">
+                  <h3 className="font-bold text-base text-white group-hover:text-[#ffcc4e] transition mb-2">
                     {res.title}
                   </h3>
 
@@ -133,7 +133,7 @@ export default function ResourcesSection() {
                     className={`w-full text-xs font-bold py-2.5 px-4 rounded-xl border transition flex items-center justify-center space-x-1.5 ${
                       isDone
                         ? "bg-emerald-950/80 text-emerald-300 border-emerald-500/40"
-                        : "bg-white/5 hover:bg-glgold hover:text-slate-950 text-white border-white/10 hover:border-glgold"
+                        : "bg-white/5 hover:bg-[#ffcc4e] hover:text-slate-950 text-white border-white/10 hover:border-[#ffcc4e]"
                     }`}
                   >
                     {isDone ? (

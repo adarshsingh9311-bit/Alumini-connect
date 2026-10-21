@@ -142,10 +142,10 @@ export default function SpreadsheetImporter({ onImportComplete }) {
   }
 
   return (
-    <div className="bg-white rounded-3xl p-6 sm:p-8 border border-teal-100 shadow-sm space-y-8">
+    <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-8">
       <div className="border-b border-slate-100 pb-4">
         <h3 className="font-extrabold text-slate-900 text-lg sm:text-xl flex items-center gap-2">
-          <FileSpreadsheet className="w-5 h-5 text-glgold" />
+          <FileSpreadsheet className="w-5 h-5 text-[#ffcc4e]" />
           <span>Excel & CSV Bulk Data Import Engine</span>
         </h3>
         <p className="text-xs text-slate-500 mt-0.5">
@@ -169,14 +169,14 @@ export default function SpreadsheetImporter({ onImportComplete }) {
                       isCompleted
                         ? "bg-emerald-600 text-white"
                         : isCurrent
-                        ? "bg-glgold text-slate-950 font-black ring-4 ring-amber-100"
+                        ? "bg-[#ffcc4e] text-slate-950 font-black ring-4 ring-amber-100"
                         : "bg-white text-slate-400 border border-slate-200"
                     }`}
                   >
                     {isCompleted ? <Check className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
                   </div>
                   <span className={`text-[10px] sm:text-xs mt-1.5 font-bold ${
-                    isCurrent ? "text-glgold" : isCompleted ? "text-emerald-700" : "text-slate-400"
+                    isCurrent ? "text-[#ffcc4e]" : isCompleted ? "text-emerald-700" : "text-slate-400"
                   }`}>
                     {step.label}
                   </span>
@@ -205,7 +205,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
             value="alumni"
             checked={targetType === "alumni"}
             onChange={() => setTargetType("alumni")}
-            className="text-glgold focus:ring-glgold"
+            className="text-[#ffcc4e] focus:ring-glgold"
           />
           <span>Alumni Records</span>
         </label>
@@ -216,7 +216,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
             value="student"
             checked={targetType === "student"}
             onChange={() => setTargetType("student")}
-            className="text-glblue-750 focus:ring-glblue-750"
+            className="text-[#592106] focus:ring-[#592106]"
           />
           <span>Student Records</span>
         </label>
@@ -226,7 +226,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
       {!parsedRows.length && !isSuccess && (
         <div
           onClick={() => document.getElementById("excel-file-input").click()}
-          className="border-2 border-dashed border-slate-300 hover:border-glgold rounded-2xl p-8 text-center cursor-pointer bg-slate-50 hover:bg-amber-50/20 transition space-y-3"
+          className="border-2 border-dashed border-slate-300 hover:border-[#ffcc4e] rounded-2xl p-8 text-center cursor-pointer bg-slate-50 hover:bg-[#faf6eb]/20 transition space-y-3"
         >
           <input
             id="excel-file-input"
@@ -235,14 +235,14 @@ export default function SpreadsheetImporter({ onImportComplete }) {
             onChange={handleFileChange}
             className="hidden"
           />
-          <div className="w-14 h-14 bg-teal-50 text-glblue-750 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
+          <div className="w-14 h-14 bg-[#faf6eb] text-[#592106] rounded-2xl flex items-center justify-center mx-auto shadow-inner">
             <Upload className="w-7 h-7" />
           </div>
           <div>
             <h4 className="font-bold text-slate-900 text-sm sm:text-base">Click to upload or drag & drop spreadsheet</h4>
             <p className="text-xs text-slate-500 mt-0.5">Supports Microsoft Excel (.xlsx, .xls) or comma-separated (.csv)</p>
           </div>
-          <div className="inline-block bg-glblue-750 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm">
+          <div className="inline-block bg-[#592106] text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm">
             Select Spreadsheet File
           </div>
         </div>
@@ -301,7 +301,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
             <button
               onClick={handleCommitImport}
               disabled={importing || validationReport.valid === 0}
-              className="bg-glgold hover:bg-glgold-dark text-white text-xs font-bold px-6 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5 disabled:opacity-50"
+              className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] text-xs font-bold px-6 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5 disabled:opacity-50"
             >
               {importing ? (
                 <Loader2 className="w-4 h-4 animate-spin" />

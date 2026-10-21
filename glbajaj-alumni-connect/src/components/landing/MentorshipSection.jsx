@@ -162,8 +162,8 @@ export default function MentorshipSection() {
 
         {/* Section Title */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center space-x-2 text-glgold font-bold text-xs uppercase tracking-widest bg-glgold/10 px-3 py-1 rounded-full border border-glgold/30">
-            <Sparkles className="w-3.5 h-3.5 text-glgold" />
+          <div className="inline-flex items-center space-x-2 text-[#ffcc4e] font-bold text-xs uppercase tracking-widest bg-[#ffcc4e]/10 px-3 py-1 rounded-full border border-[#ffcc4e]/30">
+            <Sparkles className="w-3.5 h-3.5 text-[#ffcc4e]" />
             <span>Mentorship at the Heart of GLB</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
@@ -183,7 +183,7 @@ export default function MentorshipSection() {
               placeholder="Search mentor, company, skills..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-slate-950 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-glgold transition"
+              className="w-full bg-slate-950 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#ffcc4e] transition"
             />
           </div>
 
@@ -195,7 +195,7 @@ export default function MentorshipSection() {
                 onClick={() => setActiveFilter(filter)}
                 className={`text-xs font-semibold px-3.5 py-1.5 rounded-xl border transition ${
                   activeFilter === filter
-                    ? "bg-glgold text-slate-950 border-glgold font-bold shadow-md shadow-glgold/20"
+                    ? "bg-[#ffcc4e] text-slate-950 border-[#ffcc4e] font-bold shadow-md shadow-glgold/20"
                     : "bg-white/5 border-white/10 text-slate-300 hover:text-white hover:bg-white/10"
                 }`}
               >
@@ -210,7 +210,7 @@ export default function MentorshipSection() {
           {filteredMentors.map((mentor) => (
             <div
               key={mentor.id}
-              className="bg-slate-900/80 border border-white/10 rounded-3xl p-6 hover:border-glgold/40 transition-all duration-300 hover:-translate-y-1 shadow-xl flex flex-col justify-between group"
+              className="bg-slate-900/80 border border-white/10 rounded-3xl p-6 hover:border-[#ffcc4e]/40 transition-all duration-300 hover:-translate-y-1 shadow-xl flex flex-col justify-between group"
             >
               <div>
                 {/* Header with Avatar and Batch */}
@@ -219,10 +219,10 @@ export default function MentorshipSection() {
                     <img
                       src={mentor.avatar}
                       alt={mentor.name}
-                      className="w-14 h-14 rounded-2xl object-cover border-2 border-glgold/40 group-hover:border-glgold transition shadow-md"
+                      className="w-14 h-14 rounded-2xl object-cover border-2 border-[#ffcc4e]/40 group-hover:border-[#ffcc4e] transition shadow-md"
                     />
                     <div>
-                      <h3 className="font-black text-base text-white group-hover:text-glgold transition">
+                      <h3 className="font-black text-base text-white group-hover:text-[#ffcc4e] transition">
                         {mentor.name}
                       </h3>
                       <p className="text-xs font-bold text-teal-400">
@@ -233,7 +233,7 @@ export default function MentorshipSection() {
                       </p>
                     </div>
                   </div>
-                  <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-white/5 text-glgold border border-glgold/20">
+                  <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-white/5 text-[#ffcc4e] border border-[#ffcc4e]/20">
                     '{mentor.batch.slice(2)}
                   </span>
                 </div>
@@ -300,7 +300,7 @@ export default function MentorshipSection() {
         </div>
 
         {/* Bottom Banner */}
-        <div className="bg-gradient-to-r from-glblue-750/70 to-teal-950/70 border border-teal-500/20 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="bg-gradient-to-r from-glblue-750/70 to-[#2f1508]/70 border border-teal-500/20 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
             <h3 className="text-lg sm:text-xl font-bold text-white">
               Are you a GL Bajaj graduate working in industry?
@@ -311,7 +311,7 @@ export default function MentorshipSection() {
           </div>
           <Link
             to="/login?portal=alumni"
-            className="whitespace-nowrap bg-glgold hover:bg-glgold-dark text-slate-950 font-black text-xs sm:text-sm px-5 py-3 rounded-xl transition shadow-lg shadow-glgold/25"
+            className="whitespace-nowrap bg-[#ffcc4e] hover:bg-[#e0b23d] text-slate-950 font-black text-xs sm:text-sm px-5 py-3 rounded-xl transition shadow-lg shadow-glgold/25"
           >
             Become a GLB Mentor
           </Link>
@@ -334,7 +334,7 @@ export default function MentorshipSection() {
               <img
                 src={selectedMentor.avatar}
                 alt={selectedMentor.name}
-                className="w-16 h-16 rounded-2xl object-cover border-2 border-glgold"
+                className="w-16 h-16 rounded-2xl object-cover border-2 border-[#ffcc4e]"
               />
               <div>
                 <h3 className="text-xl font-black text-white">{selectedMentor.name}</h3>
@@ -348,7 +348,7 @@ export default function MentorshipSection() {
             </p>
 
             <div className="space-y-3 mb-6">
-              <div className="text-xs font-bold uppercase tracking-wider text-glgold">
+              <div className="text-xs font-bold uppercase tracking-wider text-[#ffcc4e]">
                 Career Journey Timeline
               </div>
               <div className="space-y-2 text-xs text-slate-300 border-l-2 border-teal-500/40 pl-3">
@@ -381,7 +381,7 @@ export default function MentorshipSection() {
                     value={requestNote}
                     onChange={(e) => setRequestNote(e.target.value)}
                     required
-                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-glgold"
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#ffcc4e]"
                   ></textarea>
                 </div>
                 <div className="flex items-center space-x-3">
@@ -395,7 +395,7 @@ export default function MentorshipSection() {
                   <button
                     type="button"
                     onClick={() => handleActionDirect(selectedMentor)}
-                    className="px-4 py-2.5 rounded-xl bg-teal-900/60 hover:bg-teal-800 text-teal-200 text-xs font-semibold border border-teal-500/30"
+                    className="px-4 py-2.5 rounded-xl bg-[#472510]/60 hover:bg-[#592106] text-teal-200 text-xs font-semibold border border-teal-500/30"
                   >
                     Open in Portal
                   </button>

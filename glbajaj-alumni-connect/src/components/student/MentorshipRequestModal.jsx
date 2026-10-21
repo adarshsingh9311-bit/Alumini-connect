@@ -32,7 +32,7 @@ export default function MentorshipRequestModal({ isOpen, onClose, alumni, onSubm
     <Modal isOpen={isOpen} onClose={onClose} title="Request Mentorship" maxWidth="max-w-lg">
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Mentor Info Banner */}
-        <div className="bg-slate-50 border border-teal-100 p-4 rounded-xl flex items-center space-x-3.5">
+        <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl flex items-center space-x-3.5">
           <img
             src={alumni.avatar_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80"}
             alt={alumni.full_name}
@@ -40,8 +40,8 @@ export default function MentorshipRequestModal({ isOpen, onClose, alumni, onSubm
           />
           <div>
             <h4 className="font-bold text-slate-900 text-sm">{alumni.full_name}</h4>
-            <p className="text-xs text-glblue-750 font-semibold">{alumni.current_designation}</p>
-            <p className="text-[11px] text-slate-500">at {alumni.current_company} • {alumni.branch} ({alumni.batch_year})</p>
+            <p className="text-xs text-[#592106] font-semibold">{alumni.current_designation}</p>
+            <p className="text-[11px] text-slate-500">at {alumni.current_company} â€¢ {alumni.branch} ({alumni.batch_year})</p>
           </div>
         </div>
 
@@ -53,7 +53,7 @@ export default function MentorshipRequestModal({ isOpen, onClose, alumni, onSubm
           <select
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-glblue-750"
+            className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#592106]"
           >
             {MENTORSHIP_TOPICS.map((t, idx) => (
               <option key={idx} value={t}>{t}</option>
@@ -72,7 +72,7 @@ export default function MentorshipRequestModal({ isOpen, onClose, alumni, onSubm
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Introduce yourself, your semester/branch, and specifically what you would like advice on (e.g. preparation strategy, resume feedback, tech stack insights)..."
-            className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-glblue-750"
+            className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#592106]"
           ></textarea>
         </div>
 
@@ -87,7 +87,7 @@ export default function MentorshipRequestModal({ isOpen, onClose, alumni, onSubm
           <button
             type="submit"
             disabled={loading || !message.trim()}
-            className="bg-glgold hover:bg-glgold-dark text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5 disabled:opacity-50"
+            className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5 disabled:opacity-50"
           >
             {loading ? (
               <Loader2 className="w-4 h-4 animate-spin" />

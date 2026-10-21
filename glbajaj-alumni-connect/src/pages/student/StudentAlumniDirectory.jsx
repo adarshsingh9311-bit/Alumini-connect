@@ -75,7 +75,7 @@ export default function StudentAlumniDirectory() {
       </div>
 
       {/* Search & Filter Toolbar */}
-      <div className="bg-white rounded-2xl p-5 border border-teal-100 shadow-sm space-y-4">
+      <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
         {/* Search input */}
         <div className="relative">
           <Search className="w-5 h-5 text-slate-400 absolute left-4 top-3" />
@@ -84,7 +84,7 @@ export default function StudentAlumniDirectory() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by name, company (Google, Microsoft), job role, or skills (React, Cloud, VLSI)..."
-            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-glblue-750"
+            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#592106]"
           />
         </div>
 
@@ -94,7 +94,7 @@ export default function StudentAlumniDirectory() {
           <select
             value={selectedBranch}
             onChange={(e) => setSelectedBranch(e.target.value)}
-            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-glblue-750"
+            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#592106]"
           >
             <option value="">All Branches</option>
             {BRANCH_CODES.map((b) => (
@@ -106,7 +106,7 @@ export default function StudentAlumniDirectory() {
           <select
             value={selectedBatch}
             onChange={(e) => setSelectedBatch(e.target.value)}
-            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-glblue-750"
+            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#592106]"
           >
             <option value="">All Batch Years</option>
             {BATCH_YEARS.map((y) => (
@@ -118,7 +118,7 @@ export default function StudentAlumniDirectory() {
           <select
             value={selectedCompany}
             onChange={(e) => setSelectedCompany(e.target.value)}
-            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-glblue-750"
+            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#592106]"
           >
             <option value="">All Companies</option>
             {companies.map((c) => (
@@ -130,7 +130,7 @@ export default function StudentAlumniDirectory() {
           <select
             value={selectedLocation}
             onChange={(e) => setSelectedLocation(e.target.value)}
-            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-glblue-750"
+            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#592106]"
           >
             <option value="">All Locations</option>
             {locations.map((loc) => (
@@ -144,7 +144,7 @@ export default function StudentAlumniDirectory() {
               type="checkbox"
               checked={mentorsOnly}
               onChange={(e) => setMentorsOnly(e.target.checked)}
-              className="rounded text-glgold focus:ring-glgold"
+              className="rounded text-[#ffcc4e] focus:ring-glgold"
             />
             <span>Open for Mentorship</span>
           </label>

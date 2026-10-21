@@ -25,11 +25,11 @@ export default function AdminAchievementsPage() {
         {achievements.map((ach) => (
           <div
             key={ach.id}
-            className="bg-white rounded-3xl p-6 border border-teal-100 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4"
+            className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4"
           >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-glblue-750">{ach.alumni_name} ({ach.alumni_batch})</span>
+                <span className="text-xs font-bold text-[#592106]">{ach.alumni_name} ({ach.alumni_batch})</span>
                 <button
                   onClick={() => handleDelete(ach.id)}
                   className="text-slate-400 hover:text-red-600 p-1"

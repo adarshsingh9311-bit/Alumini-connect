@@ -36,11 +36,11 @@ export default function CareerHistoryManager({ careerHistory = [], onUpdate }) {
   }
 
   return (
-    <div className="bg-white rounded-2xl p-6 border border-teal-100 shadow-sm space-y-4">
+    <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
       <div className="flex items-center justify-between border-b border-slate-100 pb-3">
         <div>
           <h3 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
-            <Briefcase className="w-4 h-4 text-glblue-750" />
+            <Briefcase className="w-4 h-4 text-[#592106]" />
             <span>Career History & Work Experience</span>
           </h3>
           <p className="text-xs text-slate-500">Showcase your professional growth from graduation to your current role.</p>
@@ -49,7 +49,7 @@ export default function CareerHistoryManager({ careerHistory = [], onUpdate }) {
           <button
             type="button"
             onClick={() => setIsAdding(true)}
-            className="bg-glblue-750 hover:bg-teal-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1"
+            className="bg-[#592106] hover:bg-[#472510] text-white text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Position</span>
@@ -70,7 +70,7 @@ export default function CareerHistoryManager({ careerHistory = [], onUpdate }) {
                 value={newJob.company}
                 onChange={(e) => setNewJob({ ...newJob, company: e.target.value })}
                 placeholder="e.g. Google, Microsoft, Amazon"
-                className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+                className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
               />
             </div>
             <div>
@@ -81,7 +81,7 @@ export default function CareerHistoryManager({ careerHistory = [], onUpdate }) {
                 value={newJob.designation}
                 onChange={(e) => setNewJob({ ...newJob, designation: e.target.value })}
                 placeholder="e.g. Senior Software Engineer"
-                className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+                className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
               />
             </div>
           </div>
@@ -93,7 +93,7 @@ export default function CareerHistoryManager({ careerHistory = [], onUpdate }) {
                 type="date"
                 value={newJob.start_date}
                 onChange={(e) => setNewJob({ ...newJob, start_date: e.target.value })}
-                className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+                className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
               />
             </div>
             <div>
@@ -103,14 +103,14 @@ export default function CareerHistoryManager({ careerHistory = [], onUpdate }) {
                 disabled={newJob.is_current}
                 value={newJob.end_date}
                 onChange={(e) => setNewJob({ ...newJob, end_date: e.target.value })}
-                className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none disabled:bg-slate-100"
+                className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none disabled:bg-slate-100"
               />
               <label className="mt-1 flex items-center space-x-1.5 text-xs text-slate-600 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={newJob.is_current}
                   onChange={(e) => setNewJob({ ...newJob, is_current: e.target.checked, end_date: "" })}
-                  className="rounded text-glgold focus:ring-glgold"
+                  className="rounded text-[#ffcc4e] focus:ring-glgold"
                 />
                 <span>I currently work here</span>
               </label>
@@ -124,7 +124,7 @@ export default function CareerHistoryManager({ careerHistory = [], onUpdate }) {
               value={newJob.description}
               onChange={(e) => setNewJob({ ...newJob, description: e.target.value })}
               placeholder="Summary of projects, technologies, and achievements..."
-              className="w-full bg-white border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+              className="w-full bg-white border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
             ></textarea>
           </div>
 
@@ -138,7 +138,7 @@ export default function CareerHistoryManager({ careerHistory = [], onUpdate }) {
             </button>
             <button
               type="submit"
-              className="bg-glgold hover:bg-glgold-dark text-white text-xs font-bold px-4 py-1.5 rounded-lg transition shadow-sm"
+              className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] text-xs font-bold px-4 py-1.5 rounded-lg transition shadow-sm"
             >
               Save Experience
             </button>
@@ -155,9 +155,9 @@ export default function CareerHistoryManager({ careerHistory = [], onUpdate }) {
             <div key={job.id} className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-start justify-between">
               <div>
                 <h4 className="font-bold text-slate-900 text-xs sm:text-sm">{job.designation}</h4>
-                <p className="text-xs font-semibold text-glblue-750">{job.company}</p>
+                <p className="text-xs font-semibold text-[#592106]">{job.company}</p>
                 <p className="text-[11px] text-slate-400 mt-0.5">
-                  {job.start_date || "N/A"} — {job.is_current ? "Present" : job.end_date || "N/A"}
+                  {job.start_date || "N/A"} â€” {job.is_current ? "Present" : job.end_date || "N/A"}
                 </p>
                 {job.description && (
                   <p className="text-xs text-slate-600 mt-1 leading-relaxed">{job.description}</p>

@@ -13,7 +13,7 @@ export const NOTABLE_GLB_ALUMNI = [
   {
     id: "notable-1",
     name: "Saurabh Sarkar",
-    batch: "B.Tech CSE ? 2014",
+    batch: "B.Tech CSE • 2014",
     branch: "Computer Science & Engineering",
     designation: "Software Engineer",
     organization: "Apple",
@@ -25,7 +25,7 @@ export const NOTABLE_GLB_ALUMNI = [
   {
     id: "notable-2",
     name: "Ankur Varshney",
-    batch: "B.Tech CSE ? 2011",
+    batch: "B.Tech CSE • 2011",
     branch: "Computer Science & Engineering",
     designation: "Software Engineer",
     organization: "Enfas GmbH, Munich (Ex-BMW)",
@@ -37,7 +37,7 @@ export const NOTABLE_GLB_ALUMNI = [
   {
     id: "notable-3",
     name: "Shikha Chaudhary",
-    batch: "B.Tech ECE ? Alumna",
+    batch: "B.Tech ECE • Alumna",
     branch: "Electronics & Communication",
     designation: "Squadron Leader",
     organization: "Indian Air Force",
@@ -49,7 +49,7 @@ export const NOTABLE_GLB_ALUMNI = [
   {
     id: "notable-4",
     name: "Anshul Shukla",
-    batch: "B.Tech CSE ? 2012",
+    batch: "B.Tech CSE • 2012",
     branch: "Computer Science & Engineering",
     designation: "UI Engineer",
     organization: "Flipkart",
@@ -85,7 +85,7 @@ export const NOTABLE_GLB_ALUMNI = [
   {
     id: "notable-7",
     name: "Ashish Pandey",
-    batch: "B.Tech CSE ? 2014",
+    batch: "B.Tech CSE • 2014",
     branch: "Computer Science & Engineering",
     designation: "Analyst Programmer",
     organization: "MediaTech",

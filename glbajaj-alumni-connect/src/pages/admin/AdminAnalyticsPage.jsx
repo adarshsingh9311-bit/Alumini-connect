@@ -28,7 +28,7 @@ export default function AdminAnalyticsPage() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-3xl border border-teal-100 shadow-sm space-y-1">
+        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-1">
           <div className="text-[11px] font-bold text-slate-400 uppercase">Total Alumni Tracked</div>
           <div className="text-3xl font-black text-slate-900">15,420</div>
           <div className="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
@@ -36,19 +36,19 @@ export default function AdminAnalyticsPage() {
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-3xl border border-teal-100 shadow-sm space-y-1">
+        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-1">
           <div className="text-[11px] font-bold text-slate-400 uppercase">Active Mentors</div>
-          <div className="text-3xl font-black text-glgold">385</div>
-          <div className="text-[10px] text-glblue-750 font-bold">1-on-1 Guidance Ready</div>
+          <div className="text-3xl font-black text-[#ffcc4e]">385</div>
+          <div className="text-[10px] text-[#592106] font-bold">1-on-1 Guidance Ready</div>
         </div>
 
-        <div className="bg-white p-5 rounded-3xl border border-teal-100 shadow-sm space-y-1">
+        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-1">
           <div className="text-[11px] font-bold text-slate-400 uppercase">Mentorship Match Rate</div>
           <div className="text-3xl font-black text-emerald-600">94.2%</div>
           <div className="text-[10px] text-slate-500 font-semibold">Accepted within 48h</div>
         </div>
 
-        <div className="bg-white p-5 rounded-3xl border border-teal-100 shadow-sm space-y-1">
+        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-1">
           <div className="text-[11px] font-bold text-slate-400 uppercase">Verified Records</div>
           <div className="text-3xl font-black text-slate-900">100%</div>
           <div className="text-[10px] text-teal-600 font-bold">Roll-Number Linked</div>
@@ -59,9 +59,9 @@ export default function AdminAnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         
         {/* Top Hiring Companies */}
-        <div className="bg-white rounded-3xl p-6 border border-teal-100 shadow-sm space-y-4">
+        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
           <h3 className="font-extrabold text-slate-900 text-base flex items-center gap-2 border-b border-slate-100 pb-3">
-            <Briefcase className="w-4 h-4 text-glgold" />
+            <Briefcase className="w-4 h-4 text-[#ffcc4e]" />
             <span>Top Tier-1 Alumni Recruiters</span>
           </h3>
 
@@ -70,10 +70,10 @@ export default function AdminAnalyticsPage() {
               <div key={c.name} className="space-y-1">
                 <div className="flex justify-between text-xs font-bold text-slate-800">
                   <span>{c.name}</span>
-                  <span className="text-glblue-750">{c.count} Alumni</span>
+                  <span className="text-[#592106]">{c.count} Alumni</span>
                 </div>
                 <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-glgold rounded-full" style={{ width: c.pct }}></div>
+                  <div className="h-full bg-[#ffcc4e] rounded-full" style={{ width: c.pct }}></div>
                 </div>
               </div>
             ))}
@@ -81,9 +81,9 @@ export default function AdminAnalyticsPage() {
         </div>
 
         {/* Branch-wise Distribution */}
-        <div className="bg-white rounded-3xl p-6 border border-teal-100 shadow-sm space-y-4">
+        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
           <h3 className="font-extrabold text-slate-900 text-base flex items-center gap-2 border-b border-slate-100 pb-3">
-            <GraduationCap className="w-4 h-4 text-glblue-750" />
+            <GraduationCap className="w-4 h-4 text-[#592106]" />
             <span>Branch-wise Alumni Distribution</span>
           </h3>
 
@@ -95,7 +95,7 @@ export default function AdminAnalyticsPage() {
                   <span className="text-teal-700">{b.count} scholars</span>
                 </div>
                 <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-glblue-750 rounded-full" style={{ width: b.pct }}></div>
+                  <div className="h-full bg-[#592106] rounded-full" style={{ width: b.pct }}></div>
                 </div>
               </div>
             ))}

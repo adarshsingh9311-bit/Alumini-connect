@@ -8,35 +8,35 @@ export default function FamilyConnectionSection() {
       title: "GLB College",
       icon: Building2,
       desc: "Knowledge Park III campus providing academic foundation, ethics, and innovation culture.",
-      accent: "border-[#0C1929] text-[#0C1929]"
+      accent: "border-[#521321] text-[#521321]"
     },
     {
       num: "02",
       title: "GLB Alumni",
       icon: Globe2,
       desc: "Graduates excelling across top global tech firms, research centers, and public governance.",
-      accent: "border-[#8C7138] text-[#8C7138]"
+      accent: "border-[#974319] text-[#974319]"
     },
     {
       num: "03",
       title: "Mentors",
       icon: HeartHandshake,
       desc: "Experienced alumni returning to guide, review resumes, and conduct peer mock interviews.",
-      accent: "border-[#C29B38] text-[#C29B38]"
+      accent: "border-[#fac850] text-[#fac850]"
     },
     {
       num: "04",
       title: "Students",
       icon: GraduationCap,
       desc: "Current scholars reaching higher with 1-on-1 senior roadmaps and trusted job referrals.",
-      accent: "border-[#0C1929] text-[#0C1929]"
+      accent: "border-[#521321] text-[#521321]"
     },
     {
       num: "05",
       title: "Future Alumni",
       icon: Sparkles,
       desc: "Graduating scholars who step into industry and renew the cycle of giving back.",
-      accent: "border-[#8C7138] text-[#8C7138]"
+      accent: "border-[#974319] text-[#974319]"
     }
   ];
 
@@ -46,10 +46,10 @@ export default function FamilyConnectionSection() {
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center space-x-2 text-[#8C7138] text-xs font-semibold uppercase tracking-widest font-serif">
+          <div className="inline-flex items-center space-x-2 text-[#974319] text-xs font-semibold uppercase tracking-widest font-serif">
             <span>The Enduring Bond</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-bold text-[#0C1929] font-serif tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-bold text-[#521321] font-serif tracking-tight">
             Your GLB Family, Wherever You Go
           </h2>
           <p className="text-sm sm:text-base text-[#4A5568] leading-relaxed">
@@ -64,19 +64,19 @@ export default function FamilyConnectionSection() {
             return (
               <div
                 key={idx}
-                className="bg-white rounded-xl border border-[#E7E1D4] p-6 flex flex-col justify-between hover:border-[#C29B38] transition shadow-[0_2px_6px_rgba(0,0,0,0.02)] relative group"
+                className="bg-white rounded-xl border border-[#EAE5DC] p-6 flex flex-col justify-between hover:border-[#fac850] transition shadow-[0_2px_6px_rgba(0,0,0,0.02)] relative group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-[11px] font-mono font-bold text-[#A0AEC0]">
                       {step.num}
                     </span>
-                    <div className={`w-9 h-9 rounded-lg bg-[#FAF8F5] border flex items-center justify-center ${step.accent}`}>
+                    <div className={`w-9 h-9 rounded-lg bg-[#FFFFFF] border flex items-center justify-center ${step.accent}`}>
                       <Icon className="w-4 h-4" />
                     </div>
                   </div>
 
-                  <h3 className="font-bold text-base text-[#0C1929] mb-1.5 font-serif">
+                  <h3 className="font-bold text-base text-[#521321] mb-1.5 font-serif">
                     {step.title}
                   </h3>
 
@@ -87,7 +87,7 @@ export default function FamilyConnectionSection() {
 
                 {idx < steps.length - 1 && (
                   <div className="hidden md:block absolute -right-3.5 top-1/2 -translate-y-1/2 z-20 text-[#A0AEC0]">
-                    <ArrowRight className="w-4 h-4 text-[#C29B38]" />
+                    <ArrowRight className="w-4 h-4 text-[#fac850]" />
                   </div>
                 )}
               </div>
@@ -96,25 +96,25 @@ export default function FamilyConnectionSection() {
         </div>
 
         {/* Community Note */}
-        <div className="bg-[#FAF8F5] rounded-xl border border-[#E7E1D4] p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="bg-[#FFFFFF] rounded-xl border border-[#EAE5DC] p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center md:text-left">
-            <h4 className="font-bold text-base text-[#0C1929] font-serif">
+            <h4 className="font-bold text-base text-[#521321] font-serif">
               "Once GLB, Always GLB."
             </h4>
             <p className="text-xs sm:text-sm text-[#5C667A]">
               Our network thrives because every generation of GL Bajaj graduates supports the next.
             </p>
           </div>
-          <div className="flex items-center space-x-3 text-xs font-semibold text-[#0C1929]">
-            <span className="px-3 py-1.5 rounded-lg bg-white border border-[#E7E1D4]">
+          <div className="flex items-center space-x-3 text-xs font-semibold text-[#521321]">
+            <span className="px-3 py-1.5 rounded-lg bg-white border border-[#EAE5DC]">
               Connect
             </span>
-            <span>?</span>
-            <span className="px-3 py-1.5 rounded-lg bg-white border border-[#E7E1D4]">
+            <span>•</span>
+            <span className="px-3 py-1.5 rounded-lg bg-white border border-[#EAE5DC]">
               Mentor
             </span>
-            <span>?</span>
-            <span className="px-3 py-1.5 rounded-lg bg-white border border-[#E7E1D4]">
+            <span>•</span>
+            <span className="px-3 py-1.5 rounded-lg bg-white border border-[#EAE5DC]">
               Give Back
             </span>
           </div>

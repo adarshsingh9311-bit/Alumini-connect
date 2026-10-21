@@ -20,7 +20,7 @@ export default function LandingFooter() {
                 <span className="font-black text-base text-white tracking-wide">
                   GL BAJAJ ALUMNI CONNECT
                 </span>
-                <p className="text-[10px] text-glgold font-bold tracking-widest uppercase">
+                <p className="text-[10px] text-[#ffcc4e] font-bold tracking-widest uppercase">
                   "Once GLB, Always GLB."
                 </p>
               </div>
@@ -32,15 +32,15 @@ export default function LandingFooter() {
 
             <div className="space-y-2 text-xs text-slate-400 pt-2">
               <div className="flex items-start space-x-2.5">
-                <MapPin className="w-4 h-4 text-glgold shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-[#ffcc4e] shrink-0 mt-0.5" />
                 <span>Plot No. 2, Knowledge Park III, Greater Noida, Gautam Budh Nagar, UP 201306, India</span>
               </div>
               <div className="flex items-center space-x-2.5">
-                <Phone className="w-4 h-4 text-glgold shrink-0" />
+                <Phone className="w-4 h-4 text-[#ffcc4e] shrink-0" />
                 <span>+91 (0120) 2323818 / 19</span>
               </div>
               <div className="flex items-center space-x-2.5">
-                <Mail className="w-4 h-4 text-glgold shrink-0" />
+                <Mail className="w-4 h-4 text-[#ffcc4e] shrink-0" />
                 <span>alumni@glbajaj.org ? contact@glbajaj.org</span>
               </div>
             </div>
@@ -53,30 +53,30 @@ export default function LandingFooter() {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link to="/login?portal=student" className="hover:text-glgold transition flex items-center space-x-1.5">
-                  <GraduationCap className="w-3.5 h-3.5 text-glgold" />
+                <Link to="/login?portal=student" className="hover:text-[#ffcc4e] transition flex items-center space-x-1.5">
+                  <GraduationCap className="w-3.5 h-3.5 text-[#ffcc4e]" />
                   <span>Student Portal</span>
                 </Link>
               </li>
               <li>
-                <Link to="/login?portal=alumni" className="hover:text-glgold transition flex items-center space-x-1.5">
+                <Link to="/login?portal=alumni" className="hover:text-[#ffcc4e] transition flex items-center space-x-1.5">
                   <Briefcase className="w-3.5 h-3.5 text-teal-400" />
                   <span>Alumni Portal</span>
                 </Link>
               </li>
               <li>
-                <Link to="/login?portal=admin" className="hover:text-glgold transition flex items-center space-x-1.5">
+                <Link to="/login?portal=admin" className="hover:text-[#ffcc4e] transition flex items-center space-x-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-slate-300" />
                   <span>Admin Cell Portal</span>
                 </Link>
               </li>
               <li>
-                <Link to="/register" className="hover:text-glgold transition">
+                <Link to="/register" className="hover:text-[#ffcc4e] transition">
                   Roll-Number Registration
                 </Link>
               </li>
               <li>
-                <Link to="/login" className="hover:text-glgold transition">
+                <Link to="/login" className="hover:text-[#ffcc4e] transition">
                   Password Reset & OTP
                 </Link>
               </li>
@@ -90,27 +90,27 @@ export default function LandingFooter() {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <a href="#mentorship" className="hover:text-glgold transition">
+                <a href="#mentorship" className="hover:text-[#ffcc4e] transition">
                   Find an Alumni Mentor
                 </a>
               </li>
               <li>
-                <a href="#family" className="hover:text-glgold transition">
+                <a href="#family" className="hover:text-[#ffcc4e] transition">
                   The GLB Family Pipeline
                 </a>
               </li>
               <li>
-                <a href="#communities" className="hover:text-glgold transition">
+                <a href="#communities" className="hover:text-[#ffcc4e] transition">
                   10 Affinity Circles
                 </a>
               </li>
               <li>
-                <a href="#stories" className="hover:text-glgold transition">
+                <a href="#stories" className="hover:text-[#ffcc4e] transition">
                   Alumni Impact Stories
                 </a>
               </li>
               <li>
-                <a href="#resources" className="hover:text-glgold transition">
+                <a href="#resources" className="hover:text-[#ffcc4e] transition">
                   Internal Referral Board
                 </a>
               </li>
@@ -124,27 +124,27 @@ export default function LandingFooter() {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <a href="#events" className="hover:text-glgold transition">
+                <a href="#events" className="hover:text-[#ffcc4e] transition">
                   SANSMRITI 2026 Reunion
                 </a>
               </li>
               <li>
-                <a href="#moments" className="hover:text-glgold transition">
+                <a href="#moments" className="hover:text-[#ffcc4e] transition">
                   GLB Family Moments Wall
                 </a>
               </li>
               <li>
-                <a href="#resources" className="hover:text-glgold transition">
+                <a href="#resources" className="hover:text-[#ffcc4e] transition">
                   Official Transcript Request
                 </a>
               </li>
               <li>
-                <a href="#resources" className="hover:text-glgold transition">
+                <a href="#resources" className="hover:text-[#ffcc4e] transition">
                   E-Cell Prototyping Lab
                 </a>
               </li>
               <li>
-                <a href="#resources" className="hover:text-glgold transition">
+                <a href="#resources" className="hover:text-[#ffcc4e] transition">
                   Campus Guest Pass
                 </a>
               </li>
@@ -158,13 +158,13 @@ export default function LandingFooter() {
       <div className="border-t border-white/10 bg-slate-950 py-6 px-4">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
           <div className="flex items-center space-x-2 text-center md:text-left">
-            <span className="text-glgold font-bold">"Once GLB, Always GLB."</span>
-            <span>?</span>
+            <span className="text-[#ffcc4e] font-bold">"Once GLB, Always GLB."</span>
+            <span>•</span>
             <span>Approved by AICTE, Affiliated to Dr. A.P.J. Abdul Kalam Technical University (AKTU)</span>
           </div>
 
           <div className="text-center md:text-right">
-            ? {new Date().getFullYear()} G.L. Bajaj Institute of Technology & Management. All rights reserved.
+            © {new Date().getFullYear()} G.L. Bajaj Institute of Technology & Management. All rights reserved.
           </div>
         </div>
       </div>

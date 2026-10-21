@@ -27,20 +27,20 @@ export default function HeroSection() {
 
   return (
     <section id="hero" className="relative text-white py-16 sm:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden flex flex-col justify-center">
-      {/* Background with deep dark gradient overlay */}
-      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+      {/* Background with deep dark gradient overlay matching login/registration */}
+      <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
         <img
-          src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1920&q=80"
+          src="/assets/campus-hero-academic.jpg"
           alt="GL Bajaj Campus"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-glblue-750/80 to-slate-950"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#2f1508]/95 via-[#472510]/85 to-[#1e0e05]/95"></div>
       </div>
 
       <div className="max-w-6xl mx-auto text-center relative z-10 space-y-6">
         {/* Emotional Badge */}
-        <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-glgold/20 via-amber-500/10 to-glgold/20 border border-glgold/50 px-4 py-1.5 rounded-full text-glgold font-bold text-xs sm:text-sm tracking-widest uppercase shadow-lg shadow-glgold/10">
-          <Heart className="w-4 h-4 fill-glgold text-glgold animate-pulse" />
+        <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-glgold/20 via-amber-500/10 to-glgold/20 border border-[#ffcc4e]/50 px-4 py-1.5 rounded-full text-[#ffcc4e] font-bold text-xs sm:text-sm tracking-widest uppercase shadow-lg shadow-glgold/10">
+          <Heart className="w-4 h-4 fill-glgold text-[#ffcc4e] animate-pulse" />
           <span>"Once GLB, Always GLB."</span>
         </div>
 
@@ -79,9 +79,9 @@ export default function HeroSection() {
 
           <Link
             to="/register"
-            className="bg-teal-900/60 hover:bg-teal-800/80 text-teal-200 font-bold px-5 py-3.5 rounded-2xl border border-teal-500/30 transition flex items-center space-x-2"
+            className="bg-[#472510]/60 hover:bg-[#592106]/80 text-teal-200 font-bold px-5 py-3.5 rounded-2xl border border-teal-500/30 transition flex items-center space-x-2"
           >
-            <Sparkles className="w-4 h-4 text-glgold" />
+            <Sparkles className="w-4 h-4 text-[#ffcc4e]" />
             <span>Join Verified Network</span>
           </Link>
         </div>
@@ -89,7 +89,7 @@ export default function HeroSection() {
         {/* Four Credential Pills */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-6 max-w-4xl mx-auto">
           <div className="bg-slate-900/70 border border-white/10 rounded-2xl p-3 text-center backdrop-blur-md">
-            <div className="text-xl sm:text-2xl font-black text-glgold">15,000+</div>
+            <div className="text-xl sm:text-2xl font-black text-[#ffcc4e]">15,000+</div>
             <div className="text-[11px] sm:text-xs text-slate-300 font-medium">Alumni Worldwide</div>
           </div>
           <div className="bg-slate-900/70 border border-white/10 rounded-2xl p-3 text-center backdrop-blur-md">
@@ -97,7 +97,7 @@ export default function HeroSection() {
             <div className="text-[11px] sm:text-xs text-slate-300 font-medium">Active Industry Mentors</div>
           </div>
           <div className="bg-slate-900/70 border border-white/10 rounded-2xl p-3 text-center backdrop-blur-md">
-            <div className="text-xl sm:text-2xl font-black text-glgold">100%</div>
+            <div className="text-xl sm:text-2xl font-black text-[#ffcc4e]">100%</div>
             <div className="text-[11px] sm:text-xs text-slate-300 font-medium">Roll-Number Verified</div>
           </div>
           <div className="bg-slate-900/70 border border-white/10 rounded-2xl p-3 text-center backdrop-blur-md">
@@ -115,16 +115,16 @@ export default function HeroSection() {
             {/* 1. Student Portal */}
             <div
               onClick={() => handleQuickEnter(USER_ROLES.STUDENT, "/student/dashboard")}
-              className="bg-white/95 backdrop-blur-md text-slate-900 rounded-3xl p-6 hover:shadow-2xl transition cursor-pointer group shadow-xl flex flex-col justify-between border border-teal-100 hover:scale-[1.02] relative overflow-hidden"
+              className="bg-white/95 backdrop-blur-md text-slate-900 rounded-3xl p-6 hover:shadow-2xl transition cursor-pointer group shadow-xl flex flex-col justify-between border border-slate-200 hover:scale-[1.02] relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-glgold/10 rounded-full blur-2xl pointer-events-none"></div>
+              <div className="absolute top-0 right-0 w-24 h-24 bg-[#ffcc4e]/10 rounded-full blur-2xl pointer-events-none"></div>
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-glgold flex items-center justify-center text-white text-xl mb-4 group-hover:scale-110 transition shadow-md">
+                <div className="w-12 h-12 rounded-2xl bg-[#ffcc4e] flex items-center justify-center text-white text-xl mb-4 group-hover:scale-110 transition shadow-md">
                   <GraduationCap className="w-6 h-6" />
                 </div>
                 <div className="flex items-center justify-between mb-1">
                   <h2 className="text-xl font-black text-slate-900">Student Portal</h2>
-                  <span className="text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-glgold px-2.5 py-0.5 rounded-full border border-glgold/30">
+                  <span className="text-[10px] font-bold uppercase tracking-wider bg-[#faf6eb] text-[#ffcc4e] px-2.5 py-0.5 rounded-full border border-[#ffcc4e]/30">
                     Scholars
                   </span>
                 </div>
@@ -142,7 +142,7 @@ export default function HeroSection() {
                   </div>
                 </div>
               </div>
-              <div className="mt-6 flex items-center text-glgold font-bold text-sm group-hover:translate-x-2 transition">
+              <div className="mt-6 flex items-center text-[#ffcc4e] font-bold text-sm group-hover:translate-x-2 transition">
                 <span>Enter Student Portal</span>
                 <ArrowRight className="w-4 h-4 ml-1.5" />
               </div>
@@ -151,16 +151,16 @@ export default function HeroSection() {
             {/* 2. Alumni Portal */}
             <div
               onClick={() => handleQuickEnter(USER_ROLES.ALUMNI, "/alumni/dashboard")}
-              className="bg-white/95 backdrop-blur-md text-slate-900 rounded-3xl p-6 hover:shadow-2xl transition cursor-pointer group shadow-xl flex flex-col justify-between border border-teal-100 hover:scale-[1.02] relative overflow-hidden"
+              className="bg-white/95 backdrop-blur-md text-slate-900 rounded-3xl p-6 hover:shadow-2xl transition cursor-pointer group shadow-xl flex flex-col justify-between border border-slate-200 hover:scale-[1.02] relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-24 h-24 bg-teal-500/10 rounded-full blur-2xl pointer-events-none"></div>
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-glblue-750 flex items-center justify-center text-white text-xl mb-4 group-hover:scale-110 transition shadow-md">
+                <div className="w-12 h-12 rounded-2xl bg-[#592106] flex items-center justify-center text-white text-xl mb-4 group-hover:scale-110 transition shadow-md">
                   <Briefcase className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex items-center justify-between mb-1">
                   <h2 className="text-xl font-black text-slate-900">Alumni Portal</h2>
-                  <span className="text-[10px] font-bold uppercase tracking-wider bg-teal-50 text-glblue-750 px-2.5 py-0.5 rounded-full border border-teal-200">
+                  <span className="text-[10px] font-bold uppercase tracking-wider bg-[#faf6eb] text-[#592106] px-2.5 py-0.5 rounded-full border border-teal-200">
                     Graduates
                   </span>
                 </div>
@@ -178,7 +178,7 @@ export default function HeroSection() {
                   </div>
                 </div>
               </div>
-              <div className="mt-6 flex items-center text-glblue-750 font-bold text-sm group-hover:translate-x-2 transition">
+              <div className="mt-6 flex items-center text-[#592106] font-bold text-sm group-hover:translate-x-2 transition">
                 <span>Enter Alumni Portal</span>
                 <ArrowRight className="w-4 h-4 ml-1.5" />
               </div>
@@ -187,11 +187,11 @@ export default function HeroSection() {
             {/* 3. Admin Portal */}
             <div
               onClick={() => handleQuickEnter(USER_ROLES.ADMIN, "/admin/dashboard")}
-              className="bg-white/95 backdrop-blur-md text-slate-900 rounded-3xl p-6 hover:shadow-2xl transition cursor-pointer group shadow-xl flex flex-col justify-between border border-teal-100 hover:scale-[1.02] relative overflow-hidden"
+              className="bg-white/95 backdrop-blur-md text-slate-900 rounded-3xl p-6 hover:shadow-2xl transition cursor-pointer group shadow-xl flex flex-col justify-between border border-slate-200 hover:scale-[1.02] relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-teal-900/10 rounded-full blur-2xl pointer-events-none"></div>
+              <div className="absolute top-0 right-0 w-24 h-24 bg-[#472510]/10 rounded-full blur-2xl pointer-events-none"></div>
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-teal-950 flex items-center justify-center text-white text-xl mb-4 group-hover:scale-110 transition shadow-md">
+                <div className="w-12 h-12 rounded-2xl bg-[#1e0e05] flex items-center justify-center text-white text-xl mb-4 group-hover:scale-110 transition shadow-md">
                   <ShieldCheck className="w-6 h-6 text-teal-300" />
                 </div>
                 <div className="flex items-center justify-between mb-1">
@@ -214,7 +214,7 @@ export default function HeroSection() {
                   </div>
                 </div>
               </div>
-              <div className="mt-6 flex items-center text-teal-900 font-bold text-sm group-hover:translate-x-2 transition">
+              <div className="mt-6 flex items-center text-[#472510] font-bold text-sm group-hover:translate-x-2 transition">
                 <span>Enter Admin Portal</span>
                 <ArrowRight className="w-4 h-4 ml-1.5" />
               </div>

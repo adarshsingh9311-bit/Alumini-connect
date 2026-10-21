@@ -155,13 +155,36 @@ export function AuthProvider({ children }) {
 
     if (assignedRole === USER_ROLES.STUDENT) {
       localProfile = INITIAL_STUDENTS.find(s => s.roll_number === identifier) || {
-        ...INITIAL_STUDENTS[0],
-        roll_number: identifier.includes("@") ? INITIAL_STUDENTS[0].roll_number : identifier
+        id: "stu-" + Date.now(),
+        user_id: "user-" + Date.now(),
+        roll_number: identifier,
+        full_name: identifier,
+        email: identifier.includes("@") ? identifier : identifier.toLowerCase() + "@glbajaj.org",
+        branch: "CSE",
+        batch_year: "2025",
+        academic_info: "",
+        skills: [],
+        interests: "",
+        avatar_url: ""
       };
     } else if (assignedRole === USER_ROLES.ALUMNI) {
       localProfile = INITIAL_ALUMNI.find(a => a.roll_number === identifier) || {
-        ...INITIAL_ALUMNI[0],
-        roll_number: identifier.includes("@") ? INITIAL_ALUMNI[0].roll_number : identifier
+        id: "alum-" + Date.now(),
+        user_id: "user-" + Date.now(),
+        roll_number: identifier,
+        full_name: identifier,
+        email: identifier.includes("@") ? identifier : identifier.toLowerCase() + "@glbajaj.org",
+        branch: "CSE",
+        batch_year: "2024",
+        current_company: "",
+        current_designation: "",
+        industry: "",
+        location: "",
+        skills: [],
+        bio: "",
+        is_available_for_mentorship: false,
+        is_verified: false,
+        career_history: []
       };
     } else {
       localProfile = {

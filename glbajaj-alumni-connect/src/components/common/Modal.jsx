@@ -23,7 +23,7 @@ export default function Modal({ isOpen, onClose, title, children, maxWidth = "ma
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-fadeIn">
       <div
-        className={`bg-white rounded-2xl w-full ${maxWidth} shadow-2xl border border-teal-100 overflow-hidden flex flex-col max-h-[90vh]`}
+        className={`bg-white rounded-2xl w-full ${maxWidth} shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}

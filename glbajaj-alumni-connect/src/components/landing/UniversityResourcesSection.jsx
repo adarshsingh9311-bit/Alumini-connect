@@ -48,15 +48,15 @@ export default function UniversityResourcesSection() {
   }
 
   return (
-    <section id="resources" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#FAF8F5] border-t border-[#E7E1D4] font-sans">
+    <section id="resources" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#FFFFFF] border-t border-[#EAE5DC] font-sans">
       <div className="max-w-7xl mx-auto space-y-12">
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center space-x-2 text-[#8C7138] text-xs font-semibold uppercase tracking-widest font-serif">
+          <div className="inline-flex items-center space-x-2 text-[#974319] text-xs font-semibold uppercase tracking-widest font-serif">
             <span>Institutional Privileges</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-bold text-[#0C1929] font-serif tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-bold text-[#521321] font-serif tracking-tight">
             GLB Alumni Resources & Benefits
           </h2>
           <p className="text-sm sm:text-base text-[#4A5568] leading-relaxed">
@@ -73,14 +73,14 @@ export default function UniversityResourcesSection() {
             return (
               <div
                 key={res.id}
-                className="bg-white rounded-xl border border-[#E7E1D4] p-6 flex flex-col justify-between shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-[#C29B38] transition duration-200"
+                className="bg-white rounded-xl border border-[#EAE5DC] p-6 flex flex-col justify-between shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-[#fac850] transition duration-200"
               >
                 <div>
-                  <div className="w-10 h-10 rounded-lg bg-[#FAF8F5] border border-[#E7E1D4] flex items-center justify-center text-[#0C1929] mb-4">
+                  <div className="w-10 h-10 rounded-lg bg-[#FFFFFF] border border-[#EAE5DC] flex items-center justify-center text-[#521321] mb-4">
                     <Icon className="w-5 h-5" />
                   </div>
 
-                  <h3 className="font-bold text-base text-[#0C1929] mb-1.5 font-serif">
+                  <h3 className="font-bold text-base text-[#521321] mb-1.5 font-serif">
                     {res.title}
                   </h3>
 
@@ -89,13 +89,13 @@ export default function UniversityResourcesSection() {
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-[#F5F1E8]">
+                <div className="pt-3 border-t border-[#F9F6F0]">
                   <button
                     onClick={() => handleRequest(res.id)}
                     className={`w-full py-2 px-3 rounded-lg text-xs font-semibold transition flex items-center justify-center space-x-1.5 ${
                       isDone
                         ? "bg-emerald-50 border border-emerald-300 text-emerald-800"
-                        : "bg-[#FAF8F5] text-[#0C1929] border border-[#E7E1D4] hover:bg-white hover:border-[#B58A38]"
+                        : "bg-[#FFFFFF] text-[#521321] border border-[#EAE5DC] hover:bg-white hover:border-[#e0a82e]"
                     }`}
                   >
                     {isDone ? (

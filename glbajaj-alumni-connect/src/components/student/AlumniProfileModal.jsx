@@ -21,22 +21,22 @@ export default function AlumniProfileModal({ isOpen, onClose, alumni, onRequestM
           <img
             src={alumni.avatar_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80"}
             alt={alumni.full_name}
-            className="w-20 h-20 rounded-2xl object-cover border-2 border-glgold shadow-md"
+            className="w-20 h-20 rounded-2xl object-cover border-2 border-[#ffcc4e] shadow-md"
           />
           <div className="flex-1 text-center sm:text-left space-y-1">
             <div className="flex items-center justify-center sm:justify-start space-x-2">
               <h2 className="text-xl font-bold text-slate-900">{alumni.full_name}</h2>
               {alumni.is_verified && (
-                <span className="bg-amber-50 text-glgold text-[11px] font-bold px-2 py-0.5 rounded-full border border-glgold/30 flex items-center gap-1">
+                <span className="bg-[#faf6eb] text-[#ffcc4e] text-[11px] font-bold px-2 py-0.5 rounded-full border border-[#ffcc4e]/30 flex items-center gap-1">
                   <CheckCircle2 className="w-3 h-3" /> Roll-No Verified
                 </span>
               )}
             </div>
-            <p className="text-sm font-semibold text-glblue-750">
+            <p className="text-sm font-semibold text-[#592106]">
               {alumni.current_designation} at <strong className="text-slate-900">{alumni.current_company}</strong>
             </p>
             <p className="text-xs text-slate-500 flex items-center justify-center sm:justify-start gap-3 pt-1">
-              <span><GraduationCap className="w-3.5 h-3.5 inline mr-1 text-glblue-750" /> {alumni.branch} (Batch {alumni.batch_year})</span>
+              <span><GraduationCap className="w-3.5 h-3.5 inline mr-1 text-[#592106]" /> {alumni.branch} (Batch {alumni.batch_year})</span>
               {alumni.location && <span><MapPin className="w-3.5 h-3.5 inline mr-1 text-red-500" /> {alumni.location}</span>}
             </p>
           </div>
@@ -60,7 +60,7 @@ export default function AlumniProfileModal({ isOpen, onClose, alumni, onRequestM
               {alumni.skills.map((skill, i) => (
                 <span
                   key={i}
-                  className="bg-teal-50 text-glblue-900 border border-teal-200 text-xs font-semibold px-3 py-1 rounded-lg"
+                  className="bg-[#faf6eb] text-glblue-900 border border-teal-200 text-xs font-semibold px-3 py-1 rounded-lg"
                 >
                   {skill}
                 </span>
@@ -73,15 +73,15 @@ export default function AlumniProfileModal({ isOpen, onClose, alumni, onRequestM
         <div className="space-y-3">
           <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">Career Journey & Experience</h4>
           {alumni.career_history && alumni.career_history.length > 0 ? (
-            <div className="relative border-l-2 border-teal-100 ml-3 space-y-5">
+            <div className="relative border-l-2 border-slate-200 ml-3 space-y-5">
               {alumni.career_history.map((job) => (
                 <div key={job.id} className="relative pl-6">
-                  <div className="absolute -left-1.5 top-1.5 w-3 h-3 bg-glgold rounded-full border-2 border-white shadow-sm"></div>
+                  <div className="absolute -left-1.5 top-1.5 w-3 h-3 bg-[#ffcc4e] rounded-full border-2 border-white shadow-sm"></div>
                   <div>
                     <h5 className="text-sm font-bold text-slate-900">{job.designation}</h5>
-                    <p className="text-xs font-semibold text-glblue-750">{job.company}</p>
+                    <p className="text-xs font-semibold text-[#592106]">{job.company}</p>
                     <p className="text-[11px] text-slate-400 mt-0.5">
-                      {job.start_date} — {job.is_current ? "Present" : job.end_date}
+                      {job.start_date} â€” {job.is_current ? "Present" : job.end_date}
                     </p>
                     {job.description && (
                       <p className="text-xs text-slate-600 mt-1 leading-relaxed">
@@ -150,7 +150,7 @@ export default function AlumniProfileModal({ isOpen, onClose, alumni, onRequestM
                 onClose();
                 onRequestMentorship(alumni);
               }}
-              className="bg-glgold hover:bg-glgold-dark text-white text-xs font-bold px-5 py-2 rounded-xl transition shadow-md flex items-center space-x-1.5"
+              className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] text-xs font-bold px-5 py-2 rounded-xl transition shadow-md flex items-center space-x-1.5"
             >
               <MessageSquare className="w-3.5 h-3.5" />
               <span>Request Mentorship Session</span>

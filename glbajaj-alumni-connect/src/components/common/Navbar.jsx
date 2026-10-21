@@ -42,20 +42,22 @@ export default function Navbar({ onOpenNotifications }) {
   const isAdminActive = location.pathname.startsWith("/admin");
 
   return (
-    <header className="bg-glblue-750 text-white shadow-md sticky top-0 z-40 border-b border-teal-800">
+    <header className="bg-[#592106] text-white shadow-md sticky top-0 z-40 border-b-2 border-[#ffcc4e]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
         {/* Brand Logo & Name */}
         <Link to="/" className="flex items-center space-x-3 group">
-          <div className="bg-glgold text-white w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xl shadow-inner group-hover:scale-105 transition">
-            GL
-          </div>
+          <img
+            src="/assets/glb-gold-crest.png"
+            alt="GL Bajaj Seal"
+            className="w-10 h-10 object-contain drop-shadow group-hover:scale-105 transition shrink-0"
+          />
           <div>
             <h1 className="font-bold text-base sm:text-lg leading-tight tracking-wide flex items-center gap-1.5">
               <span>GL BAJAJ</span>
-              <span className="text-xs bg-teal-800/80 text-glgold px-2 py-0.5 rounded font-mono font-semibold hidden sm:inline-block">ALUMNI CONNECT</span>
+              <span className="text-xs bg-[#472510] text-[#ffcc4e] border border-[#ffcc4e]/30 px-2 py-0.5 rounded font-mono font-semibold hidden sm:inline-block">ALUMNI CONNECT</span>
             </h1>
-            <p className="text-[11px] text-glgold font-medium tracking-wider truncate max-w-[200px] sm:max-w-none">
+            <p className="text-[11px] text-[#ffcc4e] font-medium tracking-wider truncate max-w-[200px] sm:max-w-none">
               {COLLEGE_NAME}
             </p>
           </div>
@@ -67,7 +69,7 @@ export default function Navbar({ onOpenNotifications }) {
             to="/student"
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center space-x-1.5 ${
               isStudentActive
-                ? "bg-white/20 text-glgold font-bold shadow-sm"
+                ? "bg-white/20 text-[#ffcc4e] font-bold shadow-sm"
                 : "text-slate-200 hover:bg-white/10 hover:text-white"
             }`}
           >
@@ -79,7 +81,7 @@ export default function Navbar({ onOpenNotifications }) {
             to="/alumni"
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center space-x-1.5 ${
               isAlumniActive
-                ? "bg-white/20 text-glgold font-bold shadow-sm"
+                ? "bg-white/20 text-[#ffcc4e] font-bold shadow-sm"
                 : "text-slate-200 hover:bg-white/10 hover:text-white"
             }`}
           >
@@ -91,7 +93,7 @@ export default function Navbar({ onOpenNotifications }) {
             to="/admin"
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center space-x-1.5 ${
               isAdminActive
-                ? "bg-white/20 text-glgold font-bold shadow-sm"
+                ? "bg-white/20 text-[#ffcc4e] font-bold shadow-sm"
                 : "text-slate-200 hover:bg-white/10 hover:text-white"
             }`}
           >
@@ -105,12 +107,12 @@ export default function Navbar({ onOpenNotifications }) {
           {/* Quick Demo Switcher if Supabase not configured */}
           {!isConfigured && (
             <div className="relative group">
-              <button className="bg-glblue-900 border border-glgold/40 text-glgold text-xs px-2.5 py-1.5 rounded-lg font-semibold flex items-center space-x-1 hover:bg-glblue-950 transition">
+              <button className="bg-glblue-900 border border-[#ffcc4e]/40 text-[#ffcc4e] text-xs px-2.5 py-1.5 rounded-lg font-semibold flex items-center space-x-1 hover:bg-glblue-950 transition">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Switch Portal View</span>
                 <ChevronDown className="w-3 h-3" />
               </button>
-              <div className="absolute right-0 mt-1 w-48 bg-slate-900 border border-teal-700/60 rounded-xl shadow-xl py-2 hidden group-hover:block z-50">
+              <div className="absolute right-0 mt-1 w-48 bg-slate-900 border border-[#ffcc4e]/30/60 rounded-xl shadow-xl py-2 hidden group-hover:block z-50">
                 <div className="px-3 py-1 text-[10px] uppercase font-bold text-slate-400">Preview Portals</div>
                 <button
                   onClick={() => handleSwitchDemo(USER_ROLES.STUDENT)}
@@ -123,7 +125,7 @@ export default function Navbar({ onOpenNotifications }) {
                   onClick={() => handleSwitchDemo(USER_ROLES.ALUMNI)}
                   className="w-full text-left px-3 py-1.5 text-xs text-slate-200 hover:bg-white/10 flex items-center space-x-2"
                 >
-                  <Briefcase className="w-3.5 h-3.5 text-glgold" />
+                  <Briefcase className="w-3.5 h-3.5 text-[#ffcc4e]" />
                   <span>Alumni View</span>
                 </button>
                 <button
@@ -145,7 +147,7 @@ export default function Navbar({ onOpenNotifications }) {
               title="Notifications"
             >
               <Bell className="w-4 h-4" />
-              <span className="absolute -top-1 -right-1 bg-glgold text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+              <span className="absolute -top-1 -right-1 bg-[#ffcc4e] text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
                 2
               </span>
             </button>
@@ -159,15 +161,15 @@ export default function Navbar({ onOpenNotifications }) {
                   <img
                     src={profile.avatar_url}
                     alt={profile.full_name}
-                    className="w-6 h-6 rounded-full object-cover border border-glgold"
+                    className="w-6 h-6 rounded-full object-cover border border-[#ffcc4e]"
                   />
                 ) : (
-                  <User className="w-4 h-4 text-glgold" />
+                  <User className="w-4 h-4 text-[#ffcc4e]" />
                 )}
                 <span className="text-xs font-semibold max-w-[120px] truncate">
                   {profile?.full_name || user.email}
                 </span>
-                <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-glgold/20 text-glgold border border-glgold/40">
+                <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-[#ffcc4e]/20 text-[#ffcc4e] border border-[#ffcc4e]/40">
                   {role || "user"}
                 </span>
               </div>
@@ -189,7 +191,7 @@ export default function Navbar({ onOpenNotifications }) {
               </Link>
               <Link
                 to="/register"
-                className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-glgold hover:bg-glgold-dark text-white transition shadow-sm"
+                className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] transition shadow-sm"
               >
                 Join Network
               </Link>
@@ -218,7 +220,7 @@ export default function Navbar({ onOpenNotifications }) {
 
       {/* Mobile Dropdown Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-glblue-900 border-t border-teal-800 px-4 pt-3 pb-5 space-y-2">
+        <div className="md:hidden bg-glblue-900 border-t border-[#ffcc4e]/30 px-4 pt-3 pb-5 space-y-2">
           <div className="text-[10px] uppercase tracking-wider font-bold text-slate-400 px-2">
             Select Portal
           </div>
@@ -226,7 +228,7 @@ export default function Navbar({ onOpenNotifications }) {
             to="/student"
             onClick={() => setMobileMenuOpen(false)}
             className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium ${
-              isStudentActive ? "bg-glgold text-white font-bold" : "text-slate-200 hover:bg-white/10"
+              isStudentActive ? "bg-[#ffcc4e] text-white font-bold" : "text-slate-200 hover:bg-white/10"
             }`}
           >
             <GraduationCap className="w-4 h-4" />
@@ -237,7 +239,7 @@ export default function Navbar({ onOpenNotifications }) {
             to="/alumni"
             onClick={() => setMobileMenuOpen(false)}
             className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium ${
-              isAlumniActive ? "bg-glgold text-white font-bold" : "text-slate-200 hover:bg-white/10"
+              isAlumniActive ? "bg-[#ffcc4e] text-white font-bold" : "text-slate-200 hover:bg-white/10"
             }`}
           >
             <Briefcase className="w-4 h-4" />
@@ -248,14 +250,14 @@ export default function Navbar({ onOpenNotifications }) {
             to="/admin"
             onClick={() => setMobileMenuOpen(false)}
             className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium ${
-              isAdminActive ? "bg-glgold text-white font-bold" : "text-slate-200 hover:bg-white/10"
+              isAdminActive ? "bg-[#ffcc4e] text-white font-bold" : "text-slate-200 hover:bg-white/10"
             }`}
           >
             <ShieldCheck className="w-4 h-4" />
             <span>Admin Portal</span>
           </Link>
 
-          <div className="pt-3 border-t border-teal-800/80">
+          <div className="pt-3 border-t border-[#ffcc4e]/30/80">
             {user ? (
               <div className="space-y-2">
                 <div className="px-2 text-xs text-slate-300 font-medium">
@@ -281,7 +283,7 @@ export default function Navbar({ onOpenNotifications }) {
                 <Link
                   to="/register"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-center py-2 rounded-xl text-xs font-bold bg-glgold text-white"
+                  className="text-center py-2 rounded-xl text-xs font-bold bg-[#ffcc4e] text-white"
                 >
                   Register
                 </Link>

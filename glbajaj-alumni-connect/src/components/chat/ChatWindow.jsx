@@ -29,7 +29,7 @@ export default function ChatWindow({ mentorship, messages = [], onSendMessage })
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-teal-100 shadow-sm flex flex-col h-[520px] overflow-hidden">
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col h-[520px] overflow-hidden">
       {/* Chat Header */}
       <div className="px-5 py-3.5 border-b border-slate-100 bg-gradient-to-r from-glblue-750 to-teal-800 text-white flex items-center justify-between">
         <div className="flex items-center space-x-3">
@@ -68,7 +68,7 @@ export default function ChatWindow({ mentorship, messages = [], onSendMessage })
                   <div
                     className={`p-3 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm ${
                       isMe
-                        ? "bg-glblue-750 text-white rounded-br-none"
+                        ? "bg-[#592106] text-white rounded-br-none"
                         : "bg-white text-slate-800 border border-slate-200 rounded-bl-none"
                     }`}
                   >
@@ -76,7 +76,7 @@ export default function ChatWindow({ mentorship, messages = [], onSendMessage })
                   </div>
                 </div>
                 <span className="text-[10px] text-slate-400 mt-1 px-1">
-                  {msg.sender_name || (isMe ? "You" : "Mentor")} • {new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  {msg.sender_name || (isMe ? "You" : "Mentor")} â€¢ {new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                 </span>
               </div>
             );
@@ -92,12 +92,12 @@ export default function ChatWindow({ mentorship, messages = [], onSendMessage })
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           placeholder="Type your message..."
-          className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-glblue-750"
+          className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#592106]"
         />
         <button
           type="submit"
           disabled={!inputText.trim()}
-          className="bg-glgold hover:bg-glgold-dark text-white p-2.5 rounded-xl transition shadow-sm disabled:opacity-40"
+          className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] p-2.5 rounded-xl transition shadow-sm disabled:opacity-40"
         >
           <Send className="w-4 h-4" />
         </button>

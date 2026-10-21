@@ -35,7 +35,7 @@ export default function AdminStudentsPage() {
       </div>
 
       {/* Filters Bar */}
-      <div className="bg-white rounded-2xl p-4 border border-teal-100 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
           <input
@@ -43,7 +43,7 @@ export default function AdminStudentsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name, roll number, or email..."
-            className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-4 py-2 text-xs sm:text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+            className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-4 py-2 text-xs sm:text-sm focus:ring-2 focus:ring-[#592106] focus:outline-none"
           />
         </div>
 
@@ -51,7 +51,7 @@ export default function AdminStudentsPage() {
           <select
             value={branchFilter}
             onChange={(e) => setBranchFilter(e.target.value)}
-            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
           >
             <option value="">All Branches</option>
             {BRANCH_CODES.map((b) => (
@@ -62,7 +62,7 @@ export default function AdminStudentsPage() {
           <select
             value={batchFilter}
             onChange={(e) => setBatchFilter(e.target.value)}
-            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
           >
             <option value="">All Batches</option>
             {BATCH_YEARS.map((y) => (
@@ -73,7 +73,7 @@ export default function AdminStudentsPage() {
       </div>
 
       {/* Students Table */}
-      <div className="bg-white rounded-3xl border border-teal-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
           <h3 className="font-bold text-slate-900 text-sm">Enrolled Student Roster</h3>
           <span className="text-xs text-slate-500 font-medium">Showing {filtered.length} records</span>
@@ -96,12 +96,12 @@ export default function AdminStudentsPage() {
                   <td className="px-6 py-4">
                     <div className="font-bold text-slate-900 text-sm">{s.full_name}</div>
                     <div className="text-slate-400 text-xs flex items-center gap-1 mt-0.5">
-                      <Mail className="w-3 h-3 text-glblue-750" />
+                      <Mail className="w-3 h-3 text-[#592106]" />
                       <span>{s.email}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="bg-teal-50 text-glblue-750 border border-teal-200 px-2.5 py-1 rounded-md font-mono text-xs font-bold">
+                    <span className="bg-[#faf6eb] text-[#592106] border border-teal-200 px-2.5 py-1 rounded-md font-mono text-xs font-bold">
                       {s.roll_number}
                     </span>
                   </td>

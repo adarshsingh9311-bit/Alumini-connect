@@ -48,15 +48,15 @@ export default function UniversityEventsSection() {
   }
 
   return (
-    <section id="events" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#FAF8F5] border-t border-[#E7E1D4] font-sans">
+    <section id="events" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#FFFFFF] border-t border-[#EAE5DC] font-sans">
       <div className="max-w-7xl mx-auto space-y-12">
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center space-x-2 text-[#8C7138] text-xs font-semibold uppercase tracking-widest font-serif">
+          <div className="inline-flex items-center space-x-2 text-[#974319] text-xs font-semibold uppercase tracking-widest font-serif">
             <span>Academic & Community Calendar</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-bold text-[#0C1929] font-serif tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-bold text-[#521321] font-serif tracking-tight">
             What's Happening in the GLB Family
           </h2>
           <p className="text-sm sm:text-base text-[#4A5568] leading-relaxed">
@@ -72,26 +72,26 @@ export default function UniversityEventsSection() {
             return (
               <div
                 key={event.id}
-                className="bg-white rounded-xl border border-[#E7E1D4] p-6 flex flex-col justify-between shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-[#C29B38] transition duration-200"
+                className="bg-white rounded-xl border border-[#EAE5DC] p-6 flex flex-col justify-between shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-[#fac850] transition duration-200"
               >
                 <div>
                   {/* Date Badge and Category */}
                   <div className="flex items-start justify-between gap-4 mb-4">
-                    <div className="w-13 h-14 rounded-lg bg-[#FAF8F5] border border-[#E7E1D4] flex flex-col items-center justify-center text-center shrink-0">
-                      <span className="text-[10px] font-bold text-[#8C7138] uppercase">
+                    <div className="w-13 h-14 rounded-lg bg-[#FFFFFF] border border-[#EAE5DC] flex flex-col items-center justify-center text-center shrink-0">
+                      <span className="text-[10px] font-bold text-[#974319] uppercase">
                         {event.month}
                       </span>
-                      <span className="text-xl font-bold text-[#0C1929] leading-none mt-0.5 font-serif">
+                      <span className="text-xl font-bold text-[#521321] leading-none mt-0.5 font-serif">
                         {event.day}
                       </span>
                     </div>
 
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-[#FAF8F5] text-[#2B3442] border border-[#E7E1D4]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-[#FFFFFF] text-[#2B3442] border border-[#EAE5DC]">
                       {event.category}
                     </span>
                   </div>
 
-                  <h3 className="font-bold text-base text-[#0C1929] leading-snug mb-2 font-serif">
+                  <h3 className="font-bold text-base text-[#521321] leading-snug mb-2 font-serif">
                     {event.title}
                   </h3>
 
@@ -101,24 +101,24 @@ export default function UniversityEventsSection() {
 
                   <div className="space-y-1.5 text-xs text-[#718096] mb-4">
                     <div className="flex items-center space-x-2">
-                      <Clock className="w-3.5 h-3.5 text-[#8C7138]" />
+                      <Clock className="w-3.5 h-3.5 text-[#974319]" />
                       <span>{event.time}</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <MapPin className="w-3.5 h-3.5 text-[#8C7138]" />
+                      <MapPin className="w-3.5 h-3.5 text-[#974319]" />
                       <span className="truncate">{event.location}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* RSVP Button */}
-                <div className="pt-3 border-t border-[#F5F1E8]">
+                <div className="pt-3 border-t border-[#F9F6F0]">
                   <button
                     onClick={() => handleRsvp(event.id)}
                     className={`w-full py-2 px-3 rounded-lg text-xs font-semibold transition flex items-center justify-center space-x-1.5 ${
                       isRegistered
                         ? "bg-emerald-700 text-white"
-                        : "bg-[#0C1929] hover:bg-[#1A2C42] text-[#FAF8F5]"
+                        : "bg-[#521321] hover:bg-[#6f1b2f] text-[#FFFFFF]"
                     }`}
                   >
                     {isRegistered ? (

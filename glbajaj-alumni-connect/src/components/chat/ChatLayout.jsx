@@ -115,10 +115,10 @@ export default function ChatLayout({ currentUserRole }) {
         <div className="p-4 border-b border-slate-200 space-y-3 bg-white">
           <div className="flex items-center justify-between">
             <h3 className="font-extrabold text-slate-900 text-base flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-glgold" />
+              <MessageSquare className="w-5 h-5 text-[#ffcc4e]" />
               <span>Mentorship Messages</span>
             </h3>
-            <span className="text-xs bg-teal-50 text-glblue-750 font-bold px-2 py-0.5 rounded-full border border-teal-200">
+            <span className="text-xs bg-[#faf6eb] text-[#592106] font-bold px-2 py-0.5 rounded-full border border-teal-200">
               {mentorships.length} Active
             </span>
           </div>
@@ -130,7 +130,7 @@ export default function ChatLayout({ currentUserRole }) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search conversations..."
-              className="w-full pl-9 pr-3 py-1.5 bg-slate-100 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-glblue-750"
+              className="w-full pl-9 pr-3 py-1.5 bg-slate-100 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#592106]"
             />
           </div>
         </div>
@@ -157,7 +157,7 @@ export default function ChatLayout({ currentUserRole }) {
                   onClick={() => { setActiveConversation(c); setError(null); }}
                   className={`p-4 flex items-start space-x-3 cursor-pointer transition ${
                     isSelected
-                      ? "bg-teal-50/70 border-l-4 border-glblue-750"
+                      ? "bg-[#faf6eb]/70 border-l-4 border-glblue-750"
                       : "hover:bg-slate-100/70 bg-white"
                   }`}
                 >
@@ -177,13 +177,13 @@ export default function ChatLayout({ currentUserRole }) {
                         {new Date(c.created_at).toLocaleDateString([], { month: "short", day: "numeric" })}
                       </span>
                     </div>
-                    <p className="text-xs text-glblue-750 font-semibold truncate mt-0.5">
+                    <p className="text-xs text-[#592106] font-semibold truncate mt-0.5">
                       {c.topic}
                     </p>
                     <p className="text-[11px] text-slate-500 truncate mt-0.5">
                       {currentUserRole === "student"
                         ? "Connected Alumnus Mentor"
-                        : `${c.student_branch || "Student"} • Roll: ${c.student_roll || "N/A"}`}
+                        : `${c.student_branch || "Student"} â€¢ Roll: ${c.student_roll || "N/A"}`}
                     </p>
                   </div>
                 </div>
@@ -200,15 +200,15 @@ export default function ChatLayout({ currentUserRole }) {
             {/* Chat Top Bar */}
             <div className="h-16 px-6 border-b border-slate-200 flex items-center justify-between bg-white shadow-sm shrink-0">
               <div className="flex items-center space-x-3 truncate">
-                <div className="w-10 h-10 rounded-2xl bg-glgold text-white font-bold flex items-center justify-center text-sm shadow-sm">
+                <div className="w-10 h-10 rounded-2xl bg-[#ffcc4e] text-white font-bold flex items-center justify-center text-sm shadow-sm">
                   {(currentUserRole === "student" ? activeConversation.alumni_name : activeConversation.student_name)[0]}
                 </div>
                 <div className="truncate">
                   <h3 className="font-extrabold text-sm text-slate-900 flex items-center gap-1.5 truncate">
                     <span>{currentUserRole === "student" ? activeConversation.alumni_name : activeConversation.student_name}</span>
-                    <CheckCircle2 className="w-3.5 h-3.5 text-glgold shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#ffcc4e] shrink-0" />
                   </h3>
-                  <p className="text-xs text-glblue-750 font-medium truncate flex items-center gap-2">
+                  <p className="text-xs text-[#592106] font-medium truncate flex items-center gap-2">
                     <span>Topic: {activeConversation.topic}</span>
                     <span className="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
                       <Circle className="w-2 h-2 fill-emerald-500 text-emerald-500" />
@@ -226,7 +226,7 @@ export default function ChatLayout({ currentUserRole }) {
 
             {/* Error Notification banner if any */}
             {error && (
-              <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-xs text-amber-800 flex items-center gap-2">
+              <div className="bg-[#faf6eb] border-b border-amber-200 px-4 py-2 text-xs text-amber-800 flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
                 <span>{error}</span>
               </div>
@@ -236,7 +236,7 @@ export default function ChatLayout({ currentUserRole }) {
             <div className="flex-1 p-6 overflow-y-auto space-y-4 bg-slate-50/50">
               {activeMessages.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-slate-400 text-xs text-center p-6">
-                  <div className="w-12 h-12 rounded-2xl bg-teal-50 text-glblue-750 flex items-center justify-center mb-2">
+                  <div className="w-12 h-12 rounded-2xl bg-[#faf6eb] text-[#592106] flex items-center justify-center mb-2">
                     <MessageSquare className="w-6 h-6" />
                   </div>
                   <p className="font-bold text-slate-700 text-sm">Conversation Initiated</p>
@@ -260,7 +260,7 @@ export default function ChatLayout({ currentUserRole }) {
                         <div
                           className={`p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm ${
                             isMe
-                              ? "bg-glblue-750 text-white rounded-br-none"
+                              ? "bg-[#592106] text-white rounded-br-none"
                               : "bg-white text-slate-800 border border-slate-200 rounded-bl-none"
                           }`}
                         >
@@ -269,7 +269,7 @@ export default function ChatLayout({ currentUserRole }) {
                       </div>
                       <span className="text-[10px] text-slate-400 mt-1 px-1 flex items-center gap-1">
                         <span>{msg.sender_name || (isMe ? "You" : "Partner")}</span>
-                        <span>•</span>
+                        <span>â€¢</span>
                         <span>
                           {new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                         </span>
@@ -291,12 +291,12 @@ export default function ChatLayout({ currentUserRole }) {
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="Type your message here... (Press Enter to send)"
-                className="flex-1 bg-slate-50 border border-slate-300 rounded-2xl px-4 py-3 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-glblue-750"
+                className="flex-1 bg-slate-50 border border-slate-300 rounded-2xl px-4 py-3 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#592106]"
               />
               <button
                 type="submit"
                 disabled={!inputText.trim()}
-                className="bg-glgold hover:bg-glgold-dark text-white p-3 rounded-2xl transition shadow-md disabled:opacity-40 flex items-center justify-center shrink-0"
+                className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] p-3 rounded-2xl transition shadow-md disabled:opacity-40 flex items-center justify-center shrink-0"
               >
                 <Send className="w-4 h-4" />
               </button>

@@ -59,30 +59,30 @@ export default function GLBFamilyNetwork() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       
       {/* Header Banner embodying "Once GLB, Always GLB." */}
-      <div className="bg-gradient-to-r from-slate-950 via-glblue-750 to-teal-950 rounded-3xl p-8 sm:p-12 text-white shadow-2xl relative overflow-hidden border border-teal-600/30 text-center space-y-4">
-        <div className="inline-flex items-center space-x-2 bg-glgold/20 border border-glgold/50 px-4 py-1.5 rounded-full text-glgold font-bold text-xs sm:text-sm tracking-wider uppercase shadow-inner">
-          <Heart className="w-4 h-4 text-glgold fill-glgold" />
+      <div className="bg-gradient-to-r from-[#592106] via-[#472510] to-[#2f1508] border-b-4 border-[#ffcc4e] rounded-3xl p-8 sm:p-12 text-white shadow-2xl relative overflow-hidden text-center space-y-4">
+        <div className="inline-flex items-center space-x-2 bg-[#ffcc4e]/20 border border-[#ffcc4e]/50 px-4 py-1.5 rounded-full text-[#ffcc4e] font-bold text-xs sm:text-sm tracking-wider uppercase shadow-inner">
+          <Heart className="w-4 h-4 text-[#ffcc4e] fill-[#ffcc4e]" />
           <span>The Lifelong Ecosystem</span>
         </div>
 
-        <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
-          GLB <span className="text-glgold">Family Network</span>
+        <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white !text-white">
+          GLB <span className="text-[#ffcc4e]">Family Network</span>
         </h1>
 
-        <p className="text-glgold font-black text-sm sm:text-lg tracking-widest uppercase">
+        <p className="text-[#ffcc4e] font-black text-sm sm:text-lg tracking-widest uppercase">
           "Once GLB, Always GLB."
         </p>
 
-        <p className="text-slate-300 text-xs sm:text-base max-w-2xl mx-auto leading-relaxed">
-          More than an alumni directory — a living inter-generational circle connecting College Leadership, industry-veteran Alumni, active Mentors, and aspiring Students.
+        <p className="text-[#faf6eb]/90 text-xs sm:text-base max-w-2xl mx-auto leading-relaxed">
+          More than an alumni directory â€” a living inter-generational circle connecting College Leadership, industry-veteran Alumni, active Mentors, and aspiring Students.
         </p>
       </div>
 
       {/* Visual Relationship Flow Diagram */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-teal-100 shadow-sm space-y-6">
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
         <div className="text-center max-w-xl mx-auto">
-          <span className="text-xs font-bold uppercase text-glgold tracking-widest">The Circle of Lifelong Growth</span>
-          <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">College ? Alumni ? Mentors ? Students</h3>
+          <span className="text-xs font-bold uppercase text-[#c87e35] tracking-widest">The Circle of Lifelong Growth</span>
+          <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">College &bull; Alumni &bull; Mentors &bull; Students</h3>
           <p className="text-xs text-slate-500 mt-1">
             How our shared GL Bajaj foundation empowers each generation to elevate the next.
           </p>
@@ -90,8 +90,8 @@ export default function GLBFamilyNetwork() {
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
           <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-center space-y-2 relative">
-            <div className="w-12 h-12 rounded-2xl bg-teal-900 text-white flex items-center justify-center font-black mx-auto shadow-md">
-              <Building2 className="w-6 h-6 text-glgold" />
+            <div className="w-12 h-12 rounded-2xl bg-[#592106] text-white flex items-center justify-center font-black mx-auto shadow-md">
+              <Building2 className="w-6 h-6 text-[#ffcc4e]" />
             </div>
             <h4 className="font-extrabold text-slate-900 text-sm">1. Alma Mater</h4>
             <p className="text-[11px] text-slate-500 leading-relaxed">
@@ -100,8 +100,8 @@ export default function GLBFamilyNetwork() {
           </div>
 
           <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-center space-y-2 relative">
-            <div className="w-12 h-12 rounded-2xl bg-glblue-750 text-white flex items-center justify-center font-black mx-auto shadow-md">
-              <Briefcase className="w-6 h-6 text-teal-200" />
+            <div className="w-12 h-12 rounded-2xl bg-[#472510] text-white flex items-center justify-center font-black mx-auto shadow-md">
+              <Briefcase className="w-6 h-6 text-[#ffcc4e]" />
             </div>
             <h4 className="font-extrabold text-slate-900 text-sm">2. Alumni Force</h4>
             <p className="text-[11px] text-slate-500 leading-relaxed">
@@ -110,8 +110,8 @@ export default function GLBFamilyNetwork() {
           </div>
 
           <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-center space-y-2 relative">
-            <div className="w-12 h-12 rounded-2xl bg-glgold text-white flex items-center justify-center font-black mx-auto shadow-md">
-              <Sparkles className="w-6 h-6 text-white" />
+            <div className="w-12 h-12 rounded-2xl bg-[#ffcc4e] text-[#472510] flex items-center justify-center font-black mx-auto shadow-md">
+              <Sparkles className="w-6 h-6 text-[#472510]" />
             </div>
             <h4 className="font-extrabold text-slate-900 text-sm">3. Active Mentors</h4>
             <p className="text-[11px] text-slate-500 leading-relaxed">
@@ -120,8 +120,8 @@ export default function GLBFamilyNetwork() {
           </div>
 
           <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-center space-y-2 relative">
-            <div className="w-12 h-12 rounded-2xl bg-teal-800 text-white flex items-center justify-center font-black mx-auto shadow-md">
-              <GraduationCap className="w-6 h-6 text-amber-300" />
+            <div className="w-12 h-12 rounded-2xl bg-[#592106] text-white flex items-center justify-center font-black mx-auto shadow-md">
+              <GraduationCap className="w-6 h-6 text-[#ffcc4e]" />
             </div>
             <h4 className="font-extrabold text-slate-900 text-sm">4. Scholars & Juniors</h4>
             <p className="text-[11px] text-slate-500 leading-relaxed">
@@ -137,7 +137,7 @@ export default function GLBFamilyNetwork() {
           onClick={() => setActiveTab("moments")}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 ${
             activeTab === "moments"
-              ? "bg-glgold text-white shadow-sm"
+              ? "bg-[#ffcc4e] text-white shadow-sm"
               : "bg-slate-100 text-slate-600 hover:bg-slate-200"
           }`}
         >
@@ -149,7 +149,7 @@ export default function GLBFamilyNetwork() {
           onClick={() => setActiveTab("stories")}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 ${
             activeTab === "stories"
-              ? "bg-glblue-750 text-white shadow-sm"
+              ? "bg-[#592106] text-white shadow-sm"
               : "bg-slate-100 text-slate-600 hover:bg-slate-200"
           }`}
         >
@@ -164,7 +164,7 @@ export default function GLBFamilyNetwork() {
           {moments.map((m) => (
             <div
               key={m.id}
-              className="bg-white rounded-3xl p-6 border border-teal-100 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4"
+              className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4"
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -175,7 +175,7 @@ export default function GLBFamilyNetwork() {
                 </div>
 
                 <h3 className="font-extrabold text-slate-900 text-base leading-snug">{m.event}</h3>
-                <div className="text-xs font-semibold text-glblue-750">{m.recipient}</div>
+                <div className="text-xs font-semibold text-[#592106]">{m.recipient}</div>
 
                 <p className="text-xs text-slate-600 bg-slate-50 p-3.5 rounded-xl border border-slate-100 leading-relaxed italic">
                   "{m.message}"
@@ -183,7 +183,7 @@ export default function GLBFamilyNetwork() {
               </div>
 
               <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
-                <span className="font-semibold text-glgold">Issued by GL Bajaj Alma Mater</span>
+                <span className="font-semibold text-[#ffcc4e]">Issued by GL Bajaj Alma Mater</span>
                 <span className="text-[11px]">Family Recognition</span>
               </div>
             </div>
@@ -197,7 +197,7 @@ export default function GLBFamilyNetwork() {
           {achievements.map((ach) => (
             <div
               key={ach.id}
-              className="bg-white rounded-3xl p-6 border border-teal-100 shadow-sm hover:shadow-md transition space-y-4"
+              className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition space-y-4"
             >
               {ach.media_url && (
                 <div className="h-44 rounded-2xl overflow-hidden bg-slate-100 border border-slate-200">
@@ -206,7 +206,7 @@ export default function GLBFamilyNetwork() {
               )}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-glblue-750">{ach.alumni_name}</span>
+                  <span className="text-xs font-bold text-[#592106]">{ach.alumni_name}</span>
                   <span className="text-[11px] text-slate-400">{ach.alumni_batch}</span>
                 </div>
                 <h4 className="font-extrabold text-slate-900 text-base leading-snug">{ach.title}</h4>

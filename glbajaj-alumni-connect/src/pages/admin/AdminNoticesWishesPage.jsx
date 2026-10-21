@@ -63,14 +63,14 @@ export default function AdminNoticesWishesPage() {
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setIsBroadcastModalOpen(true)}
-            className="bg-glgold hover:bg-glgold-dark text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5"
+            className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5"
           >
             <Heart className="w-4 h-4" />
             <span>Broadcast Wishes</span>
           </button>
           <button
             onClick={() => setIsNoticeModalOpen(true)}
-            className="bg-glblue-750 hover:bg-teal-900 text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5"
+            className="bg-[#592106] hover:bg-[#472510] text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5"
           >
             <Plus className="w-4 h-4" />
             <span>Create Notice</span>
@@ -83,14 +83,14 @@ export default function AdminNoticesWishesPage() {
         {notices.map((n) => (
           <div
             key={n.id}
-            className="bg-white rounded-3xl p-6 border border-teal-100 shadow-sm flex flex-col justify-between space-y-3"
+            className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between space-y-3"
           >
             <div className="flex items-start justify-between">
               <div className="flex items-center space-x-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-teal-50 text-glblue-750 px-2.5 py-1 rounded">
+                <span className="text-[10px] font-bold uppercase tracking-wider bg-[#faf6eb] text-[#592106] px-2.5 py-1 rounded">
                   {n.category}
                 </span>
-                <span className="text-[10px] font-bold bg-amber-50 text-glgold px-2 py-0.5 rounded border border-glgold/30">
+                <span className="text-[10px] font-bold bg-[#faf6eb] text-[#ffcc4e] px-2 py-0.5 rounded border border-[#ffcc4e]/30">
                   Target: {n.target_audience.toUpperCase()}
                 </span>
               </div>
@@ -128,7 +128,7 @@ export default function AdminNoticesWishesPage() {
               <select
                 value={newNotice.category}
                 onChange={(e) => setNewNotice({ ...newNotice, category: e.target.value })}
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
               >
                 <option value="Reunion">Reunion & Alumni Meet</option>
                 <option value="Mentorship">Mentorship Drive</option>
@@ -142,7 +142,7 @@ export default function AdminNoticesWishesPage() {
               <select
                 value={newNotice.target_audience}
                 onChange={(e) => setNewNotice({ ...newNotice, target_audience: e.target.value })}
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
               >
                 {NOTICE_TARGETS.map((t) => (
                   <option key={t.value} value={t.value}>{t.label}</option>
@@ -159,7 +159,7 @@ export default function AdminNoticesWishesPage() {
               value={newNotice.published_by}
               onChange={(e) => setNewNotice({ ...newNotice, published_by: e.target.value })}
               placeholder="e.g. Dean Alumni Relations / HOD"
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
             />
           </div>
 
@@ -171,7 +171,7 @@ export default function AdminNoticesWishesPage() {
               value={newNotice.title}
               onChange={(e) => setNewNotice({ ...newNotice, title: e.target.value })}
               placeholder="e.g. Registration Open for Annual Alumni Meet 2026"
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
             />
           </div>
 
@@ -183,7 +183,7 @@ export default function AdminNoticesWishesPage() {
               value={newNotice.content}
               onChange={(e) => setNewNotice({ ...newNotice, content: e.target.value })}
               placeholder="Write the complete announcement..."
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs leading-relaxed focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs leading-relaxed focus:ring-2 focus:ring-[#592106] focus:outline-none"
             ></textarea>
           </div>
 
@@ -197,7 +197,7 @@ export default function AdminNoticesWishesPage() {
             </button>
             <button
               type="submit"
-              className="bg-glgold hover:bg-glgold-dark text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1"
+              className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1"
             >
               <Send className="w-3.5 h-3.5" />
               <span>Publish Notice</span>

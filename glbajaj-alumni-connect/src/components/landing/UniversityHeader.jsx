@@ -9,43 +9,6 @@ export default function UniversityHeader({ onOpenAuthModal }) {
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-[#E7E1D4] shadow-[0_1px_3px_rgba(0,0,0,0.03)] font-sans">
       
-      {/* ============================================================
-          1. TOP INFORMATION BAR (Exactly matching user screenshot)
-          Deep Navy-Slate background (#0F2132)
-          Left: GraduationCap + GLB PRIDE in rounded gold badge | Official Mentorship & Alumni Community of G. L. Bajaj Institute of Technology & Management
-          Right: Heart + "ONCE GLB, ALWAYS GLB." | MapPin + Greater Noida, Delhi-NCR
-      ============================================================ */}
-      <div className="bg-[#0F2132] text-[#E2DFD7] border-b border-[#1A2C42] py-1.5 px-4 sm:px-6 lg:px-8 text-xs">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1.5 text-[11px]">
-          
-          {/* Left info */}
-          <div className="flex items-center space-x-2.5 shrink-0">
-            <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full border border-[#C2853B]/50 text-[#E5C378] text-[10px] font-bold tracking-wider">
-              <GraduationCap className="w-3 h-3 text-[#E5C378]" />
-              <span>GLB PRIDE</span>
-            </span>
-            <span className="text-[#374151]">|</span>
-            <span className="text-[#CBD5E1] font-normal truncate max-w-md">
-              Official Mentorship & Alumni Community of <strong className="font-semibold text-white">G. L. Bajaj Institute of Technology & Management</strong>
-            </span>
-          </div>
-
-          {/* Right info */}
-          <div className="flex items-center space-x-2.5 text-[10px] tracking-wide shrink-0 font-medium">
-            <span className="flex items-center space-x-1 text-[#E5C378] font-serif font-bold">
-              <Heart className="w-3 h-3 fill-[#E5C378] text-[#E5C378]" />
-              <span>"ONCE GLB, ALWAYS GLB."</span>
-            </span>
-            <span className="text-[#374151]">|</span>
-            <span className="flex items-center space-x-1 text-[#CBD5E1]">
-              <MapPin className="w-3 h-3 text-[#C2853B]" />
-              <span>Greater Noida, Delhi-NCR</span>
-            </span>
-          </div>
-
-        </div>
-      </div>
-
 
       {/* ============================================================
           2. MAIN NAVIGATION BAR (Exact layout from user screenshot)

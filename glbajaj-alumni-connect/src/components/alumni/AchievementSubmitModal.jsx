@@ -46,7 +46,7 @@ export default function AchievementSubmitModal({ isOpen, onClose, onSubmitAchiev
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Promoted to Principal Architect at Microsoft"
-            className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-glblue-750"
+            className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#592106]"
           />
         </div>
 
@@ -57,7 +57,7 @@ export default function AchievementSubmitModal({ isOpen, onClose, onSubmitAchiev
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-glblue-750"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#592106]"
             />
           </div>
           <div>
@@ -67,7 +67,7 @@ export default function AchievementSubmitModal({ isOpen, onClose, onSubmitAchiev
               value={mediaUrl}
               onChange={(e) => setMediaUrl(e.target.value)}
               placeholder="https://..."
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-glblue-750"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#592106]"
             />
           </div>
         </div>
@@ -80,7 +80,7 @@ export default function AchievementSubmitModal({ isOpen, onClose, onSubmitAchiev
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Describe the milestone and its impact..."
-            className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-glblue-750"
+            className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#592106]"
           ></textarea>
         </div>
 
@@ -95,7 +95,7 @@ export default function AchievementSubmitModal({ isOpen, onClose, onSubmitAchiev
           <button
             type="submit"
             disabled={loading}
-            className="bg-glgold hover:bg-glgold-dark text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5"
+            className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
             <span>Submit for Verification</span>

@@ -11,7 +11,9 @@ import {
   ShieldCheck, 
   ChevronRight,
   Sparkles,
-  Users
+  Users,
+  UserCheck,
+  UserPlus
 } from "lucide-react";
 
 export default function PortalLayout({ portalTitle, portalRole, navItems, onOpenNotifications }) {
@@ -34,28 +36,28 @@ export default function PortalLayout({ portalTitle, portalRole, navItems, onOpen
 
   const roleTheme = {
     student: {
-      accent: "bg-glgold",
-      badge: "bg-amber-50 text-glgold border-glgold/30",
-      activeNav: "bg-glgold text-white font-bold shadow-md shadow-glgold/20",
-      pill: "bg-glgold/10 text-glgold"
+      accent: "bg-[#ffcc4e]",
+      badge: "bg-[#faf6eb] text-[#592106] border-[#ffcc4e]/50 font-bold",
+      activeNav: "bg-[#592106] text-[#ffcc4e] font-bold shadow-md shadow-[#592106]/20 border-l-4 border-[#ffcc4e]",
+      pill: "bg-[#faf6eb] text-[#592106]"
     },
     alumni: {
-      accent: "bg-glblue-750",
-      badge: "bg-teal-50 text-glblue-750 border-teal-200",
-      activeNav: "bg-glblue-750 text-white font-bold shadow-md shadow-glblue-750/20",
-      pill: "bg-teal-50 text-glblue-750"
+      accent: "bg-[#592106]",
+      badge: "bg-[#faf6eb] text-[#592106] border-[#ffcc4e]/50 font-bold",
+      activeNav: "bg-[#592106] text-[#ffcc4e] font-bold shadow-md shadow-[#592106]/20 border-l-4 border-[#ffcc4e]",
+      pill: "bg-[#faf6eb] text-[#592106]"
     },
     admin: {
-      accent: "bg-teal-900",
-      badge: "bg-slate-100 text-slate-800 border-slate-300",
-      activeNav: "bg-teal-900 text-white font-bold shadow-md shadow-teal-950/20",
-      pill: "bg-slate-100 text-slate-700"
+      accent: "bg-[#472510]",
+      badge: "bg-amber-100 text-[#472510] border-[#c87e35]/50 font-bold",
+      activeNav: "bg-[#472510] text-[#ffcc4e] font-bold shadow-md shadow-[#472510]/30 border-l-4 border-[#ffcc4e]",
+      pill: "bg-[#faf6eb] text-[#472510]"
     }
   }[portalRole] || {
-    accent: "bg-glblue-750",
-    badge: "bg-teal-50 text-glblue-750 border-teal-200",
-    activeNav: "bg-glblue-750 text-white font-bold shadow-md",
-    pill: "bg-teal-50 text-glblue-750"
+    accent: "bg-[#592106]",
+    badge: "bg-[#faf6eb] text-[#592106] border-[#ffcc4e]/50 font-bold",
+    activeNav: "bg-[#592106] text-[#ffcc4e] font-bold shadow-md",
+    pill: "bg-[#faf6eb] text-[#592106]"
   };
 
   return (
@@ -71,21 +73,26 @@ export default function PortalLayout({ portalTitle, portalRole, navItems, onOpen
 
       {/* Sidebar (Desktop & Mobile Drawer) */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-slate-900 text-slate-200 flex flex-col border-r border-slate-800 transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-[#2f1508] text-[#faf6eb] flex flex-col border-r border-[#ffcc4e]/20 transition-transform duration-300 ease-in-out lg:translate-x-0 shadow-2xl ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Brand Header */}
-        <div className="h-20 px-5 flex items-center justify-between border-b border-slate-800 bg-slate-950/50">
+        <div className="h-20 px-5 flex items-center justify-between border-b border-[#ffcc4e]/20 bg-[#1e0e05]">
           <Link to="/" className="flex items-center space-x-3 group">
-            <div className="bg-glgold text-white w-10 h-10 rounded-xl flex items-center justify-center font-black text-xl shadow-md group-hover:scale-105 transition">
-              GL
-            </div>
+            <img
+              src="/assets/glb-gold-crest.png"
+              alt="GL Bajaj Seal"
+              className="w-10 h-10 object-contain drop-shadow group-hover:scale-105 transition shrink-0"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
             <div>
               <h1 className="font-extrabold text-sm sm:text-base leading-tight tracking-wide text-white flex items-center gap-1.5">
                 <span>GL BAJAJ</span>
               </h1>
-              <p className="text-[10px] text-glgold font-bold tracking-widest uppercase">
+              <p className="text-[10px] text-[#ffcc4e] font-bold tracking-widest uppercase">
                 "Once GLB, Always GLB."
               </p>
             </div>
@@ -99,8 +106,8 @@ export default function PortalLayout({ portalTitle, portalRole, navItems, onOpen
         </div>
 
         {/* Portal Identifier Badge */}
-        <div className="px-5 py-3 bg-slate-900/80 border-b border-slate-800/80 flex items-center justify-between">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+        <div className="px-5 py-3 bg-[#241006] border-b border-[#ffcc4e]/20 flex items-center justify-between">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-amber-200/70">
             Active Workspace
           </span>
           <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${roleTheme.badge}`}>
@@ -131,7 +138,7 @@ export default function PortalLayout({ portalTitle, portalRole, navItems, onOpen
                 {item.badge && (
                   <span
                     className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                      isActive ? "bg-white text-slate-900" : "bg-glgold text-white"
+                      isActive ? "bg-white text-slate-900" : "bg-[#ffcc4e] text-white"
                     }`}
                   >
                     {item.badge}
@@ -147,30 +154,30 @@ export default function PortalLayout({ portalTitle, portalRole, navItems, onOpen
           <Link
             to={`/${portalRole}/stories`}
             onClick={() => setSidebarOpen(false)}
-            className="block p-3 rounded-xl bg-gradient-to-r from-glblue-750/30 to-teal-800/30 border border-teal-700/50 hover:border-glgold transition group"
+            className="block p-3 rounded-xl bg-gradient-to-r from-[#592106]/40 to-[#472510]/50 border border-[#ffcc4e]/30 hover:border-[#ffcc4e] transition group"
           >
-            <div className="flex items-center space-x-2 text-glgold text-xs font-bold">
+            <div className="flex items-center space-x-2 text-[#ffcc4e] text-xs font-bold">
               <Heart className="w-3.5 h-3.5" />
               <span>GLB Family Network</span>
             </div>
-            <p className="text-[11px] text-slate-400 mt-1 leading-snug">
+            <p className="text-[11px] text-amber-100/70 mt-1 leading-snug">
               Celebrating the lifelong bond between scholars & alumni.
             </p>
           </Link>
         </div>
 
         {/* User Mini Profile Footer */}
-        <div className="p-3 border-t border-slate-800 bg-slate-950/60">
+        <div className="p-3 border-t border-[#ffcc4e]/20 bg-[#1e0e05]">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2.5 truncate">
               {profile?.avatar_url ? (
                 <img
                   src={profile.avatar_url}
                   alt={profile.full_name}
-                  className="w-8 h-8 rounded-xl object-cover border border-glgold"
+                  className="w-8 h-8 rounded-xl object-cover border border-[#ffcc4e]"
                 />
               ) : (
-                <div className="w-8 h-8 rounded-xl bg-glgold text-white font-bold flex items-center justify-center text-xs">
+                <div className="w-8 h-8 rounded-xl bg-[#ffcc4e] text-[#472510] font-bold flex items-center justify-center text-xs">
                   {(profile?.full_name || user?.email || "U")[0]}
                 </div>
               )}
@@ -178,7 +185,7 @@ export default function PortalLayout({ portalTitle, portalRole, navItems, onOpen
                 <div className="text-xs font-bold text-white truncate max-w-[110px]">
                   {profile?.full_name || user?.email || "GLB Member"}
                 </div>
-                <div className="text-[10px] font-mono text-slate-400 truncate">
+                <div className="text-[10px] font-mono text-amber-200/60 truncate">
                   {profile?.roll_number ? `Roll: ${profile.roll_number}` : (profile?.designation || portalRole)}
                 </div>
               </div>
@@ -186,7 +193,7 @@ export default function PortalLayout({ portalTitle, portalRole, navItems, onOpen
 
             <button
               onClick={handleLogout}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-white/10 transition"
+              className="p-1.5 rounded-lg text-amber-200/70 hover:text-red-400 hover:bg-white/10 transition"
               title="Sign Out"
             >
               <LogOut className="w-4 h-4" />
@@ -196,10 +203,10 @@ export default function PortalLayout({ portalTitle, portalRole, navItems, onOpen
       </aside>
 
       {/* Main App Canvas */}
-      <div className="flex-1 lg:pl-64 flex flex-col min-w-0">
+      <div className="flex-1 lg:pl-64 flex flex-col min-w-0 bg-[#fdfbf7]">
         
         {/* Top Header Bar */}
-        <header className="h-16 bg-white border-b border-slate-200/80 sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 lg:px-8 shadow-sm">
+        <header className="h-16 bg-white border-b-2 border-[#ffcc4e]/40 sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 lg:px-8 shadow-sm">
           <div className="flex items-center space-x-3">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -222,19 +229,19 @@ export default function PortalLayout({ portalTitle, portalRole, navItems, onOpen
             {!isConfigured && (
               <div className="relative group hidden sm:block">
                 <button className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs px-3 py-1.5 rounded-xl font-bold flex items-center space-x-1.5 transition">
-                  <Sparkles className="w-3.5 h-3.5 text-glgold" />
+                  <Sparkles className="w-3.5 h-3.5 text-[#ffcc4e]" />
                   <span>Switch Portal</span>
                 </button>
                 <div className="absolute right-0 mt-1 w-44 bg-white border border-slate-200 rounded-xl shadow-xl py-1.5 hidden group-hover:block z-50">
                   <button
                     onClick={() => handleSwitchDemo(USER_ROLES.STUDENT)}
-                    className="w-full text-left px-3 py-1.5 text-xs text-slate-700 hover:bg-amber-50 hover:text-glgold font-semibold"
+                    className="w-full text-left px-3 py-1.5 text-xs text-slate-700 hover:bg-[#faf6eb] hover:text-[#ffcc4e] font-semibold"
                   >
                     Student Portal
                   </button>
                   <button
                     onClick={() => handleSwitchDemo(USER_ROLES.ALUMNI)}
-                    className="w-full text-left px-3 py-1.5 text-xs text-slate-700 hover:bg-teal-50 hover:text-glblue-750 font-semibold"
+                    className="w-full text-left px-3 py-1.5 text-xs text-slate-700 hover:bg-[#faf6eb] hover:text-[#592106] font-semibold"
                   >
                     Alumni Portal
                   </button>
@@ -256,13 +263,34 @@ export default function PortalLayout({ portalTitle, portalRole, navItems, onOpen
                 title="Notifications"
               >
                 <Bell className="w-4 h-4" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-glgold rounded-full ring-2 ring-white"></span>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#ffcc4e] rounded-full ring-2 ring-white"></span>
               </button>
             )}
 
+{/* Login & Register Direct Navigation Links */}
+            <div className="flex items-center space-x-2">
+              <Link
+                to="/login"
+                className="inline-flex items-center space-x-1 bg-[#472510] hover:bg-[#381a0b] text-[#faf6eb] text-xs font-bold px-3 py-1.5 rounded-xl border border-[#ffcc4e]/30 transition shadow-xs"
+                title="Go to Login Portal"
+              >
+                <UserCheck className="w-3.5 h-3.5 text-[#ffcc4e]" />
+                <span className="hidden sm:inline">Login</span>
+              </Link>
+
+              <Link
+                to="/register"
+                className="inline-flex items-center space-x-1 bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] text-xs font-black px-3 py-1.5 rounded-xl transition shadow-sm"
+                title="Register New Account"
+              >
+                <UserPlus className="w-3.5 h-3.5 text-[#472510]" />
+                <span className="hidden sm:inline">Register</span>
+              </Link>
+            </div>
+
             {/* Tagline Pill */}
-            <div className="hidden md:flex items-center space-x-1 bg-amber-50 border border-glgold/30 text-glgold text-[11px] font-bold px-2.5 py-1 rounded-full">
-              <Heart className="w-3 h-3" />
+            <div className="hidden xl:flex items-center space-x-1 bg-[#faf6eb] border border-[#ffcc4e]/50 text-[#592106] text-[11px] font-bold px-2.5 py-1 rounded-full">
+              <Heart className="w-3 h-3 text-[#c87e35]" />
               <span>Once GLB, Always GLB.</span>
             </div>
           </div>

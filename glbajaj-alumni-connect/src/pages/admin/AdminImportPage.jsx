@@ -33,10 +33,10 @@ export default function AdminImportPage() {
       <SpreadsheetImporter onImportComplete={handleImportComplete} />
 
       {/* Import History Table */}
-      <div className="bg-white rounded-3xl border border-teal-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
           <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-            <History className="w-4 h-4 text-glgold" />
+            <History className="w-4 h-4 text-[#ffcc4e]" />
             <span>Spreadsheet Import History Audit Log</span>
           </h3>
           <span className="text-xs text-slate-500 font-medium">Logged in `import_history`</span>
@@ -70,7 +70,7 @@ export default function AdminImportPage() {
                     {new Date(h.created_at).toLocaleString()}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <span className="bg-teal-50 text-glblue-750 border border-teal-200 text-[10px] font-bold px-2.5 py-1 rounded-full">
+                    <span className="bg-[#faf6eb] text-[#592106] border border-teal-200 text-[10px] font-bold px-2.5 py-1 rounded-full">
                       {h.status}
                     </span>
                   </td>

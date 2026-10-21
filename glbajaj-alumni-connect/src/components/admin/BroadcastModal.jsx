@@ -49,14 +49,14 @@ export default function BroadcastModal({ isOpen, onClose, onSendBroadcast }) {
           <button
             type="button"
             onClick={() => handleTemplateSelect("wishes")}
-            className="text-[11px] bg-amber-50 text-glgold hover:bg-amber-100 px-2.5 py-1 rounded-lg font-bold border border-glgold/30"
+            className="text-[11px] bg-[#faf6eb] text-[#ffcc4e] hover:bg-amber-100 px-2.5 py-1 rounded-lg font-bold border border-[#ffcc4e]/30"
           >
             Festive Wishes
           </button>
           <button
             type="button"
             onClick={() => handleTemplateSelect("invitation")}
-            className="text-[11px] bg-teal-50 text-glblue-750 hover:bg-teal-100 px-2.5 py-1 rounded-lg font-bold border border-teal-200"
+            className="text-[11px] bg-[#faf6eb] text-[#592106] hover:bg-teal-100 px-2.5 py-1 rounded-lg font-bold border border-teal-200"
           >
             Alumni Keynote Invite
           </button>
@@ -69,7 +69,7 @@ export default function BroadcastModal({ isOpen, onClose, onSendBroadcast }) {
           <select
             value={targetBatch}
             onChange={(e) => setTargetBatch(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-glblue-750"
+            className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#592106]"
           >
             <option value="all">All Alumni Batches (2005 - 2026)</option>
             <option value="2024">Batch of 2024</option>
@@ -90,7 +90,7 @@ export default function BroadcastModal({ isOpen, onClose, onSendBroadcast }) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Heartiest Congratulations on Foundation Day!"
-            className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-glblue-750"
+            className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#592106]"
           />
         </div>
 
@@ -104,7 +104,7 @@ export default function BroadcastModal({ isOpen, onClose, onSendBroadcast }) {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Write your wishes or message from the college administration..."
-            className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-glblue-750 leading-relaxed"
+            className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#592106] leading-relaxed"
           ></textarea>
         </div>
 
@@ -119,7 +119,7 @@ export default function BroadcastModal({ isOpen, onClose, onSendBroadcast }) {
           <button
             type="submit"
             disabled={loading}
-            className="bg-glgold hover:bg-glgold-dark text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5"
+            className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md flex items-center space-x-1.5"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
             <span>Broadcast to Alumni</span>

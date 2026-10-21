@@ -18,15 +18,15 @@ export default function FinalCtaSection() {
       <div className="max-w-5xl mx-auto text-center relative z-10 space-y-10">
         
         {/* Heart Badge */}
-        <div className="inline-flex items-center space-x-2 bg-glgold/20 border border-glgold/50 px-4 py-1.5 rounded-full text-glgold font-bold text-xs sm:text-sm tracking-widest uppercase shadow-lg">
-          <Heart className="w-4 h-4 fill-glgold text-glgold animate-pulse" />
+        <div className="inline-flex items-center space-x-2 bg-[#ffcc4e]/20 border border-[#ffcc4e]/50 px-4 py-1.5 rounded-full text-[#ffcc4e] font-bold text-xs sm:text-sm tracking-widest uppercase shadow-lg">
+          <Heart className="w-4 h-4 fill-glgold text-[#ffcc4e] animate-pulse" />
           <span>"Once GLB, Always GLB."</span>
         </div>
 
         {/* Big Bold Headline */}
         <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
           Ready to Reconnect with Your <br />
-          <span className="text-glgold">Lifelong GLB Family?</span>
+          <span className="text-[#ffcc4e]">Lifelong GLB Family?</span>
         </h2>
 
         <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
@@ -36,9 +36,9 @@ export default function FinalCtaSection() {
         {/* Dual Entrance Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left max-w-3xl mx-auto">
           {/* Student Path */}
-          <div className="bg-slate-900/90 border border-glgold/30 rounded-3xl p-6 sm:p-8 flex flex-col justify-between hover:border-glgold transition group shadow-xl">
+          <div className="bg-slate-900/90 border border-[#ffcc4e]/30 rounded-3xl p-6 sm:p-8 flex flex-col justify-between hover:border-[#ffcc4e] transition group shadow-xl">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-glgold flex items-center justify-center text-slate-950 mb-4 group-hover:scale-105 transition shadow-lg">
+              <div className="w-12 h-12 rounded-2xl bg-[#ffcc4e] flex items-center justify-center text-slate-950 mb-4 group-hover:scale-105 transition shadow-lg">
                 <GraduationCap className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-black text-white mb-1">

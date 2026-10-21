@@ -3,7 +3,7 @@ import { Briefcase, MapPin, GraduationCap, Award, CheckCircle2, MessageSquare, A
 
 export default function AlumniCard({ alumni, onOpenProfile, onRequestMentorship }) {
   return (
-    <div className="bg-white rounded-2xl border border-teal-100 hover:border-glgold/50 shadow-sm hover:shadow-md transition p-5 flex flex-col justify-between group">
+    <div className="bg-white rounded-2xl border border-slate-200 hover:border-[#ffcc4e]/50 shadow-sm hover:shadow-md transition p-5 flex flex-col justify-between group">
       <div>
         {/* Top bar: Avatar + verification */}
         <div className="flex items-start space-x-3.5">
@@ -17,11 +17,11 @@ export default function AlumniCard({ alumni, onOpenProfile, onRequestMentorship 
               <h3 className="font-bold text-slate-900 text-base truncate">{alumni.full_name}</h3>
               {alumni.is_verified && (
                 <span title="Roll-Number Verified Alumnus">
-                  <CheckCircle2 className="w-4 h-4 text-glgold shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[#ffcc4e] shrink-0" />
                 </span>
               )}
             </div>
-            <p className="text-xs font-semibold text-glblue-750 flex items-center gap-1 truncate mt-0.5">
+            <p className="text-xs font-semibold text-[#592106] flex items-center gap-1 truncate mt-0.5">
               <Briefcase className="w-3.5 h-3.5 shrink-0" />
               <span>{alumni.current_designation}</span>
             </p>
@@ -33,9 +33,9 @@ export default function AlumniCard({ alumni, onOpenProfile, onRequestMentorship 
 
         {/* Academic & Location details */}
         <div className="mt-4 pt-3 border-t border-slate-100 flex flex-wrap gap-2 text-xs text-slate-500">
-          <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-teal-50 text-glblue-900 font-medium">
-            <GraduationCap className="w-3 h-3 mr-1 text-glblue-750" />
-            {alumni.branch} • Batch {alumni.batch_year}
+          <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-[#faf6eb] text-glblue-900 font-medium">
+            <GraduationCap className="w-3 h-3 mr-1 text-[#592106]" />
+            {alumni.branch} â€¢ Batch {alumni.batch_year}
           </span>
           {alumni.location && (
             <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-slate-100 text-slate-700">
@@ -83,7 +83,7 @@ export default function AlumniCard({ alumni, onOpenProfile, onRequestMentorship 
         {alumni.is_available_for_mentorship ? (
           <button
             onClick={() => onRequestMentorship(alumni)}
-            className="flex-1 bg-glgold hover:bg-glgold-dark text-white text-xs font-bold py-2 rounded-xl transition shadow-sm text-center flex items-center justify-center space-x-1"
+            className="flex-1 bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] text-xs font-bold py-2 rounded-xl transition shadow-sm text-center flex items-center justify-center space-x-1"
           >
             <MessageSquare className="w-3.5 h-3.5" />
             <span>Request Mentor</span>

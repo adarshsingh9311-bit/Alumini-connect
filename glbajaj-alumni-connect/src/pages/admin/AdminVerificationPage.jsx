@@ -51,7 +51,7 @@ export default function AdminVerificationPage() {
           onClick={() => setActiveTab("alumni")}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 ${
             activeTab === "alumni"
-              ? "bg-glblue-750 text-white shadow-sm"
+              ? "bg-[#592106] text-white shadow-sm"
               : "bg-slate-100 text-slate-600 hover:bg-slate-200"
           }`}
         >
@@ -63,7 +63,7 @@ export default function AdminVerificationPage() {
           onClick={() => setActiveTab("achievements")}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 ${
             activeTab === "achievements"
-              ? "bg-glgold text-white shadow-sm"
+              ? "bg-[#ffcc4e] text-white shadow-sm"
               : "bg-slate-100 text-slate-600 hover:bg-slate-200"
           }`}
         >
@@ -76,7 +76,7 @@ export default function AdminVerificationPage() {
       {activeTab === "alumni" && (
         <div className="space-y-4">
           {pendingAlumni.length === 0 ? (
-            <div className="bg-white rounded-3xl p-10 border border-teal-100 text-center text-slate-500 text-sm">
+            <div className="bg-white rounded-3xl p-10 border border-slate-200 text-center text-slate-500 text-sm">
               <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto mb-2" />
               <h3 className="font-bold text-slate-900 text-base">All Alumni Records Verified</h3>
               <p className="text-xs text-slate-400 mt-1">No pending registrations waiting in the queue.</p>
@@ -90,12 +90,12 @@ export default function AdminVerificationPage() {
                 <div className="space-y-1">
                   <div className="flex items-center space-x-2">
                     <h4 className="font-bold text-slate-900 text-base">{alum.full_name}</h4>
-                    <span className="bg-teal-50 text-glblue-750 font-mono text-xs font-bold px-2.5 py-0.5 rounded border border-teal-200">
+                    <span className="bg-[#faf6eb] text-[#592106] font-mono text-xs font-bold px-2.5 py-0.5 rounded border border-teal-200">
                       Roll: {alum.roll_number}
                     </span>
                   </div>
                   <p className="text-xs text-slate-600">
-                    {alum.branch} Department • Graduated Batch {alum.batch_year}
+                    {alum.branch} Department â€¢ Graduated Batch {alum.batch_year}
                   </p>
                   <p className="text-xs text-slate-500">
                     Current: <strong className="text-slate-800">{alum.current_designation}</strong> at <strong className="text-slate-800">{alum.current_company}</strong> ({alum.location})
@@ -112,7 +112,7 @@ export default function AdminVerificationPage() {
                   </button>
                   <button
                     onClick={() => verifyAlumni(alum.id)}
-                    className="flex-1 md:flex-none bg-glgold hover:bg-glgold-dark text-white text-xs font-bold px-5 py-2 rounded-xl transition shadow-sm flex items-center justify-center space-x-1"
+                    className="flex-1 md:flex-none bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] text-xs font-bold px-5 py-2 rounded-xl transition shadow-sm flex items-center justify-center space-x-1"
                   >
                     <CheckCircle2 className="w-4 h-4" />
                     <span>Approve & Verify</span>
@@ -128,7 +128,7 @@ export default function AdminVerificationPage() {
       {activeTab === "achievements" && (
         <div className="space-y-4">
           {pendingAchievements.length === 0 ? (
-            <div className="bg-white rounded-3xl p-10 border border-teal-100 text-center text-slate-500 text-sm">
+            <div className="bg-white rounded-3xl p-10 border border-slate-200 text-center text-slate-500 text-sm">
               <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto mb-2" />
               <h3 className="font-bold text-slate-900 text-base">All Achievements Audited</h3>
               <p className="text-xs text-slate-400 mt-1">No pending accolades requiring approval.</p>
@@ -144,7 +144,7 @@ export default function AdminVerificationPage() {
                     <h4 className="font-bold text-slate-900 text-base">{ach.title}</h4>
                     <span className="text-xs text-slate-400">({ach.date})</span>
                   </div>
-                  <p className="text-xs font-semibold text-glblue-750">
+                  <p className="text-xs font-semibold text-[#592106]">
                     Submitted by: {ach.alumni_name} ({ach.alumni_batch})
                   </p>
                   <p className="text-xs text-slate-600 bg-slate-50 p-3 rounded-xl max-w-xl">

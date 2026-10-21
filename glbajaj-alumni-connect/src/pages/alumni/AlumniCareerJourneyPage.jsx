@@ -12,7 +12,7 @@ export default function AlumniCareerJourneyPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       <div>
-        <div className="inline-flex items-center space-x-2 bg-teal-50 border border-teal-200 text-glblue-750 text-xs px-3 py-1 rounded-full font-bold uppercase mb-2">
+        <div className="inline-flex items-center space-x-2 bg-[#faf6eb] border border-teal-200 text-[#592106] text-xs px-3 py-1 rounded-full font-bold uppercase mb-2">
           <TrendingUp className="w-3.5 h-3.5" />
           <span>Professional Timeline</span>
         </div>

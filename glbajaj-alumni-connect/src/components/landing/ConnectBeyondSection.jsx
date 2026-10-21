@@ -64,8 +64,8 @@ export default function ConnectBeyondSection() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center space-x-2 text-glgold font-bold text-xs uppercase tracking-widest bg-glgold/10 px-3 py-1 rounded-full border border-glgold/30">
-            <Globe className="w-3.5 h-3.5 text-glgold" />
+          <div className="inline-flex items-center space-x-2 text-[#ffcc4e] font-bold text-xs uppercase tracking-widest bg-[#ffcc4e]/10 px-3 py-1 rounded-full border border-[#ffcc4e]/30">
+            <Globe className="w-3.5 h-3.5 text-[#ffcc4e]" />
             <span>Digital Footprint</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
@@ -84,13 +84,13 @@ export default function ConnectBeyondSection() {
               href={item.url}
               target="_blank"
               rel="noreferrer"
-              className="bg-slate-900/80 border border-white/10 rounded-2xl p-5 text-center hover:border-glgold/40 hover:-translate-y-1 transition duration-200 group flex flex-col items-center justify-center space-y-3"
+              className="bg-slate-900/80 border border-white/10 rounded-2xl p-5 text-center hover:border-[#ffcc4e]/40 hover:-translate-y-1 transition duration-200 group flex flex-col items-center justify-center space-y-3"
             >
               <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-xl text-slate-300 group-hover:scale-110 transition shadow-inner">
                 <i className={`${item.iconClass} ${item.color} transition text-2xl`}></i>
               </div>
               <div>
-                <div className="font-bold text-sm text-white group-hover:text-glgold transition">
+                <div className="font-bold text-sm text-white group-hover:text-[#ffcc4e] transition">
                   {item.name}
                 </div>
                 <div className="text-[11px] text-slate-400 font-medium">
@@ -106,7 +106,7 @@ export default function ConnectBeyondSection() {
 
         {/* Newsletter Box */}
         <div className="bg-gradient-to-r from-glblue-750 via-teal-950 to-glblue-750 border border-teal-500/30 rounded-3xl p-8 max-w-3xl mx-auto text-center space-y-4">
-          <div className="w-10 h-10 rounded-xl bg-glgold/20 border border-glgold/40 flex items-center justify-center mx-auto text-glgold">
+          <div className="w-10 h-10 rounded-xl bg-[#ffcc4e]/20 border border-[#ffcc4e]/40 flex items-center justify-center mx-auto text-[#ffcc4e]">
             <Heart className="w-5 h-5 fill-glgold" />
           </div>
           <h3 className="text-xl sm:text-2xl font-black text-white">
@@ -129,11 +129,11 @@ export default function ConnectBeyondSection() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="flex-1 bg-slate-950/90 border border-white/20 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-glgold"
+                className="flex-1 bg-slate-950/90 border border-white/20 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#ffcc4e]"
               />
               <button
                 type="submit"
-                className="bg-glgold hover:bg-glgold-dark text-slate-950 font-bold px-5 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center justify-center space-x-1.5 shadow-lg shadow-glgold/20"
+                className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-slate-950 font-bold px-5 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center justify-center space-x-1.5 shadow-lg shadow-glgold/20"
               >
                 <span>Subscribe</span>
                 <Send className="w-3.5 h-3.5" />

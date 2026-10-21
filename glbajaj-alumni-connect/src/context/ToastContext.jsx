@@ -32,13 +32,13 @@ export function ToastProvider({ children }) {
               key={toast.id}
               className={`pointer-events-auto flex items-start space-x-3 p-4 rounded-xl shadow-2xl border transition-all duration-300 transform translate-y-0 ${
                 isSuccess
-                  ? "bg-slate-900 text-white border-glgold"
+                  ? "bg-slate-900 text-white border-[#ffcc4e]"
                   : isError
                   ? "bg-red-950 text-white border-red-500"
                   : "bg-slate-900 text-white border-teal-500"
               }`}
             >
-              {isSuccess && <CheckCircle2 className="w-5 h-5 text-glgold shrink-0 mt-0.5" />}
+              {isSuccess && <CheckCircle2 className="w-5 h-5 text-[#ffcc4e] shrink-0 mt-0.5" />}
               {isError && <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />}
               {!isSuccess && !isError && <Info className="w-5 h-5 text-teal-400 shrink-0 mt-0.5" />}
               <div className="flex-1 text-sm font-medium leading-snug">

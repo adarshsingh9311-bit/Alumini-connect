@@ -61,7 +61,7 @@ export default function AdminAlumniPage() {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white rounded-2xl p-4 border border-teal-100 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
           <input
@@ -69,7 +69,7 @@ export default function AdminAlumniPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name, roll no, company, role..."
-            className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-4 py-2 text-xs sm:text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+            className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-4 py-2 text-xs sm:text-sm focus:ring-2 focus:ring-[#592106] focus:outline-none"
           />
         </div>
 
@@ -77,7 +77,7 @@ export default function AdminAlumniPage() {
           <select
             value={branchFilter}
             onChange={(e) => setBranchFilter(e.target.value)}
-            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
           >
             <option value="">All Branches</option>
             {BRANCH_CODES.map((b) => (
@@ -88,7 +88,7 @@ export default function AdminAlumniPage() {
           <select
             value={batchFilter}
             onChange={(e) => setBatchFilter(e.target.value)}
-            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
           >
             <option value="">All Batches</option>
             {BATCH_YEARS.map((y) => (
@@ -99,7 +99,7 @@ export default function AdminAlumniPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+            className="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-[#592106] focus:outline-none"
           >
             <option value="">All Statuses</option>
             <option value="verified">Verified Only</option>
@@ -109,7 +109,7 @@ export default function AdminAlumniPage() {
       </div>
 
       {/* Alumni Roster Table */}
-      <div className="bg-white rounded-3xl border border-teal-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
           <h3 className="font-bold text-slate-900 text-sm">Graduated Alumni Roster</h3>
           <span className="text-xs text-slate-500 font-medium">Showing {filtered.length} records</span>
@@ -133,21 +133,21 @@ export default function AdminAlumniPage() {
                   <td className="px-6 py-4">
                     <div className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
                       <span>{alum.full_name}</span>
-                      {alum.is_verified && <CheckCircle2 className="w-3.5 h-3.5 text-glgold shrink-0" />}
+                      {alum.is_verified && <CheckCircle2 className="w-3.5 h-3.5 text-[#ffcc4e] shrink-0" />}
                     </div>
                     <div className="text-slate-400 text-xs flex items-center gap-1 mt-0.5">
-                      <Mail className="w-3 h-3 text-glblue-750" />
+                      <Mail className="w-3 h-3 text-[#592106]" />
                       <span>{alum.email}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="bg-teal-50 text-glblue-750 border border-teal-200 px-2.5 py-1 rounded-md font-mono text-xs font-bold">
+                    <span className="bg-[#faf6eb] text-[#592106] border border-teal-200 px-2.5 py-1 rounded-md font-mono text-xs font-bold">
                       {alum.roll_number}
                     </span>
                   </td>
                   <td className="px-6 py-4">
                     <div className="font-semibold text-slate-900">{alum.current_designation || "Graduate"}</div>
-                    <div className="text-glblue-750 font-medium">{alum.current_company || "Company N/A"}</div>
+                    <div className="text-[#592106] font-medium">{alum.current_company || "Company N/A"}</div>
                   </td>
                   <td className="px-6 py-4">
                     <span className="bg-slate-100 text-slate-800 px-2 py-0.5 rounded text-xs font-semibold mr-1">
@@ -172,7 +172,7 @@ export default function AdminAlumniPage() {
                       className={`px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-sm ${
                         alum.is_verified
                           ? "bg-red-50 text-red-700 hover:bg-red-100 border border-red-200"
-                          : "bg-glgold hover:bg-glgold-dark text-white"
+                          : "bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510]"
                       }`}
                     >
                       {alum.is_verified ? "Revoke Verify" : "Verify Alumnus"}

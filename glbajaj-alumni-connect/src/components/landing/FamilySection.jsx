@@ -49,7 +49,7 @@ export default function FamilySection() {
       title: "CONNECT",
       desc: "Discover GLB seniors by company, branch, graduation year, or location worldwide.",
       icon: Users,
-      bg: "bg-teal-900/30 border-teal-500/30 text-teal-300"
+      bg: "bg-[#472510]/30 border-teal-500/30 text-teal-300"
     },
     {
       step: "02",
@@ -63,7 +63,7 @@ export default function FamilySection() {
       title: "CHAT",
       desc: "Converse directly with verified alumni through private, real-time messaging.",
       icon: MessageSquare,
-      bg: "bg-teal-900/30 border-teal-500/30 text-teal-300"
+      bg: "bg-[#472510]/30 border-teal-500/30 text-teal-300"
     },
     {
       step: "04",
@@ -77,7 +77,7 @@ export default function FamilySection() {
       title: "STAY CONNECTED",
       desc: "Celebrate batch reunions, career promotions, startup milestones, and college achievements.",
       icon: Globe2,
-      bg: "bg-teal-900/30 border-teal-500/30 text-teal-300"
+      bg: "bg-[#472510]/30 border-teal-500/30 text-teal-300"
     }
   ];
 
@@ -87,7 +87,7 @@ export default function FamilySection() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center space-x-2 text-glgold font-bold text-xs uppercase tracking-widest bg-glgold/10 px-3 py-1 rounded-full border border-glgold/30">
+          <div className="inline-flex items-center space-x-2 text-[#ffcc4e] font-bold text-xs uppercase tracking-widest bg-[#ffcc4e]/10 px-3 py-1 rounded-full border border-[#ffcc4e]/30">
             <span>The Enduring GLB Bond</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
@@ -105,12 +105,12 @@ export default function FamilySection() {
             return (
               <div 
                 key={idx}
-                className="bg-slate-950/70 border border-white/10 rounded-2xl p-6 relative hover:border-glgold/40 transition group hover:-translate-y-1 duration-200"
+                className="bg-slate-950/70 border border-white/10 rounded-2xl p-6 relative hover:border-[#ffcc4e]/40 transition group hover:-translate-y-1 duration-200"
               >
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white mb-4 shadow-md group-hover:scale-105 transition`}>
                   <Icon className="w-6 h-6" />
                 </div>
-                <div className="text-[10px] font-extrabold uppercase tracking-wider text-glgold mb-1">
+                <div className="text-[10px] font-extrabold uppercase tracking-wider text-[#ffcc4e] mb-1">
                   {item.tag}
                 </div>
                 <h3 className="text-lg font-bold text-white mb-2">
@@ -121,7 +121,7 @@ export default function FamilySection() {
                 </p>
                 {idx < steps.length - 1 && (
                   <div className="hidden md:block absolute -right-3 top-1/2 -translate-y-1/2 z-20 text-slate-600">
-                    <ArrowRight className="w-5 h-5 text-glgold/60" />
+                    <ArrowRight className="w-5 h-5 text-[#ffcc4e]/60" />
                   </div>
                 )}
               </div>

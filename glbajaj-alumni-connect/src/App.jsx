@@ -81,6 +81,7 @@ function AppContent() {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/family" element={<Navigate to="/student/stories" replace />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login/:role" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -172,7 +173,7 @@ function AppContent() {
             <div
               key={n.id}
               className={`p-3.5 rounded-xl border text-xs space-y-1 ${
-                n.read ? "bg-slate-50 border-slate-200" : "bg-amber-50/50 border-glgold/40"
+                n.read ? "bg-slate-50 border-slate-200" : "bg-[#faf6eb]/50 border-[#ffcc4e]/40"
               }`}
             >
               <div className="flex items-center justify-between font-bold text-slate-900">
@@ -186,7 +187,7 @@ function AppContent() {
           <div className="pt-2 flex justify-end">
             <button
               onClick={markAllRead}
-              className="text-xs text-glblue-750 font-bold hover:underline"
+              className="text-xs text-[#592106] font-bold hover:underline"
             >
               Mark all as read
             </button>

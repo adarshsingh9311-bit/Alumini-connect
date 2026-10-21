@@ -70,10 +70,10 @@ export default function UniversityAffinityCircles() {
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center space-x-2 text-[#8C7138] text-xs font-semibold uppercase tracking-widest font-serif">
+          <div className="inline-flex items-center space-x-2 text-[#974319] text-xs font-semibold uppercase tracking-widest font-serif">
             <span>Specialized Groups</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-bold text-[#0C1929] font-serif tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-bold text-[#521321] font-serif tracking-tight">
             Affinity Circles & Regional Chapters
           </h2>
           <p className="text-sm sm:text-base text-[#4A5568] leading-relaxed">
@@ -90,19 +90,19 @@ export default function UniversityAffinityCircles() {
             return (
               <div
                 key={circle.id}
-                className="bg-white rounded-xl border border-[#E7E1D4] p-6 flex flex-col justify-between shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-[#C29B38] transition duration-200"
+                className="bg-white rounded-xl border border-[#EAE5DC] p-6 flex flex-col justify-between shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-[#fac850] transition duration-200"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-10 h-10 rounded-lg bg-[#FAF8F5] border border-[#E7E1D4] flex items-center justify-center text-[#0C1929]">
+                    <div className="w-10 h-10 rounded-lg bg-[#FFFFFF] border border-[#EAE5DC] flex items-center justify-center text-[#521321]">
                       <Icon className="w-5 h-5" />
                     </div>
-                    <span className="text-[11px] font-semibold text-[#8C7138] bg-[#FAF8F5] border border-[#E7E1D4] px-2.5 py-0.5 rounded">
+                    <span className="text-[11px] font-semibold text-[#974319] bg-[#FFFFFF] border border-[#EAE5DC] px-2.5 py-0.5 rounded">
                       {circle.members}
                     </span>
                   </div>
 
-                  <h3 className="font-bold text-base text-[#0C1929] mb-1.5 font-serif">
+                  <h3 className="font-bold text-base text-[#521321] mb-1.5 font-serif">
                     {circle.name}
                   </h3>
 
@@ -111,13 +111,13 @@ export default function UniversityAffinityCircles() {
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-[#F5F1E8]">
+                <div className="pt-3 border-t border-[#F9F6F0]">
                   <button
                     onClick={() => handleToggleJoin(circle.id)}
                     className={`w-full py-2 px-3 rounded-lg text-xs font-semibold transition flex items-center justify-center space-x-1 ${
                       isJoined
                         ? "bg-emerald-700 text-white"
-                        : "bg-[#FAF8F5] text-[#0C1929] border border-[#E7E1D4] hover:bg-white hover:border-[#B58A38]"
+                        : "bg-[#FFFFFF] text-[#521321] border border-[#EAE5DC] hover:bg-white hover:border-[#e0a82e]"
                     }`}
                   >
                     {isJoined ? (

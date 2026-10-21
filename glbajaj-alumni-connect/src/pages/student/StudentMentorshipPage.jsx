@@ -53,7 +53,7 @@ export default function StudentMentorshipPage() {
             onClick={() => setStatusFilter(tab)}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-bold capitalize transition ${
               statusFilter === tab
-                ? "bg-glblue-750 text-white shadow-sm"
+                ? "bg-[#592106] text-white shadow-sm"
                 : "bg-slate-100 text-slate-600 hover:bg-slate-200"
             }`}
           >
@@ -93,14 +93,14 @@ export default function StudentMentorshipPage() {
                     }}
                     className={`p-4 rounded-2xl border transition cursor-pointer ${
                       isSelected
-                        ? "border-glblue-750 bg-teal-50/40 shadow-sm"
+                        ? "border-glblue-750 bg-[#faf6eb]/40 shadow-sm"
                         : "border-slate-200 bg-white hover:border-slate-300"
                     }`}
                   >
                     <div className="flex items-start justify-between">
                       <div>
                         <h4 className="font-bold text-slate-900 text-sm">{req.alumni_name}</h4>
-                        <p className="text-xs font-semibold text-glblue-750">{req.topic}</p>
+                        <p className="text-xs font-semibold text-[#592106]">{req.topic}</p>
                       </div>
                       <span
                         className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase flex items-center gap-1 ${
@@ -131,7 +131,7 @@ export default function StudentMentorshipPage() {
                     <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
                       <span>{new Date(req.created_at).toLocaleDateString()}</span>
                       {isAccepted && (
-                        <span className="text-glgold font-bold flex items-center gap-1">
+                        <span className="text-[#ffcc4e] font-bold flex items-center gap-1">
                           <MessageCircle className="w-3.5 h-3.5" />
                           <span>Click to Chat</span>
                         </span>

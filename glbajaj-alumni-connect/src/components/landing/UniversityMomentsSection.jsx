@@ -72,10 +72,10 @@ export default function UniversityMomentsSection() {
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center space-x-2 text-[#8C7138] text-xs font-semibold uppercase tracking-widest font-serif">
+          <div className="inline-flex items-center space-x-2 text-[#974319] text-xs font-semibold uppercase tracking-widest font-serif">
             <span>Community Celebrations</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-bold text-[#0C1929] font-serif tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-bold text-[#521321] font-serif tracking-tight">
             GLB Family Moments
           </h2>
           <p className="text-sm sm:text-base text-[#4A5568] leading-relaxed">
@@ -92,20 +92,20 @@ export default function UniversityMomentsSection() {
             return (
               <div
                 key={item.id}
-                className="bg-white rounded-xl border border-[#E7E1D4] p-6 flex flex-col justify-between shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-[#C29B38] transition duration-200"
+                className="bg-white rounded-xl border border-[#EAE5DC] p-6 flex flex-col justify-between shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-[#fac850] transition duration-200"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3 text-xs">
-                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-[#FAF8F5] text-[#8C7138] border border-[#E7E1D4]">
+                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-[#FFFFFF] text-[#974319] border border-[#EAE5DC]">
                       {item.badge}
                     </span>
                     <span className="text-[11px] text-[#A0AEC0]">{item.time}</span>
                   </div>
 
-                  <h3 className="font-bold text-sm text-[#0C1929]">
+                  <h3 className="font-bold text-sm text-[#521321]">
                     {item.author}
                   </h3>
-                  <p className="text-xs text-[#8C7138] font-medium mb-3">
+                  <p className="text-xs text-[#974319] font-medium mb-3">
                     {item.batch}
                   </p>
 
@@ -114,7 +114,7 @@ export default function UniversityMomentsSection() {
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-[#F5F1E8] mt-4 flex items-center justify-between text-xs text-[#718096]">
+                <div className="pt-4 border-t border-[#F9F6F0] mt-4 flex items-center justify-between text-xs text-[#718096]">
                   <button
                     onClick={() => handleLike(item.id)}
                     className={`flex items-center space-x-1.5 transition ${

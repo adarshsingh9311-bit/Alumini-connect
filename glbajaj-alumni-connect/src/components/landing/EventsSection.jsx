@@ -86,8 +86,8 @@ export default function EventsSection() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center space-x-2 text-glgold font-bold text-xs uppercase tracking-widest bg-glgold/10 px-3 py-1 rounded-full border border-glgold/30">
-            <Calendar className="w-3.5 h-3.5 text-glgold" />
+          <div className="inline-flex items-center space-x-2 text-[#ffcc4e] font-bold text-xs uppercase tracking-widest bg-[#ffcc4e]/10 px-3 py-1 rounded-full border border-[#ffcc4e]/30">
+            <Calendar className="w-3.5 h-3.5 text-[#ffcc4e]" />
             <span>Community Calendar</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
@@ -113,15 +113,15 @@ export default function EventsSection() {
             return (
               <div
                 key={item.id}
-                className="bg-slate-900/80 border border-white/10 rounded-3xl p-6 sm:p-7 hover:border-glgold/40 transition-all duration-300 hover:-translate-y-1 shadow-xl flex flex-col justify-between group"
+                className="bg-slate-900/80 border border-white/10 rounded-3xl p-6 sm:p-7 hover:border-[#ffcc4e]/40 transition-all duration-300 hover:-translate-y-1 shadow-xl flex flex-col justify-between group"
               >
                 <div>
                   {/* Top Bar: Date Badge + Category Badge */}
                   <div className="flex items-start justify-between gap-4 mb-4">
                     <div className="flex items-center space-x-4">
                       {/* Howard-style Date Tile */}
-                      <div className="w-14 h-16 rounded-2xl bg-gradient-to-b from-glblue-750 to-teal-950 border border-teal-500/30 flex flex-col items-center justify-center text-center shadow-md group-hover:border-glgold/60 transition">
-                        <span className="text-[10px] font-black uppercase text-glgold tracking-wider">
+                      <div className="w-14 h-16 rounded-2xl bg-gradient-to-b from-glblue-750 to-[#2f1508] border border-teal-500/30 flex flex-col items-center justify-center text-center shadow-md group-hover:border-[#ffcc4e]/60 transition">
+                        <span className="text-[10px] font-black uppercase text-[#ffcc4e] tracking-wider">
                           {item.month}
                         </span>
                         <span className="text-2xl font-black text-white leading-none mt-0.5">
@@ -130,7 +130,7 @@ export default function EventsSection() {
                       </div>
 
                       <div>
-                        <span className="inline-block text-[10px] font-bold uppercase tracking-wider bg-glgold/15 text-glgold border border-glgold/30 px-2.5 py-0.5 rounded-full mb-1">
+                        <span className="inline-block text-[10px] font-bold uppercase tracking-wider bg-[#ffcc4e]/15 text-[#ffcc4e] border border-[#ffcc4e]/30 px-2.5 py-0.5 rounded-full mb-1">
                           {item.badge}
                         </span>
                         <div className="flex items-center space-x-2 text-xs text-slate-400">
@@ -146,11 +146,11 @@ export default function EventsSection() {
                             </span>
                           ) : (
                             <span className="flex items-center space-x-1 text-slate-300 font-medium">
-                              <Building2 className="w-3.5 h-3.5 text-glgold" />
+                              <Building2 className="w-3.5 h-3.5 text-[#ffcc4e]" />
                               <span>On-Campus</span>
                             </span>
                           )}
-                          <span>?</span>
+                          <span>•</span>
                           <span className="text-slate-400">{item.year}</span>
                         </div>
                       </div>
@@ -162,7 +162,7 @@ export default function EventsSection() {
                   </div>
 
                   {/* Title and Description */}
-                  <h3 className="font-black text-lg sm:text-xl text-white group-hover:text-glgold transition mb-2">
+                  <h3 className="font-black text-lg sm:text-xl text-white group-hover:text-[#ffcc4e] transition mb-2">
                     {item.title}
                   </h3>
 
@@ -204,7 +204,7 @@ export default function EventsSection() {
                   ) : (
                     <button
                       onClick={() => handleRegister(item)}
-                      className="w-full sm:w-auto bg-white/5 hover:bg-glgold hover:text-slate-950 text-white font-bold text-xs px-5 py-2.5 rounded-xl border border-white/10 hover:border-glgold transition flex items-center justify-center space-x-1.5 group/btn"
+                      className="w-full sm:w-auto bg-white/5 hover:bg-[#ffcc4e] hover:text-slate-950 text-white font-bold text-xs px-5 py-2.5 rounded-xl border border-white/10 hover:border-[#ffcc4e] transition flex items-center justify-center space-x-1.5 group/btn"
                     >
                       <span>RSVP for Event</span>
                       <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition" />

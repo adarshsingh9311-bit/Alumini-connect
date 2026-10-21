@@ -34,9 +34,9 @@ export default function AlumniSettingsPage() {
       </div>
 
       {/* Password Change Card */}
-      <form onSubmit={handleSavePassword} className="bg-white rounded-3xl p-6 sm:p-8 border border-teal-100 shadow-sm space-y-4">
+      <form onSubmit={handleSavePassword} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
         <h3 className="font-extrabold text-slate-900 text-base flex items-center gap-2 border-b border-slate-100 pb-3">
-          <Lock className="w-4 h-4 text-glblue-750" />
+          <Lock className="w-4 h-4 text-[#592106]" />
           <span>Security & Password</span>
         </h3>
 
@@ -48,8 +48,8 @@ export default function AlumniSettingsPage() {
               required
               value={passwords.current}
               onChange={(e) => setPasswords({ ...passwords, current: e.target.value })}
-              placeholder="••••••••"
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+              placeholder="Enter password"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-[#592106] focus:outline-none"
             />
           </div>
           <div>
@@ -59,8 +59,8 @@ export default function AlumniSettingsPage() {
               required
               value={passwords.newPass}
               onChange={(e) => setPasswords({ ...passwords, newPass: e.target.value })}
-              placeholder="••••••••"
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+              placeholder="Enter password"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-[#592106] focus:outline-none"
             />
           </div>
           <div>
@@ -70,8 +70,8 @@ export default function AlumniSettingsPage() {
               required
               value={passwords.confirm}
               onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })}
-              placeholder="••••••••"
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-glblue-750 focus:outline-none"
+              placeholder="Enter password"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-[#592106] focus:outline-none"
             />
           </div>
         </div>
@@ -79,7 +79,7 @@ export default function AlumniSettingsPage() {
         <div className="flex justify-end pt-2">
           <button
             type="submit"
-            className="bg-glblue-750 hover:bg-teal-900 text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm"
+            className="bg-[#592106] hover:bg-[#472510] text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm"
           >
             Update Password
           </button>
@@ -87,9 +87,9 @@ export default function AlumniSettingsPage() {
       </form>
 
       {/* Privacy & Contact Visibility */}
-      <form onSubmit={handleSavePrivacy} className="bg-white rounded-3xl p-6 sm:p-8 border border-teal-100 shadow-sm space-y-4">
+      <form onSubmit={handleSavePrivacy} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
         <h3 className="font-extrabold text-slate-900 text-base flex items-center gap-2 border-b border-slate-100 pb-3">
-          <Eye className="w-4 h-4 text-glgold" />
+          <Eye className="w-4 h-4 text-[#ffcc4e]" />
           <span>Contact Information Visibility</span>
         </h3>
 
@@ -103,7 +103,7 @@ export default function AlumniSettingsPage() {
               type="checkbox"
               checked={showEmail}
               onChange={(e) => setShowEmail(e.target.checked)}
-              className="rounded text-glgold focus:ring-glgold cursor-pointer"
+              className="rounded text-[#ffcc4e] focus:ring-glgold cursor-pointer"
             />
           </label>
 
@@ -116,7 +116,7 @@ export default function AlumniSettingsPage() {
               type="checkbox"
               checked={showPhone}
               onChange={(e) => setShowPhone(e.target.checked)}
-              className="rounded text-glgold focus:ring-glgold cursor-pointer"
+              className="rounded text-[#ffcc4e] focus:ring-glgold cursor-pointer"
             />
           </label>
 
@@ -129,7 +129,7 @@ export default function AlumniSettingsPage() {
               type="checkbox"
               checked={emailAlerts}
               onChange={(e) => setEmailAlerts(e.target.checked)}
-              className="rounded text-glgold focus:ring-glgold cursor-pointer"
+              className="rounded text-[#ffcc4e] focus:ring-glgold cursor-pointer"
             />
           </label>
         </div>
@@ -137,7 +137,7 @@ export default function AlumniSettingsPage() {
         <div className="flex justify-end pt-2">
           <button
             type="submit"
-            className="bg-glgold hover:bg-glgold-dark text-white font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm transition shadow-md"
+            className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm transition shadow-md"
           >
             Save Privacy Settings
           </button>

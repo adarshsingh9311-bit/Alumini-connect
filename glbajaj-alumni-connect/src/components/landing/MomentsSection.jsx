@@ -41,7 +41,7 @@ export const INITIAL_MOMENTS = [
     batch: "Batches '16-'20",
     type: "Giving Back",
     icon: Award,
-    color: "text-glgold bg-glgold/10 border-glgold/30",
+    color: "text-[#ffcc4e] bg-[#ffcc4e]/10 border-[#ffcc4e]/30",
     content: "Alumni from our old autonomous robotics club pooled together to sponsor 2 industrial-grade 3D LiDAR sensors for the current GL Bajaj E-BAJA collegiate team. Keep innovating, juniors!",
     likes: 215,
     comments: 42,
@@ -109,8 +109,8 @@ export default function MomentsSection() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center space-x-2 text-glgold font-bold text-xs uppercase tracking-widest bg-glgold/10 px-3 py-1 rounded-full border border-glgold/30">
-            <Heart className="w-3.5 h-3.5 fill-glgold text-glgold" />
+          <div className="inline-flex items-center space-x-2 text-[#ffcc4e] font-bold text-xs uppercase tracking-widest bg-[#ffcc4e]/10 px-3 py-1 rounded-full border border-[#ffcc4e]/30">
+            <Heart className="w-3.5 h-3.5 fill-glgold text-[#ffcc4e]" />
             <span>Community Wall</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
@@ -130,14 +130,14 @@ export default function MomentsSection() {
             return (
               <div
                 key={item.id}
-                className="bg-slate-950/85 border border-white/10 rounded-3xl p-6 hover:border-glgold/30 transition-all duration-300 hover:-translate-y-1 shadow-xl flex flex-col justify-between"
+                className="bg-slate-950/85 border border-white/10 rounded-3xl p-6 hover:border-[#ffcc4e]/30 transition-all duration-300 hover:-translate-y-1 shadow-xl flex flex-col justify-between"
               >
                 <div>
                   {/* Top: Author & Tag */}
                   <div className="flex items-center justify-between gap-2 mb-3">
                     <div>
                       <h3 className="font-bold text-sm text-white">{item.author}</h3>
-                      <span className="text-[11px] font-mono text-glgold font-semibold">
+                      <span className="text-[11px] font-mono text-[#ffcc4e] font-semibold">
                         {item.batch}
                       </span>
                     </div>

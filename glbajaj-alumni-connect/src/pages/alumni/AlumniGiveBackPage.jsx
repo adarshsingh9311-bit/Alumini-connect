@@ -42,7 +42,7 @@ export default function AlumniGiveBackPage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Header */}
       <div>
-        <div className="inline-flex items-center space-x-2 bg-amber-50 border border-glgold/30 text-glgold text-xs px-3 py-1 rounded-full font-bold uppercase mb-2">
+        <div className="inline-flex items-center space-x-2 bg-[#faf6eb] border border-[#ffcc4e]/30 text-[#ffcc4e] text-xs px-3 py-1 rounded-full font-bold uppercase mb-2">
           <HeartHandshake className="w-3.5 h-3.5" />
           <span>Giving Back to Alma Mater</span>
         </div>
@@ -53,14 +53,14 @@ export default function AlumniGiveBackPage() {
       </div>
 
       {/* Alumni Impact Badges Banner */}
-      <div className="bg-gradient-to-r from-glblue-750 via-teal-800 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6 border border-teal-600/30">
+      <div className="bg-gradient-to-r from-glblue-750 via-teal-800 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6 border border-[#ffcc4e]/30/30">
         <div className="space-y-2 text-center sm:text-left">
           <span className="text-[10px] uppercase font-bold text-teal-200 tracking-wider">
             Your Alumni Contribution Level
           </span>
           <h2 className="text-xl sm:text-2xl font-black text-white flex items-center justify-center sm:justify-start gap-2">
             <span>GLB Gold Pillar of Excellence</span>
-            <Award className="w-6 h-6 text-glgold" />
+            <Award className="w-6 h-6 text-[#ffcc4e]" />
           </h2>
           <p className="text-xs text-teal-100 max-w-md leading-relaxed">
             Recognized for active student mentorship, sharing tech opportunities, and supporting GL Bajaj placement initiatives.
@@ -69,7 +69,7 @@ export default function AlumniGiveBackPage() {
 
         <div className="grid grid-cols-2 gap-3 text-center w-full sm:w-auto">
           <div className="bg-white/10 backdrop-blur-sm p-3 rounded-2xl border border-white/10">
-            <div className="text-xl sm:text-2xl font-black text-glgold">12</div>
+            <div className="text-xl sm:text-2xl font-black text-[#ffcc4e]">12</div>
             <div className="text-[10px] text-slate-300 font-medium">Scholars Mentored</div>
           </div>
           <div className="bg-white/10 backdrop-blur-sm p-3 rounded-2xl border border-white/10">
@@ -80,7 +80,7 @@ export default function AlumniGiveBackPage() {
       </div>
 
       {/* Give Back Contribution Checklist */}
-      <form onSubmit={handleSave} className="bg-white rounded-3xl p-6 sm:p-8 border border-teal-100 shadow-sm space-y-6">
+      <form onSubmit={handleSave} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
         <div className="border-b border-slate-100 pb-4">
           <h3 className="font-extrabold text-slate-900 text-base">Select Your Contribution Activities</h3>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -93,18 +93,18 @@ export default function AlumniGiveBackPage() {
           <div
             onClick={() => handleToggle("mentorship")}
             className={`p-4 rounded-2xl border transition cursor-pointer flex items-start space-x-3.5 ${
-              pledges.mentorship ? "border-glblue-750 bg-teal-50/40" : "border-slate-200 hover:border-slate-300"
+              pledges.mentorship ? "border-glblue-750 bg-[#faf6eb]/40" : "border-slate-200 hover:border-slate-300"
             }`}
           >
             <input
               type="checkbox"
               checked={pledges.mentorship}
               onChange={() => {}}
-              className="mt-1 rounded text-glblue-750 focus:ring-glblue-750 cursor-pointer"
+              className="mt-1 rounded text-[#592106] focus:ring-[#592106] cursor-pointer"
             />
             <div>
               <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                <Users className="w-4 h-4 text-glblue-750" />
+                <Users className="w-4 h-4 text-[#592106]" />
                 <span>1-on-1 Student Mentorship & Mock Interviews</span>
               </h4>
               <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
@@ -117,18 +117,18 @@ export default function AlumniGiveBackPage() {
           <div
             onClick={() => handleToggle("internships")}
             className={`p-4 rounded-2xl border transition cursor-pointer flex items-start space-x-3.5 ${
-              pledges.internships ? "border-glblue-750 bg-teal-50/40" : "border-slate-200 hover:border-slate-300"
+              pledges.internships ? "border-glblue-750 bg-[#faf6eb]/40" : "border-slate-200 hover:border-slate-300"
             }`}
           >
             <input
               type="checkbox"
               checked={pledges.internships}
               onChange={() => {}}
-              className="mt-1 rounded text-glblue-750 focus:ring-glblue-750 cursor-pointer"
+              className="mt-1 rounded text-[#592106] focus:ring-[#592106] cursor-pointer"
             />
             <div>
               <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                <Briefcase className="w-4 h-4 text-glgold" />
+                <Briefcase className="w-4 h-4 text-[#ffcc4e]" />
                 <span>Share Internship Openings</span>
               </h4>
               <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
@@ -141,14 +141,14 @@ export default function AlumniGiveBackPage() {
           <div
             onClick={() => handleToggle("job_referrals")}
             className={`p-4 rounded-2xl border transition cursor-pointer flex items-start space-x-3.5 ${
-              pledges.job_referrals ? "border-glblue-750 bg-teal-50/40" : "border-slate-200 hover:border-slate-300"
+              pledges.job_referrals ? "border-glblue-750 bg-[#faf6eb]/40" : "border-slate-200 hover:border-slate-300"
             }`}
           >
             <input
               type="checkbox"
               checked={pledges.job_referrals}
               onChange={() => {}}
-              className="mt-1 rounded text-glblue-750 focus:ring-glblue-750 cursor-pointer"
+              className="mt-1 rounded text-[#592106] focus:ring-[#592106] cursor-pointer"
             />
             <div>
               <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
@@ -165,14 +165,14 @@ export default function AlumniGiveBackPage() {
           <div
             onClick={() => handleToggle("webinars")}
             className={`p-4 rounded-2xl border transition cursor-pointer flex items-start space-x-3.5 ${
-              pledges.webinars ? "border-glblue-750 bg-teal-50/40" : "border-slate-200 hover:border-slate-300"
+              pledges.webinars ? "border-glblue-750 bg-[#faf6eb]/40" : "border-slate-200 hover:border-slate-300"
             }`}
           >
             <input
               type="checkbox"
               checked={pledges.webinars}
               onChange={() => {}}
-              className="mt-1 rounded text-glblue-750 focus:ring-glblue-750 cursor-pointer"
+              className="mt-1 rounded text-[#592106] focus:ring-[#592106] cursor-pointer"
             />
             <div>
               <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
@@ -189,14 +189,14 @@ export default function AlumniGiveBackPage() {
           <div
             onClick={() => handleToggle("project_guidance")}
             className={`p-4 rounded-2xl border transition cursor-pointer flex items-start space-x-3.5 ${
-              pledges.project_guidance ? "border-glblue-750 bg-teal-50/40" : "border-slate-200 hover:border-slate-300"
+              pledges.project_guidance ? "border-glblue-750 bg-[#faf6eb]/40" : "border-slate-200 hover:border-slate-300"
             }`}
           >
             <input
               type="checkbox"
               checked={pledges.project_guidance}
               onChange={() => {}}
-              className="mt-1 rounded text-glblue-750 focus:ring-glblue-750 cursor-pointer"
+              className="mt-1 rounded text-[#592106] focus:ring-[#592106] cursor-pointer"
             />
             <div>
               <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
@@ -216,7 +216,7 @@ export default function AlumniGiveBackPage() {
           </div>
           <button
             type="submit"
-            className="bg-glgold hover:bg-glgold-dark text-white font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm transition shadow-md flex items-center space-x-1.5"
+            className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm transition shadow-md flex items-center space-x-1.5"
           >
             <Save className="w-4 h-4" />
             <span>Save Give Back Preferences</span>
