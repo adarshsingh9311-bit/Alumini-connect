@@ -26,7 +26,16 @@ export default function AlumniDashboard() {
   const { profile, user } = useAuth();
   const { addToast } = useToast();
 
-  const currentAlumni = profile || INITIAL_ALUMNI[0];
+  const currentAlumni = profile || {
+    full_name: "Alumnus",
+    roll_number: "220192010001",
+    branch: "CSE",
+    batch_year: "2022",
+    current_company: "Professional Industry",
+    current_designation: "Software Engineer",
+    avatar_url: "",
+    is_available_for_mentorship: true
+  };
   const [isAvailable, setIsAvailable] = useState(currentAlumni?.is_available_for_mentorship ?? true);
   const [mentorships, setMentorships] = useState(INITIAL_MENTORSHIPS);
   const [events, setEvents] = useState(INITIAL_EVENTS);
@@ -63,24 +72,7 @@ export default function AlumniDashboard() {
   ]);
 
   // Students actively seeking mentors
-  const studentsSeekingMentors = [
-    {
-      id: "stu-sq-1",
-      name: "Tanmay Singhal",
-      roll: "230192010055",
-      branch: "CSE (3rd Year)",
-      topic: "Google Off-Campus & System Design Prep",
-      note: "Hi senior! Aspiring for SDE intern roles. Would love guidance on solving distributed systems questions."
-    },
-    {
-      id: "stu-sq-2",
-      name: "Ananya Dixit",
-      roll: "230192013012",
-      branch: "IT (Final Year)",
-      topic: "Resume Review & Microsoft Referrals",
-      note: "Looking for feedback on my full-stack projects before applying for 2026 graduate openings."
-    }
-  ];
+  const studentsSeekingMentors = [];
 
   function toggleAvailability() {
     const next = !isAvailable;
@@ -341,39 +333,41 @@ export default function AlumniDashboard() {
           </div>
 
           {/* Students Looking for Mentors Widget */}
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div>
-                <h3 className="font-extrabold text-slate-900 text-lg flex items-center gap-2">
-                  <Users className="w-5 h-5 text-teal-600" />
-                  <span>Students Looking for Mentors</span>
-                </h3>
-                <p className="text-xs text-slate-500">GLB scholars who could benefit from your expertise in {currentAlumni.current_company}</p>
+          {studentsSeekingMentors.length > 0 && (
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div>
+                  <h3 className="font-extrabold text-slate-900 text-lg flex items-center gap-2">
+                    <Users className="w-5 h-5 text-[#592106]" />
+                    <span>Students Looking for Mentors</span>
+                  </h3>
+                  <p className="text-xs text-slate-500">GLB scholars who could benefit from your expertise in {currentAlumni.current_company || "your domain"}</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {studentsSeekingMentors.map(stu => (
+                  <div key={stu.id} className="p-4 rounded-2xl bg-[#faf6eb]/40 border border-slate-200 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-xs text-slate-900">{stu.name}</span>
+                      <span className="text-[10px] font-mono text-slate-500">{stu.branch}</span>
+                    </div>
+                    <div className="text-[11px] font-bold text-[#592106]">{stu.topic}</div>
+                    <p className="text-[11px] text-slate-600 leading-relaxed italic">"{stu.note}"</p>
+                    <div className="pt-2">
+                      <Link
+                        to="/alumni/messages"
+                        className="inline-flex items-center space-x-1 text-xs font-bold text-[#592106] hover:text-[#472510]"
+                      >
+                        <span>Reach Out via Chat</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </Link>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {studentsSeekingMentors.map(stu => (
-                <div key={stu.id} className="p-4 rounded-2xl bg-[#faf6eb]/40 border border-slate-200 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-slate-900">{stu.name}</span>
-                    <span className="text-[10px] font-mono text-slate-500">{stu.branch}</span>
-                  </div>
-                  <div className="text-[11px] font-bold text-[#592106]">{stu.topic}</div>
-                  <p className="text-[11px] text-slate-600 leading-relaxed italic">"{stu.note}"</p>
-                  <div className="pt-2">
-                    <Link
-                      to="/alumni/messages"
-                      className="inline-flex items-center space-x-1 text-xs font-bold text-[#ffcc4e] hover:text-amber-700"
-                    >
-                      <span>Reach Out via Chat</span>
-                      <ArrowRight className="w-3 h-3" />
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          )}
 
           {/* Official College Invitations */}
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
@@ -424,34 +418,34 @@ export default function AlumniDashboard() {
         <div className="space-y-6">
           
           {/* My GLB Impact Summary Widget */}
-          <div className="bg-gradient-to-br from-glblue-750 to-[#2f1508] text-white rounded-3xl p-6 shadow-xl space-y-4">
+          <div className="bg-gradient-to-br from-[#472510] to-[#2f1508] border-2 border-[#ffcc4e]/30 text-white rounded-3xl p-6 shadow-xl space-y-4">
             <div className="flex items-center space-x-2 text-[#ffcc4e] text-xs font-bold uppercase tracking-wider">
-              <Heart className="w-4 h-4 fill-glgold text-[#ffcc4e]" />
+              <Heart className="w-4 h-4 fill-[#ffcc4e] text-[#ffcc4e]" />
               <span>My GLB Impact</span>
             </div>
             <h4 className="text-xl font-black">Giving Back to GLB</h4>
-            <p className="text-xs text-teal-100 leading-relaxed">
+            <p className="text-xs text-[#faf6eb]/80 leading-relaxed">
               Every hour spent mentoring, referral posted, or guest lecture given directly shapes the future of GL Bajaj scholars.
             </p>
 
             <div className="space-y-2 pt-2 text-xs">
-              <div className="flex items-center justify-between bg-white/10 p-2.5 rounded-xl">
+              <div className="flex items-center justify-between bg-white/10 p-2.5 rounded-xl border border-white/10">
                 <span>Mentorship Sessions</span>
-                <strong className="text-[#ffcc4e] font-mono">14 Completed</strong>
+                <strong className="text-[#ffcc4e] font-mono">0 Completed</strong>
               </div>
-              <div className="flex items-center justify-between bg-white/10 p-2.5 rounded-xl">
+              <div className="flex items-center justify-between bg-white/10 p-2.5 rounded-xl border border-white/10">
                 <span>Referrals Shared</span>
-                <strong className="text-teal-300 font-mono">4 Candidates</strong>
+                <strong className="text-[#ffcc4e] font-mono">0 Candidates</strong>
               </div>
-              <div className="flex items-center justify-between bg-white/10 p-2.5 rounded-xl">
+              <div className="flex items-center justify-between bg-white/10 p-2.5 rounded-xl border border-white/10">
                 <span>Guest Lectures</span>
-                <strong className="text-[#ffcc4e] font-mono">2 Sessions</strong>
+                <strong className="text-[#ffcc4e] font-mono">0 Sessions</strong>
               </div>
             </div>
 
             <Link
               to="/alumni/give-back"
-              className="block text-center w-full bg-[#ffcc4e] hover:bg-[#e0b23d] text-slate-950 font-bold text-xs py-2.5 rounded-xl transition shadow-md"
+              className="block text-center w-full bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] font-black text-xs py-2.5 rounded-xl transition shadow-md"
             >
               Update Giving Back Pledges
             </Link>
