@@ -28,7 +28,7 @@ import {
 import {
   MapPin,
   Award,
-  CheckSquare, GraduationCap, Briefcase, UserPlus, ArrowRight, Loader2, ShieldAlert } from "lucide-react";
+  CheckSquare, GraduationCap, Briefcase, UserPlus, ArrowRight, Loader2, ShieldAlert, FileText, Upload, CheckCircle2, AlertCircle } from "lucide-react";
 export default function RegisterPage() {
   const [searchParams] = useSearchParams();
   const initialRole = searchParams.get("role") || USER_ROLES.STUDENT;
