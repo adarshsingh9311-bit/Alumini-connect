@@ -37,8 +37,16 @@ export default function SpreadsheetImporter({ onImportComplete }) {
             roll_number: `200192010001`,
             full_name: "Aditya Sharma",
             email: "aditya.sharma@example.com",
+            student_mobile: "9876543210",
+            father_name: "Rajesh Sharma",
+            father_mobile: "9876543211",
+            mother_name: "Sunita Sharma",
+            mother_mobile: "9876543212",
+            date_of_birth: "15/08/2000",
+            marital_status: "Unmarried",
             branch: "CSE",
             batch_year: templateBatchYear,
+            cv_status: "Uploaded",
             current_company: "Google India",
             current_designation: "Senior Software Engineer"
           },
@@ -46,8 +54,16 @@ export default function SpreadsheetImporter({ onImportComplete }) {
             roll_number: `200192010002`,
             full_name: "Pooja Verma",
             email: "pooja.verma@example.com",
+            student_mobile: "9812345678",
+            father_name: "Suresh Verma",
+            father_mobile: "9812345679",
+            mother_name: "Anita Verma",
+            mother_mobile: "9812345670",
+            date_of_birth: "22/11/1999",
+            marital_status: "Married",
             branch: "IT",
             batch_year: templateBatchYear,
+            cv_status: "Uploaded",
             current_company: "Microsoft",
             current_designation: "Product Manager"
           },
@@ -55,8 +71,16 @@ export default function SpreadsheetImporter({ onImportComplete }) {
             roll_number: `200192010003`,
             full_name: "Rohan Kulkarni",
             email: "rohan.kulkarni@example.com",
+            student_mobile: "9765432109",
+            father_name: "Anand Kulkarni",
+            father_mobile: "9765432110",
+            mother_name: "Meera Kulkarni",
+            mother_mobile: "9765432111",
+            date_of_birth: "05/03/2000",
+            marital_status: "Unmarried",
             branch: "ECE",
             batch_year: templateBatchYear,
+            cv_status: "Not Uploaded",
             current_company: "Amazon AWS",
             current_designation: "Solutions Architect"
           }
@@ -66,8 +90,16 @@ export default function SpreadsheetImporter({ onImportComplete }) {
             roll_number: `230192010001`,
             full_name: "Ananya Dixit",
             email: "ananya.dixit@glbajaj.org",
+            student_mobile: "9898989890",
+            father_name: "Manoj Dixit",
+            father_mobile: "9898989891",
+            mother_name: "Kavita Dixit",
+            mother_mobile: "9898989892",
+            date_of_birth: "12/06/2003",
+            marital_status: "Unmarried",
             branch: "CSE",
             batch_year: templateBatchYear,
+            cv_status: "Uploaded",
             current_company: "Student Scholar",
             current_designation: "B.Tech CSE"
           },
@@ -75,8 +107,16 @@ export default function SpreadsheetImporter({ onImportComplete }) {
             roll_number: `230192010002`,
             full_name: "Devendra Singh",
             email: "devendra.singh@glbajaj.org",
+            student_mobile: "9797979790",
+            father_name: "Harish Singh",
+            father_mobile: "9797979791",
+            mother_name: "Geeta Singh",
+            mother_mobile: "9797979792",
+            date_of_birth: "29/09/2003",
+            marital_status: "Unmarried",
             branch: "AI-ML",
             batch_year: templateBatchYear,
+            cv_status: "Uploaded",
             current_company: "Student Scholar",
             current_designation: "B.Tech AI-ML"
           }
@@ -88,11 +128,19 @@ export default function SpreadsheetImporter({ onImportComplete }) {
     const colWidths = [
       { wch: 18 }, // roll_number
       { wch: 22 }, // full_name
-      { wch: 30 }, // email
+      { wch: 28 }, // email
+      { wch: 16 }, // student_mobile
+      { wch: 20 }, // father_name
+      { wch: 16 }, // father_mobile
+      { wch: 20 }, // mother_name
+      { wch: 16 }, // mother_mobile
+      { wch: 14 }, // date_of_birth
+      { wch: 15 }, // marital_status
       { wch: 10 }, // branch
       { wch: 12 }, // batch_year
-      { wch: 24 }, // current_company
-      { wch: 28 }  // current_designation
+      { wch: 16 }, // cv_status
+      { wch: 22 }, // current_company
+      { wch: 26 }  // current_designation
     ];
     worksheet["!cols"] = colWidths;
 
@@ -106,7 +154,7 @@ export default function SpreadsheetImporter({ onImportComplete }) {
       XLSX.writeFile(workbook, `${baseName}.xlsx`, { bookType: "xlsx" });
     }
 
-    addToast(`Template downloaded for ${targetType.toUpperCase()} (Batch ${templateBatchYear}) in .${format.toUpperCase()}`, "success");
+    addToast(`Template downloaded with all demographic & CV columns for ${targetType.toUpperCase()} (Batch ${templateBatchYear}) in .${format.toUpperCase()}`, "success");
   }
 
   // 6-step state
@@ -167,8 +215,16 @@ export default function SpreadsheetImporter({ onImportComplete }) {
               roll_number: roll || "MISSING",
               full_name: name || "MISSING",
               email: email || "MISSING",
+              student_mobile: String(row.student_mobile || row["Mobile"] || row.Phone || ""),
+              father_name: String(row.father_name || row["Father Name"] || row.FatherName || ""),
+              father_mobile: String(row.father_mobile || row["Father Mobile"] || ""),
+              mother_name: String(row.mother_name || row["Mother Name"] || row.MotherName || ""),
+              mother_mobile: String(row.mother_mobile || row["Mother Mobile"] || ""),
+              date_of_birth: String(row.date_of_birth || row.DOB || row["Date of Birth"] || ""),
+              marital_status: String(row.marital_status || row["Marital Status"] || "Unmarried"),
               branch: String(row.branch || row.Branch || "CSE").toUpperCase(),
               batch_year: String(row.batch_year || row.Batch || "2024"),
+              cv_status: String(row.cv_status || row["CV Status"] || "Not Uploaded"),
               current_company: String(row.current_company || row.Company || ""),
               current_designation: String(row.current_designation || row.Designation || "")
             },
@@ -446,18 +502,24 @@ export default function SpreadsheetImporter({ onImportComplete }) {
 
       {/* Spreadsheet Live Preview Table */}
       {parsedRows.length > 0 && !isSuccess && (
-        <div className="overflow-x-auto border border-slate-200 rounded-2xl max-h-80 overflow-y-auto">
+        <div className="overflow-x-auto border border-slate-200 rounded-2xl max-h-96 overflow-y-auto">
           <table className="w-full text-left border-collapse text-xs">
-            <thead className="bg-slate-100 text-slate-600 font-bold uppercase sticky top-0">
+            <thead className="bg-slate-100 text-slate-600 font-bold uppercase sticky top-0 shadow-xs z-10">
               <tr className="border-b border-slate-200">
-                <th className="px-4 py-2.5">Row</th>
-                <th className="px-4 py-2.5">Status</th>
-                <th className="px-4 py-2.5">Roll Number</th>
-                <th className="px-4 py-2.5">Full Name</th>
-                <th className="px-4 py-2.5">Email</th>
-                <th className="px-4 py-2.5">Branch</th>
-                <th className="px-4 py-2.5">Batch</th>
-                {targetType === "alumni" && <th className="px-4 py-2.5">Company & Role</th>}
+                <th className="px-3 py-2.5 whitespace-nowrap">Row</th>
+                <th className="px-3 py-2.5 whitespace-nowrap">Status</th>
+                <th className="px-3 py-2.5 whitespace-nowrap">Roll Number</th>
+                <th className="px-3 py-2.5 whitespace-nowrap">Full Name</th>
+                <th className="px-3 py-2.5 whitespace-nowrap">Email</th>
+                <th className="px-3 py-2.5 whitespace-nowrap">Student Mobile</th>
+                <th className="px-3 py-2.5 whitespace-nowrap">Father Name (Mobile)</th>
+                <th className="px-3 py-2.5 whitespace-nowrap">Mother Name (Mobile)</th>
+                <th className="px-3 py-2.5 whitespace-nowrap">DOB</th>
+                <th className="px-3 py-2.5 whitespace-nowrap">Marital Status</th>
+                <th className="px-3 py-2.5 whitespace-nowrap">Branch</th>
+                <th className="px-3 py-2.5 whitespace-nowrap">Batch</th>
+                <th className="px-3 py-2.5 whitespace-nowrap">CV Status</th>
+                {targetType === "alumni" && <th className="px-3 py-2.5 whitespace-nowrap">Company &amp; Role</th>}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -466,8 +528,8 @@ export default function SpreadsheetImporter({ onImportComplete }) {
                   key={r.rowIndex}
                   className={`hover:bg-slate-50 ${!r.isValid ? "bg-red-50/50" : "bg-white"}`}
                 >
-                  <td className="px-4 py-2.5 text-slate-400 font-mono">{r.rowIndex}</td>
-                  <td className="px-4 py-2.5">
+                  <td className="px-3 py-2.5 text-slate-400 font-mono">{r.rowIndex}</td>
+                  <td className="px-3 py-2.5 whitespace-nowrap">
                     {r.isValid ? (
                       <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">
                         Valid
@@ -481,13 +543,35 @@ export default function SpreadsheetImporter({ onImportComplete }) {
                       </span>
                     )}
                   </td>
-                  <td className="px-4 py-2.5 font-mono font-bold text-slate-800">{r.data.roll_number}</td>
-                  <td className="px-4 py-2.5 font-semibold text-slate-900">{r.data.full_name}</td>
-                  <td className="px-4 py-2.5 text-slate-600">{r.data.email}</td>
-                  <td className="px-4 py-2.5 text-slate-600">{r.data.branch}</td>
-                  <td className="px-4 py-2.5 text-slate-600">{r.data.batch_year}</td>
+                  <td className="px-3 py-2.5 font-mono font-bold text-slate-800 whitespace-nowrap">{r.data.roll_number}</td>
+                  <td className="px-3 py-2.5 font-semibold text-slate-900 whitespace-nowrap">{r.data.full_name}</td>
+                  <td className="px-3 py-2.5 text-slate-600 whitespace-nowrap">{r.data.email}</td>
+                  <td className="px-3 py-2.5 text-slate-700 font-mono whitespace-nowrap">{r.data.student_mobile || "-"}</td>
+                  <td className="px-3 py-2.5 text-slate-700 whitespace-nowrap">
+                    {r.data.father_name ? `${r.data.father_name} (${r.data.father_mobile || "N/A"})` : "-"}
+                  </td>
+                  <td className="px-3 py-2.5 text-slate-700 whitespace-nowrap">
+                    {r.data.mother_name ? `${r.data.mother_name} (${r.data.mother_mobile || "N/A"})` : "-"}
+                  </td>
+                  <td className="px-3 py-2.5 text-slate-600 whitespace-nowrap">{r.data.date_of_birth || "-"}</td>
+                  <td className="px-3 py-2.5 whitespace-nowrap">
+                    <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px] font-medium">
+                      {r.data.marital_status || "Unmarried"}
+                    </span>
+                  </td>
+                  <td className="px-3 py-2.5 text-slate-600 whitespace-nowrap">{r.data.branch}</td>
+                  <td className="px-3 py-2.5 text-slate-600 whitespace-nowrap">{r.data.batch_year}</td>
+                  <td className="px-3 py-2.5 whitespace-nowrap">
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                      r.data.cv_status?.toLowerCase().includes("upload") && !r.data.cv_status?.toLowerCase().includes("not")
+                        ? "bg-emerald-100 text-emerald-800"
+                        : "bg-amber-100 text-amber-800"
+                    }`}>
+                      {r.data.cv_status || "Not Uploaded"}
+                    </span>
+                  </td>
                   {targetType === "alumni" && (
-                    <td className="px-4 py-2.5 text-slate-600">
+                    <td className="px-3 py-2.5 text-slate-600 whitespace-nowrap">
                       {r.data.current_designation ? `${r.data.current_designation} @ ${r.data.current_company}` : "-"}
                     </td>
                   )}
