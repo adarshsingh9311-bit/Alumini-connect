@@ -11,18 +11,103 @@ import {
   Eye, 
   ShieldCheck, 
   ClipboardCheck, 
-  CheckCheck 
+  CheckCheck,
+  Download,
+  FileDown,
+  Sparkles
 } from "lucide-react";
 import { useToast } from "../../context/ToastContext";
+import { BATCH_YEARS, BRANCH_CODES } from "../../lib/constants";
 
 export default function SpreadsheetImporter({ onImportComplete }) {
   const { addToast } = useToast();
   const [file, setFile] = useState(null);
   const [targetType, setTargetType] = useState("alumni"); // alumni | student
+  const [templateBatchYear, setTemplateBatchYear] = useState("2024");
   const [parsedRows, setParsedRows] = useState([]);
   const [validationReport, setValidationReport] = useState(null);
   const [importing, setImporting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  function handleDownloadTemplate(format = "xlsx") {
+    const isAlumni = targetType === "alumni";
+    const sampleRows = isAlumni
+      ? [
+          {
+            roll_number: `200192010001`,
+            full_name: "Aditya Sharma",
+            email: "aditya.sharma@example.com",
+            branch: "CSE",
+            batch_year: templateBatchYear,
+            current_company: "Google India",
+            current_designation: "Senior Software Engineer"
+          },
+          {
+            roll_number: `200192010002`,
+            full_name: "Pooja Verma",
+            email: "pooja.verma@example.com",
+            branch: "IT",
+            batch_year: templateBatchYear,
+            current_company: "Microsoft",
+            current_designation: "Product Manager"
+          },
+          {
+            roll_number: `200192010003`,
+            full_name: "Rohan Kulkarni",
+            email: "rohan.kulkarni@example.com",
+            branch: "ECE",
+            batch_year: templateBatchYear,
+            current_company: "Amazon AWS",
+            current_designation: "Solutions Architect"
+          }
+        ]
+      : [
+          {
+            roll_number: `230192010001`,
+            full_name: "Ananya Dixit",
+            email: "ananya.dixit@glbajaj.org",
+            branch: "CSE",
+            batch_year: templateBatchYear,
+            current_company: "Student Scholar",
+            current_designation: "B.Tech CSE"
+          },
+          {
+            roll_number: `230192010002`,
+            full_name: "Devendra Singh",
+            email: "devendra.singh@glbajaj.org",
+            branch: "AI-ML",
+            batch_year: templateBatchYear,
+            current_company: "Student Scholar",
+            current_designation: "B.Tech AI-ML"
+          }
+        ];
+
+    const worksheet = XLSX.utils.json_to_sheet(sampleRows);
+
+    // Auto-fit column widths for clear readability in Excel
+    const colWidths = [
+      { wch: 18 }, // roll_number
+      { wch: 22 }, // full_name
+      { wch: 30 }, // email
+      { wch: 10 }, // branch
+      { wch: 12 }, // batch_year
+      { wch: 24 }, // current_company
+      { wch: 28 }  // current_designation
+    ];
+    worksheet["!cols"] = colWidths;
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, `${targetType.toUpperCase()}_Batch_${templateBatchYear}`);
+
+    const baseName = `GLB_${targetType.toUpperCase()}_Template_Batch_${templateBatchYear}`;
+    if (format === "csv") {
+      XLSX.writeFile(workbook, `${baseName}.csv`, { bookType: "csv" });
+    } else {
+      XLSX.writeFile(workbook, `${baseName}.xlsx`, { bookType: "xlsx" });
+    }
+
+    addToast(`Template downloaded for ${targetType.toUpperCase()} (Batch ${templateBatchYear}) in .${format.toUpperCase()}`, "success");
+  }
 
   // 6-step state
   // 1: Upload, 2: Preview, 3: Validate, 4: Show Errors, 5: Confirm, 6: Success
@@ -195,31 +280,74 @@ export default function SpreadsheetImporter({ onImportComplete }) {
         </div>
       </div>
 
-      {/* Target Type Selector */}
-      <div className="flex items-center space-x-6">
-        <span className="text-xs font-bold text-slate-700 uppercase">Target Directory:</span>
-        <label className="flex items-center space-x-2 text-xs font-semibold text-slate-800 cursor-pointer">
-          <input
-            type="radio"
-            name="targetType"
-            value="alumni"
-            checked={targetType === "alumni"}
-            onChange={() => setTargetType("alumni")}
-            className="text-[#ffcc4e] focus:ring-glgold"
-          />
-          <span>Alumni Records</span>
-        </label>
-        <label className="flex items-center space-x-2 text-xs font-semibold text-slate-800 cursor-pointer">
-          <input
-            type="radio"
-            name="targetType"
-            value="student"
-            checked={targetType === "student"}
-            onChange={() => setTargetType("student")}
-            className="text-[#592106] focus:ring-[#592106]"
-          />
-          <span>Student Records</span>
-        </label>
+      {/* Target Type Selector & Batch Template Download Row */}
+      <div className="bg-[#faf6eb] border border-[#ffcc4e]/50 rounded-2xl p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        {/* Directory Target Selection */}
+        <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+          <span className="text-xs font-black text-[#592106] uppercase tracking-wider">
+            1. Target Directory:
+          </span>
+          <label className="flex items-center space-x-2 text-xs font-bold text-slate-800 cursor-pointer">
+            <input
+              type="radio"
+              name="targetType"
+              value="alumni"
+              checked={targetType === "alumni"}
+              onChange={() => setTargetType("alumni")}
+              className="text-[#ffcc4e] focus:ring-[#ffcc4e] w-4 h-4"
+            />
+            <span>Alumni Records</span>
+          </label>
+          <label className="flex items-center space-x-2 text-xs font-bold text-slate-800 cursor-pointer">
+            <input
+              type="radio"
+              name="targetType"
+              value="student"
+              checked={targetType === "student"}
+              onChange={() => setTargetType("student")}
+              className="text-[#592106] focus:ring-[#592106] w-4 h-4"
+            />
+            <span>Student Records</span>
+          </label>
+        </div>
+
+        {/* Batch Template Downloader */}
+        <div className="flex flex-wrap items-center gap-2.5 pt-2 lg:pt-0 border-t lg:border-t-0 border-[#ffcc4e]/30">
+          <div className="flex items-center space-x-1.5">
+            <span className="text-[11px] font-bold text-[#592106] uppercase">Batch Year:</span>
+            <select
+              value={templateBatchYear}
+              onChange={(e) => setTemplateBatchYear(e.target.value)}
+              className="bg-white border border-[#ffcc4e] rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#592106]"
+            >
+              {BATCH_YEARS.map((yr) => (
+                <option key={yr} value={yr}>
+                  Batch {yr}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => handleDownloadTemplate("xlsx")}
+            className="bg-[#592106] hover:bg-[#472510] text-[#ffcc4e] text-xs font-extrabold px-3.5 py-1.5 rounded-xl transition shadow-sm flex items-center space-x-1.5 cursor-pointer"
+            title="Download formatted Excel (.xlsx) template"
+          >
+            <FileSpreadsheet className="w-3.5 h-3.5 text-[#ffcc4e]" />
+            <span>Download Excel Template</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleDownloadTemplate("csv")}
+            className="bg-white hover:bg-slate-50 text-[#592106] border border-slate-300 text-xs font-bold px-3 py-1.5 rounded-xl transition flex items-center space-x-1 cursor-pointer"
+            title="Download CSV format template"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>CSV</span>
+          </button>
+        </div>
       </div>
 
       {/* Upload Zone */}
