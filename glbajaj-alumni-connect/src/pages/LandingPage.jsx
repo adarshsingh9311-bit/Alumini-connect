@@ -28,7 +28,7 @@ import UniversityFinalCta from "../components/landing/UniversityFinalCta";
 import UniversityFooter from "../components/landing/UniversityFooter";
 
 export default function LandingPage() {
-  const { setDemoPortal } = useAuth();
+  const { user, role, setDemoPortal } = useAuth();
   const navigate = useNavigate();
 
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -36,9 +36,18 @@ export default function LandingPage() {
   const [connectSuccess, setConnectSuccess] = useState(false);
   const [connectMessage, setConnectMessage] = useState("");
 
-  function handleDirectPortal(role, path) {
+  function handleSelectAlumnus(alumnus) {
+    if (!user) {
+      // If user is not logged in, prompt login first
+      navigate("/login?role=student");
+      return;
+    }
+    setSelectedAlumnus(alumnus);
+  }
+
+  function handleDirectPortal(targetRole, path) {
     setAuthModalOpen(false);
-    navigate(`/login?role=${role}`);
+    navigate(`/login?role=${targetRole}`);
   }
 
   function handleSendConnect(e) {
@@ -61,7 +70,7 @@ export default function LandingPage() {
       <UniversityHero onOpenAuthModal={() => setAuthModalOpen(true)} />
 
       {/* 3. Notable GLB Alumni Showcase & Carousel */}
-      <NotableAlumniSection onSelectAlumnus={(alumnus) => setSelectedAlumnus(alumnus)} />
+      <NotableAlumniSection onSelectAlumnus={handleSelectAlumnus} />
 
       {/* 4. Voices From Our GLB Family: Verified Reflections */}
       <AlumniVoicesSection />

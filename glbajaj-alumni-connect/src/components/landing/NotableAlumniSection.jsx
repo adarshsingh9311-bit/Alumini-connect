@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -109,6 +110,9 @@ export const NOTABLE_GLB_ALUMNI = [
 ];
 
 export default function NotableAlumniSection({ onSelectAlumnus }) {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
   const [startIndex, setStartIndex] = useState(0);
   const itemsPerPage = 4;
   const totalItems = NOTABLE_GLB_ALUMNI.length;
@@ -125,6 +129,15 @@ export default function NotableAlumniSection({ onSelectAlumnus }) {
   function handleNext() {
     if (canNext) {
       setStartIndex((prev) => Math.min(totalItems - itemsPerPage, prev + 1));
+    }
+  }
+
+  function handleViewAllAlumni(e) {
+    e.preventDefault();
+    if (!user) {
+      navigate("/login?role=student");
+    } else {
+      navigate("/student/alumni");
     }
   }
 
@@ -267,12 +280,12 @@ export default function NotableAlumniSection({ onSelectAlumnus }) {
           Information verified from the official GL Bajaj Institute of Technology & Management notable alumni archive.
         </div>
 
-        <Link
-          to="/student/alumni"
-          className="inline-flex items-center space-x-1.5 text-xs sm:text-sm font-semibold text-[#0C1929] hover:text-[#B58A38] border-b border-[#0C1929] hover:border-[#B58A38] pb-0.5 transition"
+        <button
+          onClick={handleViewAllAlumni}
+          className="inline-flex items-center space-x-1.5 text-xs sm:text-sm font-semibold text-[#0C1929] hover:text-[#B58A38] border-b border-[#0C1929] hover:border-[#B58A38] pb-0.5 transition cursor-pointer"
         >
-          <span>View All Alumni ?</span>
-        </Link>
+          <span>View All Alumni &rarr;</span>
+        </button>
       </div>
 
     </section>
