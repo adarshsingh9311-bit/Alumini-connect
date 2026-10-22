@@ -60,24 +60,7 @@ export default function StudentDashboard() {
   const greeting = hour < 12 ? "Good Morning" : hour < 17 ? "Good Afternoon" : "Good Evening";
 
   // Family moments for student community widget
-  const studentFamilyMoments = [
-    {
-      id: "sfm-1",
-      author: "Rahul Gupta",
-      batch: "CSE '21",
-      company: "Microsoft",
-      text: "Promoted to Senior SDE at Microsoft! Happy to mentor GLB 3rd/4th years on System Design.",
-      time: "3h ago"
-    },
-    {
-      id: "sfm-2",
-      author: "Neha Mishra",
-      batch: "IT '22",
-      company: "CMU Scholar",
-      text: "Admitted into Carnegie Mellon University MS CS. Open to reviewing US graduate SOPs for GLBians!",
-      time: "1d ago"
-    }
-  ];
+  const studentFamilyMoments = [];
 
   function handleRsvp(eventId) {
     setEvents((prev) =>
@@ -289,67 +272,77 @@ export default function StudentDashboard() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {alumniList.slice(0, 4).map((alumni) => (
-                <AlumniCard
-                  key={alumni.id}
-                  alumni={alumni}
-                  onOpenProfile={setSelectedAlumni}
-                  onRequestMentorship={setRequestTargetAlumni}
-                />
-              ))}
-            </div>
+            {alumniList.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {alumniList.slice(0, 4).map((alumni) => (
+                  <AlumniCard
+                    key={alumni.id}
+                    alumni={alumni}
+                    onOpenProfile={setSelectedAlumni}
+                    onRequestMentorship={setRequestTargetAlumni}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="bg-slate-50 border border-slate-200 rounded-2xl p-8 text-center text-xs text-slate-500">
+                No alumni mentors registered yet. Once alumni join and activate mentorship, they will appear here.
+              </div>
+            )}
           </div>
 
           {/* Alumni Achievements Highlight */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                <Award className="w-4 h-4 text-[#ffcc4e]" />
-                <span>Alumni Accolades & Milestones</span>
-              </h3>
-              <span className="text-[11px] text-slate-400 font-medium">Verified by College Admin</span>
-            </div>
+          {achievements.length > 0 && (
+            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                  <Award className="w-4 h-4 text-[#ffcc4e]" />
+                  <span>Alumni Accolades & Milestones</span>
+                </h3>
+                <span className="text-[11px] text-slate-400 font-medium">Verified by College Admin</span>
+              </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {achievements.map((ach) => (
-                <div key={ach.id} className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
-                  <div className="flex items-center justify-between text-xs font-bold text-[#592106]">
-                    <span>{ach.alumni_name}</span>
-                    <span className="text-[10px] text-slate-400 font-normal">{ach.alumni_batch}</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {achievements.map((ach) => (
+                  <div key={ach.id} className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
+                    <div className="flex items-center justify-between text-xs font-bold text-[#592106]">
+                      <span>{ach.alumni_name}</span>
+                      <span className="text-[10px] text-slate-400 font-normal">{ach.alumni_batch}</span>
+                    </div>
+                    <h4 className="text-xs font-bold text-slate-900 leading-snug">{ach.title}</h4>
+                    <p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">{ach.description}</p>
                   </div>
-                  <h4 className="text-xs font-bold text-slate-900 leading-snug">{ach.title}</h4>
-                  <p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">{ach.description}</p>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Sidebar: Moments, Notices & Events */}
         <div className="space-y-6">
           
           {/* GLB Family Moments Feed Widget */}
-          <div className="bg-gradient-to-br from-amber-50/60 to-teal-50/60 rounded-2xl p-5 border border-amber-200/60 shadow-sm space-y-3">
-            <div className="flex items-center justify-between border-b border-amber-200/40 pb-2">
-              <h3 className="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
-                <Heart className="w-3.5 h-3.5 fill-glgold text-[#ffcc4e]" />
-                <span>GLB Family Moments</span>
-              </h3>
-              <span className="text-[10px] text-[#ffcc4e] font-bold">Community</span>
-            </div>
-            <div className="space-y-2.5">
-              {studentFamilyMoments.map(m => (
-                <div key={m.id} className="bg-white/90 p-3 rounded-xl border border-amber-100 text-xs space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-slate-900">{m.author} ({m.batch})</span>
-                    <span className="text-[10px] text-slate-400">{m.time}</span>
+          {studentFamilyMoments.length > 0 && (
+            <div className="bg-gradient-to-br from-amber-50/60 to-teal-50/60 rounded-2xl p-5 border border-amber-200/60 shadow-sm space-y-3">
+              <div className="flex items-center justify-between border-b border-amber-200/40 pb-2">
+                <h3 className="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                  <Heart className="w-3.5 h-3.5 fill-glgold text-[#ffcc4e]" />
+                  <span>GLB Family Moments</span>
+                </h3>
+                <span className="text-[10px] text-[#ffcc4e] font-bold">Community</span>
+              </div>
+              <div className="space-y-2.5">
+                {studentFamilyMoments.map(m => (
+                  <div key={m.id} className="bg-white/90 p-3 rounded-xl border border-amber-100 text-xs space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-slate-900">{m.author} ({m.batch})</span>
+                      <span className="text-[10px] text-slate-400">{m.time}</span>
+                    </div>
+                    <p className="text-slate-600 text-[11px] leading-relaxed">{m.text}</p>
                   </div>
-                  <p className="text-slate-600 text-[11px] leading-relaxed">{m.text}</p>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* College Notices Card */}
           <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
@@ -363,22 +356,26 @@ export default function StudentDashboard() {
               </Link>
             </div>
 
-            <div className="space-y-3">
-              {notices.map((notice) => (
-                <div key={notice.id} className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1 hover:bg-[#faf6eb]/50 transition">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#592106] bg-teal-100/60 px-2 py-0.5 rounded">
-                      {notice.category}
-                    </span>
-                    <span className="text-[10px] text-slate-400">
-                      {new Date(notice.created_at).toLocaleDateString()}
-                    </span>
+            {notices.length > 0 ? (
+              <div className="space-y-3">
+                {notices.map((notice) => (
+                  <div key={notice.id} className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1 hover:bg-[#faf6eb]/50 transition">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#592106] bg-teal-100/60 px-2 py-0.5 rounded">
+                        {notice.category}
+                      </span>
+                      <span className="text-[10px] text-slate-400">
+                        {new Date(notice.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <h4 className="font-bold text-xs text-slate-900 leading-snug">{notice.title}</h4>
+                    <p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">{notice.content}</p>
                   </div>
-                  <h4 className="font-bold text-xs text-slate-900 leading-snug">{notice.title}</h4>
-                  <p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">{notice.content}</p>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-slate-400 text-center py-2">No official notices posted yet.</p>
+            )}
           </div>
 
           {/* Upcoming Events Card */}
@@ -393,38 +390,42 @@ export default function StudentDashboard() {
               </Link>
             </div>
 
-            <div className="space-y-3">
-              {events.map((ev) => {
-                const isRsvp = ev.rsvps?.includes(user?.id || "user-stu-1");
-                return (
-                  <div key={ev.id} className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-slate-500 uppercase">{ev.category}</span>
-                      <span className="text-[11px] text-[#ffcc4e] font-bold">{ev.date}</span>
+            {events.length > 0 ? (
+              <div className="space-y-3">
+                {events.map((ev) => {
+                  const isRsvp = ev.rsvps?.includes(user?.id || "user-stu-1");
+                  return (
+                    <div key={ev.id} className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase">{ev.category}</span>
+                        <span className="text-[11px] text-[#ffcc4e] font-bold">{ev.date}</span>
+                      </div>
+                      <h4 className="font-bold text-xs text-slate-900">{ev.title}</h4>
+                      <p className="text-[11px] text-slate-500">{ev.venue} • {ev.time}</p>
+                      <button
+                        onClick={() => handleRsvp(ev.id)}
+                        className={`w-full py-1.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1 ${
+                          isRsvp
+                            ? "bg-emerald-600 text-white"
+                            : "bg-slate-100 text-slate-700 hover:bg-[#592106] hover:text-white"
+                        }`}
+                      >
+                        {isRsvp ? (
+                          <>
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            <span>RSVP Confirmed</span>
+                          </>
+                        ) : (
+                          <span>RSVP to Attend</span>
+                        )}
+                      </button>
                     </div>
-                    <h4 className="font-bold text-xs text-slate-900">{ev.title}</h4>
-                    <p className="text-[11px] text-slate-500">{ev.venue} ? {ev.time}</p>
-                    <button
-                      onClick={() => handleRsvp(ev.id)}
-                      className={`w-full py-1.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1 ${
-                        isRsvp
-                          ? "bg-emerald-600 text-white"
-                          : "bg-slate-100 text-slate-700 hover:bg-[#592106] hover:text-white"
-                      }`}
-                    >
-                      {isRsvp ? (
-                        <>
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          <span>RSVP Confirmed</span>
-                        </>
-                      ) : (
-                        <span>RSVP to Attend</span>
-                      )}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-xs text-slate-400 text-center py-2">No upcoming events scheduled yet.</p>
+            )}
           </div>
 
         </div>
