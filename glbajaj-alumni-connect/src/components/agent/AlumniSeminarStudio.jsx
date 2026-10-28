@@ -205,28 +205,52 @@ export default function AlumniSeminarStudio() {
             <div className="space-y-2 text-xs">
               <span className="font-semibold text-slate-700">Provisioned Meeting &amp; Community Links:</span>
               
-              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
-                <div className="flex items-center space-x-2 text-slate-800">
-                  <Video className="w-4 h-4 text-[#592106]" />
-                  <span className="font-mono text-[11px] truncate max-w-[180px]">
+              {/* Google Meet Action Pill */}
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between hover:bg-slate-100 transition group">
+                <a
+                  href={createdSeminar?.meet_link || "https://meet.google.com/new"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center space-x-2 text-slate-800 flex-1 mr-2"
+                >
+                  <Video className="w-4 h-4 text-[#592106] shrink-0" />
+                  <span className="font-mono text-[11px] truncate text-[#592106] font-semibold underline decoration-dotted">
                     {createdSeminar?.meet_link || "https://meet.google.com/glb-agentx-2026"}
                   </span>
-                </div>
-                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
-                  Active
-                </span>
+                </a>
+                <a
+                  href={createdSeminar?.meet_link || "https://meet.google.com/new"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center space-x-1 text-[10px] font-bold text-white bg-[#592106] hover:bg-[#431804] px-2.5 py-1 rounded-lg shadow-sm transition"
+                >
+                  <span>Open Meet</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
               </div>
 
-              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
-                <div className="flex items-center space-x-2 text-slate-800">
-                  <MessageSquare className="w-4 h-4 text-emerald-600" />
-                  <span className="font-mono text-[11px] truncate max-w-[180px]">
+              {/* WhatsApp Community Action Pill */}
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between hover:bg-slate-100 transition group">
+                <a
+                  href={createdSeminar?.whatsapp_link || "https://chat.whatsapp.com/"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center space-x-2 text-slate-800 flex-1 mr-2"
+                >
+                  <MessageSquare className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span className="font-mono text-[11px] truncate text-emerald-800 font-semibold underline decoration-dotted">
                     {createdSeminar?.whatsapp_link || "https://chat.whatsapp.com/GLBAJAJ-AI-2026"}
                   </span>
-                </div>
-                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
-                  Cohort
-                </span>
+                </a>
+                <a
+                  href={createdSeminar?.whatsapp_link || "https://chat.whatsapp.com/"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center space-x-1 text-[10px] font-bold text-white bg-emerald-700 hover:bg-emerald-800 px-2.5 py-1 rounded-lg shadow-sm transition"
+                >
+                  <span>Join Chat</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
               </div>
             </div>
 
