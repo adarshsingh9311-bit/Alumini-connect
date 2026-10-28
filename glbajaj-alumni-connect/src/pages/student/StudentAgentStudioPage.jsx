@@ -24,8 +24,7 @@ import {
   Cpu,
   Calendar,
   Users,
-  Briefcase,
-  ChevronRight
+  Briefcase
 } from "lucide-react";
 
 export default function StudentAgentStudioPage() {
@@ -39,7 +38,7 @@ export default function StudentAgentStudioPage() {
   const [workflowState, setWorkflowState] = useState(null);
   const [events, setEvents] = useState([]);
   const [approvalModalOpen, setApprovalModalOpen] = useState(false);
-  const [activeWorkflowTab, setActiveWorkflowTab] = useState("matching"); // 'matching' | 'seminar'
+  const [activeWorkflowTab, setActiveWorkflowTab] = useState("matching");
 
   useEffect(() => {
     handleTriggerMatch();
@@ -57,9 +56,9 @@ export default function StudentAgentStudioPage() {
       });
       setWorkflowState(res);
       setEvents(res.events || []);
-      addToast(`Agent pipeline executed for ${targetRole}`, "success");
+      addToast(`Alumni matches ranked for ${targetRole}`, "success");
     } catch (err) {
-      addToast("Failed to run agent matching pipeline", "error");
+      addToast("Failed to run matching pipeline", "error");
     } finally {
       setIsMatching(false);
     }
@@ -69,7 +68,7 @@ export default function StudentAgentStudioPage() {
     const file = e.target.files?.[0];
     if (file) {
       setResumeFilename(file.name);
-      addToast(`Resume "${file.name}" uploaded. Skills parsed by Candidate Profiler.`, "success");
+      addToast(`Resume "${file.name}" uploaded. Skills parsed by Profiler.`, "success");
     }
   }
 
@@ -98,21 +97,21 @@ export default function StudentAgentStudioPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 font-sans">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       
-      {/* Banner */}
-      <div className="bg-gradient-to-r from-[#592106] via-[#472510] to-[#2f1508] border-b-4 border-[#ffcc4e] rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+      {/* Standard GLBITM Portal Banner */}
+      <div className="bg-gradient-to-r from-[#592106] via-[#472510] to-[#2f1508] border-b-4 border-[#ffcc4e] rounded-3xl p-6 sm:p-8 text-white shadow-md relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="inline-flex items-center space-x-2 bg-[#ffcc4e]/20 border border-[#ffcc4e]/40 text-[#ffcc4e] text-xs px-3 py-1 rounded-full font-bold">
               <Cpu className="w-3.5 h-3.5 text-[#ffcc4e]" />
-              <span>AGENTX 2026 • Autonomous Career Engine</span>
+              <span>AGENTX 2026 • AI Career Hub</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-              AI Multi-Agent Career Studio
+              AI Multi-Agent Studio
             </h1>
             <p className="text-[#faf6eb] text-xs sm:text-sm max-w-2xl leading-relaxed">
-              Demonstrate the complete live multi-agent journey: Candidate Profiler, Explainable Mentorship Broker, PII Guardrail Redaction, and the Seminar Planner.
+              Explore autonomous career acceleration: Candidate Profiler, Explainable Mentorship Broker, PII Guardrails, and Seminar Curator.
             </p>
           </div>
 
@@ -145,31 +144,31 @@ export default function StudentAgentStudioPage() {
       ) : (
         <>
           {/* Step 1: Candidate Profiler Goal & Skill Input */}
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#592106] bg-amber-100/60 px-2.5 py-1 rounded-md">
-                  Agent Node 1 • Candidate Profiler
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#592106] bg-[#faf6eb] px-2.5 py-1 rounded-md border border-[#ffcc4e]/30">
+                  Step 1 • Candidate Profiler
                 </span>
-                <h2 className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
-                  Input Career Objective &amp; Parse Skills
+                <h2 className="text-lg sm:text-xl font-bold text-slate-900 mt-1">
+                  Specify Your Career Objective
                 </h2>
                 <p className="text-xs text-slate-500">
-                  Select an aspirational career target or upload your CV to trigger automated gap detection.
+                  Choose a target role or attach your CV for automated skill-gap analysis.
                 </p>
               </div>
 
               <button
                 onClick={handleTriggerMatch}
                 disabled={isMatching}
-                className="px-5 py-2.5 rounded-xl bg-[#592106] hover:bg-[#472510] text-[#ffcc4e] font-extrabold text-xs shadow-md transition flex items-center space-x-2"
+                className="px-4 py-2 rounded-xl bg-[#592106] hover:bg-[#472510] text-[#ffcc4e] font-bold text-xs shadow-sm transition flex items-center space-x-1.5"
               >
-                <RefreshCw className={`w-4 h-4 text-[#ffcc4e] ${isMatching ? "animate-spin" : ""}`} />
-                <span>{isMatching ? "Agents Executing..." : "Rerun Multi-Agent Pipeline"}</span>
+                <RefreshCw className={`w-3.5 h-3.5 text-[#ffcc4e] ${isMatching ? "animate-spin" : ""}`} />
+                <span>{isMatching ? "Running Pipeline..." : "Rerun Multi-Agent Pipeline"}</span>
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
                   Target Aspirational Role
@@ -177,7 +176,7 @@ export default function StudentAgentStudioPage() {
                 <select
                   value={targetRole}
                   onChange={(e) => setTargetRole(e.target.value)}
-                  className="w-full p-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#ffcc4e]"
+                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#ffcc4e]"
                 >
                   <option value="Machine Learning Engineer">Machine Learning Engineer</option>
                   <option value="Backend Engineer">Backend Engineer (Java/Go)</option>
@@ -189,13 +188,13 @@ export default function StudentAgentStudioPage() {
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Technical Skills (Manual or Extracted)
+                  Technical Skills (Manual or Parsed)
                 </label>
                 <input
                   type="text"
                   value={skillsInput}
                   onChange={(e) => setSkillsInput(e.target.value)}
-                  className="w-full p-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#ffcc4e]"
+                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#ffcc4e]"
                   placeholder="e.g. Python, PyTorch, SQL"
                 />
               </div>
@@ -219,25 +218,25 @@ export default function StudentAgentStudioPage() {
 
             {/* Inferred Preparation Gaps */}
             {workflowState?.inferred_gaps && workflowState.inferred_gaps.length > 0 && (
-              <div className="p-3.5 rounded-2xl bg-amber-50/60 border border-amber-200/80 flex flex-wrap items-center justify-between gap-2 text-xs">
+              <div className="p-3 rounded-xl bg-[#faf6eb] border border-[#ffcc4e]/40 flex flex-wrap items-center justify-between gap-2 text-xs">
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-amber-900">Inferred Preparation Gaps:</span>
+                  <span className="font-bold text-[#592106]">Inferred Preparation Gaps:</span>
                   <div className="flex flex-wrap gap-1">
                     {workflowState.inferred_gaps.map((g, idx) => (
-                      <span key={idx} className="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-medium">
+                      <span key={idx} className="bg-amber-100/70 text-amber-900 px-2 py-0.5 rounded font-medium text-[11px]">
                         {g}
                       </span>
                     ))}
                   </div>
                 </div>
-                <span className="text-[11px] text-amber-800 italic">
-                  Identified by Candidate Profiler as benchmark requirements
+                <span className="text-[11px] text-slate-500 italic">
+                  Suggested for mentorship discussion
                 </span>
               </div>
             )}
           </div>
 
-          {/* AI Activity Console (Live Trace) */}
+          {/* AI Activity Console (Clean GLBITM Theme) */}
           <AgentActivityConsole
             workflowState={workflowState}
             events={events}
@@ -247,18 +246,18 @@ export default function StudentAgentStudioPage() {
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h3 className="text-lg font-black text-slate-900">
-                  Ranked Alumni Matches ({workflowState?.ranked_matches?.length || 0})
+                <h3 className="text-base font-bold text-slate-900">
+                  Top Recommended Alumni Matches ({workflowState?.ranked_matches?.length || 0})
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Scored via formula: <code>40% Skill + 30% Relevance + 20% Availability - 15% Workload</code>.
+                  Formula: <code>40% Skill + 30% Relevance + 20% Availability - 15% Workload</code>.
                 </p>
               </div>
 
               {workflowState?.status === "AWAITING_HUMAN_APPROVAL" && (
                 <button
                   onClick={() => setApprovalModalOpen(true)}
-                  className="px-4 py-2.5 rounded-xl bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] font-extrabold text-xs shadow-md transition flex items-center space-x-1.5 animate-bounce"
+                  className="px-4 py-2 rounded-xl bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] font-bold text-xs shadow-sm transition flex items-center space-x-1.5"
                 >
                   <ShieldCheck className="w-4 h-4 text-[#472510]" />
                   <span>Review Synthesized Outreach Draft</span>

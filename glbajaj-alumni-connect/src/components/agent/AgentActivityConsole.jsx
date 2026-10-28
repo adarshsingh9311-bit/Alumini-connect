@@ -5,39 +5,39 @@ export default function AgentActivityConsole({ workflowState, events = [] }) {
   const currentStatus = workflowState?.status || "IDLE";
 
   return (
-    <div className="bg-slate-950 text-slate-100 rounded-3xl p-6 border border-slate-800 shadow-2xl space-y-4">
+    <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
         <div className="flex items-center space-x-3">
-          <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400">
-            <Cpu className="w-5 h-5 animate-pulse" />
+          <div className="p-2 rounded-xl bg-[#faf6eb] border border-[#ffcc4e]/40 text-[#592106]">
+            <Cpu className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="font-mono text-sm font-bold tracking-wider text-slate-100 uppercase">
-                AI Agent Activity Console
+              <h3 className="font-bold text-sm text-slate-900">
+                AI Agent Execution Trace
               </h3>
-              <span className="text-[10px] px-2 py-0.5 rounded-full font-mono bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-                LIVE ORCHESTRATION
+              <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-[#faf6eb] text-[#592106] border border-[#ffcc4e]/50">
+                ACTIVE PIPELINE
               </span>
             </div>
-            <p className="text-[11px] text-slate-400 font-mono">
+            <p className="text-[11px] text-slate-500 font-mono">
               Workflow ID: {workflowState?.workflow_id || "None active"}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center space-x-2 font-mono text-xs">
-          <span className="text-slate-400">Status:</span>
+        <div className="flex items-center space-x-2 text-xs">
+          <span className="text-slate-500 font-medium">Status:</span>
           <span
             className={`px-2.5 py-1 rounded-lg font-bold uppercase text-[11px] ${
               currentStatus === "AWAITING_HUMAN_APPROVAL"
-                ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse"
+                ? "bg-amber-100 text-amber-900 border border-amber-300"
                 : currentStatus === "SIMULATED" || currentStatus === "COMPLETED"
-                ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                ? "bg-emerald-100 text-emerald-900 border border-emerald-300"
                 : currentStatus === "REJECTED"
-                ? "bg-rose-500/20 text-rose-300 border border-rose-500/40"
-                : "bg-slate-800 text-slate-300"
+                ? "bg-rose-100 text-rose-900 border border-rose-300"
+                : "bg-slate-100 text-slate-700"
             }`}
           >
             {currentStatus}
@@ -45,44 +45,44 @@ export default function AgentActivityConsole({ workflowState, events = [] }) {
         </div>
       </div>
 
-      {/* Terminal Event Stream */}
-      <div className="space-y-3 max-h-72 overflow-y-auto pr-2 font-mono text-xs">
+      {/* Structured Clean Event List */}
+      <div className="space-y-2.5 max-h-64 overflow-y-auto pr-1 text-xs">
         {events.length === 0 ? (
-          <div className="py-8 text-center text-slate-500 space-y-1">
-            <Terminal className="w-8 h-8 mx-auto opacity-40 mb-2" />
-            <p>Ready to orchestrate. Launch the mentor matching pipeline below.</p>
+          <div className="py-6 text-center text-slate-400 space-y-1">
+            <Clock className="w-6 h-6 mx-auto opacity-50 mb-1 text-slate-300" />
+            <p>Ready to orchestrate. Click "Rerun Multi-Agent Pipeline" to begin.</p>
           </div>
         ) : (
           events.map((ev, idx) => (
             <div
               key={idx}
-              className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1 transition hover:border-slate-700"
+              className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1 hover:border-slate-300 transition"
             >
               <div className="flex items-center justify-between text-[11px]">
-                <span className="font-bold text-amber-400 flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                <span className="font-bold text-[#592106] flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#592106]" />
                   {ev.agent}
                 </span>
-                <span className="text-slate-500">{ev.time_str || "Just now"}</span>
+                <span className="text-slate-400 font-mono text-[10px]">{ev.time_str || "Just now"}</span>
               </div>
-              <div className="text-slate-300 font-semibold">{ev.step}</div>
-              <p className="text-[11px] text-slate-400 leading-relaxed font-sans">{ev.result_summary}</p>
+              <div className="text-slate-800 font-semibold">{ev.step}</div>
+              <p className="text-[11px] text-slate-600 leading-relaxed">{ev.result_summary}</p>
             </div>
           ))
         )}
       </div>
 
-      {/* Trust & Safety Indicator Bar */}
+      {/* Trust & Safety Guardrail Bar */}
       {workflowState?.pii_flags && workflowState.pii_flags.length > 0 && (
-        <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-800/40 flex items-center justify-between text-xs">
-          <div className="flex items-center space-x-2 text-rose-300">
-            <ShieldAlert className="w-4 h-4 text-rose-400" />
+        <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+          <div className="flex items-center space-x-2 text-amber-950 font-medium">
+            <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0" />
             <span>
-              <strong>Trust &amp; Safety Guardrail:</strong> {workflowState.pii_flags.length} sensitive fields masked (PII Protected).
+              <strong>Guardrail Filter:</strong> {workflowState.pii_flags.length} private items masked before approval.
             </span>
           </div>
-          <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-rose-900/60 text-rose-200">
-            Human Approval Required
+          <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-amber-200/70 text-amber-900 self-start sm:self-auto">
+            Review Required
           </span>
         </div>
       )}
