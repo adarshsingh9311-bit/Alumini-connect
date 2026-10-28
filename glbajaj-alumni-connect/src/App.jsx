@@ -28,6 +28,8 @@ import StudentNoticesPage from "./pages/student/StudentNoticesPage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
 import StudentAgentStudioPage from "./pages/student/StudentAgentStudioPage";
 import StudentSettingsPage from "./pages/student/StudentSettingsPage";
+import StudentSeminarHub from "./components/agent/StudentSeminarHub";
+import AlumniSeminarStudio from "./components/agent/AlumniSeminarStudio";
 
 // Alumni Portal Pages
 import AlumniDashboard from "./pages/alumni/AlumniDashboard";
@@ -98,6 +100,7 @@ function AppContent() {
         >
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<StudentDashboard />} />
+          <Route path="seminar-hub" element={<StudentSeminarHub />} />
           <Route path="agent-studio" element={<StudentAgentStudioPage />} />
           <Route path="alumni" element={<StudentAlumniDirectory />} />
           <Route path="mentorship" element={<StudentMentorshipPage />} />
@@ -121,6 +124,7 @@ function AppContent() {
         >
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<AlumniDashboard />} />
+          <Route path="seminar-studio" element={<AlumniSeminarStudio />} />
           <Route path="profile" element={<AlumniProfilePage />} />
           <Route path="mentorship" element={<AlumniMentorshipPage />} />
           <Route path="messages" element={<AlumniMessagesPage />} />

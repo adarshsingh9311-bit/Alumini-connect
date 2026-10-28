@@ -10,12 +10,14 @@ import {
   Briefcase, 
   Calendar, 
   Bell, 
-  Settings 
+  Settings,
+  Sparkles
 } from "lucide-react";
 
 export default function AlumniLayout({ onOpenNotifications }) {
   const navItems = [
     { label: "Dashboard", to: "/alumni/dashboard", icon: LayoutDashboard },
+    { label: "Seminar Studio", to: "/alumni/seminar-studio", icon: Sparkles, badge: "AI" },
     { label: "My Profile", to: "/alumni/profile", icon: User },
     { label: "Mentorship", to: "/alumni/mentorship", icon: MessageSquare },
     { label: "Messages", to: "/alumni/messages", icon: MessagesSquare, badge: "Live" },

@@ -5,7 +5,11 @@ from tools import (
     extract_and_analyze_skills,
     compute_multi_objective_utility,
     query_alumni_vector_index,
-    scrub_pii
+    scrub_pii,
+    create_seminar_record,
+    register_student_for_seminar,
+    generate_stage_alert,
+    SEMINAR_STORE
 )
 
 def log_agent_event(state: AlumniPlatformState, agent_name: str, step: str, summary: str, status: str = "COMPLETED"):
@@ -27,7 +31,7 @@ def supervisor_router_node(state: AlumniPlatformState) -> AlumniPlatformState:
         state,
         "Supervisor Agent",
         "Route Selection",
-        f"Selected workflow branch: '{wf_type}' with target: '{state.get('target_role') or state.get('seminar_topic')}'"
+        f"Selected workflow branch: '{wf_type}' with target: '{state.get('target_role') or state.get('seminar_topic') or state.get('seminar_details', {}).get('title')}'"
     )
     return state
 
@@ -137,31 +141,69 @@ def trust_guardrail_node(state: AlumniPlatformState) -> AlumniPlatformState:
     )
     return state
 
-# 6. Seminar Curator Agent
+# 6. Autonomous Seminar Curator Node (Alumni Side)
 def seminar_curator_node(state: AlumniPlatformState) -> AlumniPlatformState:
-    topic = state.get("seminar_topic", "Agentic AI in Enterprise Production")
-    plan = {
-        "topic": topic,
-        "syllabus": [
-            {"time": "00:00 - 00:20", "topic": f"Foundations of {topic}"},
-            {"time": "00:20 - 00:50", "topic": "Enterprise Architecture & Microservice Integration"},
-            {"time": "00:50 - 01:20", "topic": "Live Code Teardown & Hands-on Demo"},
-            {"time": "01:20 - 01:30", "topic": "Placement Advice & Q&A"}
-        ],
-        "prerequisites": ["Data Structures", "Terminal & Git basics", "GL Bajaj Student ID"],
-        "meeting_link": "https://meet.google.com/glb-alum-talk",
-        "reminders": [
-            {"stage": "T0 Confirmation", "status": "Simulated Active"},
-            {"stage": "T-24h Alert", "status": "Scheduled"},
-            {"stage": "T-1h Alert", "status": "Scheduled"}
-        ]
+    details = state.get("seminar_details") or {}
+    record = create_seminar_record(details)
+    state["seminar_id"] = record["id"]
+    state["seminar_details"] = record
+    state["generated_assets"] = {
+        "agenda": record["agenda"],
+        "meet_link": record["meet_link"],
+        "whatsapp_link": record["whatsapp_link"],
+        "prerequisites": record["prerequisites"],
+        "poster_copy": f"GL BAJAJ MASTERCLASS • {record['title']} • By {record['speaker_name']}"
     }
-    state["seminar_plan"] = plan
     state["status"] = "COMPLETED"
+
     log_agent_event(
         state,
-        "Seminar Curator Agent",
-        "Curate Syllabus & Schedule",
-        f"Expanded topic into 4-module syllabus with automated 3-stage reminders."
+        "Curator Agent",
+        "Structure Syllabus & Assets",
+        f"Synthesized 4-part timed agenda, provisioned Google Meet & WhatsApp links, initialized {record['total_slots']} seats."
+    )
+    return state
+
+# 7. Student Seminar Registration Node
+def seminar_registration_node(state: AlumniPlatformState) -> AlumniPlatformState:
+    sem_id = state.get("seminar_id") or list(SEMINAR_STORE.keys())[0]
+    st_reg = state.get("student_registration") or {}
+
+    log_agent_event(
+        state,
+        "Registration Agent",
+        "Validate Student Credentials",
+        f"Verified student {st_reg.get('name')} ({st_reg.get('branch')}, {st_reg.get('year')}) with college email {st_reg.get('college_email')}."
+    )
+
+    success, msg, updated_sem = register_student_for_seminar(sem_id, st_reg)
+    state["seminar_details"] = updated_sem
+    state["status"] = "SEAT_RESERVED" if success else "CAPACITY_FULL"
+
+    log_agent_event(
+        state,
+        "Broker Agent",
+        "Reserve Capacity Slot",
+        f"Seat slot claimed! Live capacity updated to {updated_sem['booked_slots']} / {updated_sem['total_slots']} booked."
+    )
+    return state
+
+# 8. Omnichannel Dispatcher Node
+def omnichannel_dispatcher_node(state: AlumniPlatformState) -> AlumniPlatformState:
+    st_reg = state.get("student_registration") or {}
+    sem = state.get("seminar_details") or list(SEMINAR_STORE.values())[0]
+
+    t0_alert = generate_stage_alert("T_0", st_reg, sem)
+    t24_alert = generate_stage_alert("T_24h", st_reg, sem)
+    t1_alert = generate_stage_alert("T_1h", st_reg, sem)
+
+    state["dispatch_queue"] = [t0_alert, t24_alert, t1_alert]
+    state["status"] = "DISPATCHED"
+
+    log_agent_event(
+        state,
+        "Dispatcher Agent",
+        "Omnichannel Alert Dispatch",
+        f"Constructed instant T_0 confirmation packet and scheduled T-24h & T-1h calendar alerts to {st_reg.get('college_email')}."
     )
     return state

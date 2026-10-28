@@ -16,6 +16,7 @@ from pydantic import BaseModel
 from state import AlumniPlatformState
 from graph import compiled_graph
 from fixtures import SEEDED_ALUMNI
+from tools import SEMINAR_STORE, generate_stage_alert
 
 app = FastAPI(title="GL Bajaj Alumni Connect Multi-Agent Engine", version="1.0.0")
 
@@ -31,7 +32,7 @@ app.add_middleware(
 WORKFLOW_RUNS: Dict[str, AlumniPlatformState] = {}
 
 class WorkflowRequest(BaseModel):
-    workflow_type: Optional[str] = "mentor_match"  # 'mentor_match' or 'seminar_curation'
+    workflow_type: Optional[str] = "mentor_match"  # 'mentor_match', 'seminar_create', 'seminar_register'
     target_role: Optional[str] = "Machine Learning Engineer"
     skills: Optional[str] = "Python, PyTorch, Machine Learning, SQL"
     goals: Optional[List[str]] = None
@@ -39,10 +40,18 @@ class WorkflowRequest(BaseModel):
     student_name: Optional[str] = "Tanmay Singhal"
     student_id: Optional[str] = "stu-glb-01"
     seminar_topic: Optional[str] = "Agentic AI in Enterprise Production"
+    seminar_id: Optional[str] = None
+    seminar_details: Optional[Dict[str, Any]] = None
+    student_registration: Optional[Dict[str, Any]] = None
 
 class ApprovalRequest(BaseModel):
     decision: str  # 'APPROVE', 'REJECT', 'SIMULATE_SEND'
     edited_message: Optional[str] = None
+
+class SimulateAlertRequest(BaseModel):
+    stage: str  # 'T_0', 'T_24h', 'T_1h'
+    seminar_id: Optional[str] = None
+    student_registration: Optional[Dict[str, Any]] = None
 
 @app.get("/api/health")
 def health():
@@ -51,12 +60,31 @@ def health():
         "service": "alumni_connect_agent_service",
         "engine": "LangGraph StateGraph",
         "seeded_alumni_count": len(SEEDED_ALUMNI),
-        "active_workflows": len(WORKFLOW_RUNS)
+        "active_workflows": len(WORKFLOW_RUNS),
+        "active_seminars": len(SEMINAR_STORE)
     }
 
 @app.get("/api/alumni")
 def get_alumni():
     return {"alumni": SEEDED_ALUMNI}
+
+@app.get("/api/seminars")
+def get_seminars():
+    return {"seminars": list(SEMINAR_STORE.values())}
+
+@app.post("/api/seminars/simulate-alert")
+def simulate_seminar_alert(req: SimulateAlertRequest):
+    sem_id = req.seminar_id or (list(SEMINAR_STORE.keys())[0] if SEMINAR_STORE else None)
+    sem = SEMINAR_STORE.get(sem_id, list(SEMINAR_STORE.values())[0] if SEMINAR_STORE else {})
+    student = req.student_registration or {
+        "name": "Tanmay Singhal",
+        "college_email": "tanmay.s@glbajaj.ac.in",
+        "mobile": "+91-98765-43210",
+        "branch": "Computer Science & Engineering",
+        "year": "3rd Year"
+    }
+    alert = generate_stage_alert(req.stage, student, sem)
+    return {"alert": alert, "seminar": sem, "student": student}
 
 @app.post("/api/run-workflow")
 def run_workflow(req: WorkflowRequest):
@@ -83,9 +111,14 @@ def run_workflow(req: WorkflowRequest):
         "sanitized_outreach": None,
         "pii_flags": [],
         "requires_approval": False,
-        "seminar_topic": req.seminar_topic or "Agentic AI",
-        "seminar_plan": None,
+        "seminar_id": req.seminar_id,
+        "seminar_details": req.seminar_details,
+        "generated_assets": None,
+        "student_registration": req.student_registration,
+        "registered_attendees": [],
+        "dispatch_queue": [],
         "status": "RUNNING",
+        "current_status": "INITIALIZED",
         "events": [],
         "created_at": time.time(),
         "updated_at": time.time()
