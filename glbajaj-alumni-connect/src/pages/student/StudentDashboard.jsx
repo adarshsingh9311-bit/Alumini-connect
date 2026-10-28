@@ -1,28 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import { 
-  runMentorMatchWorkflow, 
-  submitWorkflowApproval 
-} from "../../lib/agentService";
-
-import AgentActivityConsole from "../../components/agent/AgentActivityConsole";
-import ExplainableMatchCard from "../../components/agent/ExplainableMatchCard";
-import OutreachApprovalModal from "../../components/agent/OutreachApprovalModal";
-import SeminarPlannerWorkflow from "../../components/agent/SeminarPlannerWorkflow";
-
+  INITIAL_ALUMNI, 
+  INITIAL_NOTICES, 
+  INITIAL_EVENTS, 
+  INITIAL_ACHIEVEMENTS,
+  INITIAL_MENTORSHIPS 
+} from "../../lib/mockData";
+import AlumniCard from "../../components/student/AlumniCard";
+import AlumniProfileModal from "../../components/student/AlumniProfileModal";
+import MentorshipRequestModal from "../../components/student/MentorshipRequestModal";
 import { 
   Users, 
+  MessageSquare, 
+  Bell, 
+  Calendar, 
+  ArrowRight, 
+  Award, 
   Sparkles, 
-  Send, 
-  FileText, 
-  Upload, 
-  ShieldCheck, 
-  CheckCircle2, 
-  GraduationCap, 
-  RefreshCw,
-  Sliders,
+  CheckCircle2,
+  GraduationCap,
+  Heart,
+  Briefcase,
+  FileText,
+  Upload,
   AlertCircle
 } from "lucide-react";
 
@@ -30,75 +33,74 @@ export default function StudentDashboard() {
   const { profile, user } = useAuth();
   const { addToast } = useToast();
 
-  // Agent State
-  const [targetRole, setTargetRole] = useState("Machine Learning Engineer");
-  const [skillsInput, setSkillsInput] = useState("Python, Machine Learning, PyTorch, SQL");
-  const [resumeFilename, setResumeFilename] = useState("Resume_GLB_Scholar.pdf");
-  const [isMatching, setIsMatching] = useState(false);
-  const [workflowState, setWorkflowState] = useState(null);
-  const [events, setEvents] = useState([]);
-  const [approvalModalOpen, setApprovalModalOpen] = useState(false);
-  const [showSeminarWorkflow, setShowSeminarWorkflow] = useState(false);
+  const [alumniList] = useState(INITIAL_ALUMNI);
+  const [notices] = useState(INITIAL_NOTICES);
+  const [events, setEvents] = useState(INITIAL_EVENTS);
+  const [achievements] = useState(INITIAL_ACHIEVEMENTS);
+  const [mentorships, setMentorships] = useState(INITIAL_MENTORSHIPS);
+  const [studentCv, setStudentCv] = useState(profile?.resume_name || "Resume_GLB_Scholar.pdf");
 
-  // Initial auto-trigger to seed view on first load
-  useEffect(() => {
-    handleTriggerMatch();
-  }, []);
-
-  async function handleTriggerMatch() {
-    setIsMatching(true);
-    try {
-      const res = await runMentorMatchWorkflow({
-        target_role: targetRole,
-        skills: skillsInput,
-        student_name: profile?.full_name || "Tanmay Singhal",
-        student_id: profile?.id || "stu-glb-01",
-        goals: ["Off-campus referral", "Mock interview", "System Design teardown"]
-      });
-      setWorkflowState(res);
-      setEvents(res.events || []);
-      addToast(`Agent retrieved and ranked top alumni for ${targetRole}`, "success");
-    } catch (err) {
-      addToast("Error running matching pipeline", "error");
-    } finally {
-      setIsMatching(false);
-    }
-  }
-
-  function handleResumeUpload(e) {
+  function handleQuickCvUpload(e) {
     const file = e.target.files?.[0];
     if (file) {
-      setResumeFilename(file.name);
-      addToast(`Resume "${file.name}" uploaded. Profiler will extract skills automatically.`, "success");
+      if (file.size > 5 * 1024 * 1024) {
+        addToast("File size exceeds 5MB limit. Please upload a smaller PDF/DOCX file.", "error");
+        return;
+      }
+      setStudentCv(file.name);
+      addToast(`CV "${file.name}" uploaded successfully!`, "success");
     }
   }
 
-  async function handleApproveOutreach(workflowId, message) {
-    try {
-      const res = await submitWorkflowApproval(workflowId, "APPROVE", message);
-      setWorkflowState(res);
-      setEvents((prev) => [...prev, ...(res.events || [])]);
-      setApprovalModalOpen(false);
-      addToast("Outreach approved & simulated dispatch to mentor!", "success");
-    } catch (err) {
-      addToast("Failed to record approval decision", "error");
-    }
+  const [selectedAlumni, setSelectedAlumni] = useState(null);
+  const [requestTargetAlumni, setRequestTargetAlumni] = useState(null);
+
+  // Time-of-day greeting
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? "Good Morning" : hour < 17 ? "Good Afternoon" : "Good Evening";
+
+  // Family moments for student community widget
+  const studentFamilyMoments = [];
+
+  function handleRsvp(eventId) {
+    setEvents((prev) =>
+      prev.map((ev) => {
+        if (ev.id === eventId) {
+          const hasRsvp = ev.rsvps?.includes(user?.id || "user-stu-1");
+          const nextRsvps = hasRsvp
+            ? ev.rsvps.filter((id) => id !== (user?.id || "user-stu-1"))
+            : [...(ev.rsvps || []), user?.id || "user-stu-1"];
+          addToast(hasRsvp ? `RSVP cancelled for ${ev.title}` : `RSVP confirmed for ${ev.title}!`, "success");
+          return { ...ev, rsvps: nextRsvps };
+        }
+        return ev;
+      })
+    );
   }
 
-  async function handleRejectOutreach(workflowId) {
-    try {
-      const res = await submitWorkflowApproval(workflowId, "REJECT");
-      setWorkflowState(res);
-      setEvents((prev) => [...prev, ...(res.events || [])]);
-      setApprovalModalOpen(false);
-      addToast("Outreach rejected. Transmission halted.", "info");
-    } catch (err) {
-      addToast("Failed to record rejection", "error");
-    }
+  function handleSubmitMentorship(requestData) {
+    const newReq = {
+      id: "mr-" + Date.now(),
+      student_id: profile?.id || "stu-1",
+      student_name: profile?.full_name || "Tanmay Singhal",
+      student_roll: profile?.roll_number || "230192010055",
+      student_branch: profile?.branch || "CSE",
+      alumni_id: requestData.alumni_id,
+      alumni_name: requestData.alumni_name,
+      topic: requestData.topic,
+      message: requestData.message,
+      status: "pending",
+      response_note: null,
+      created_at: new Date().toISOString()
+    };
+    setMentorships((prev) => [newReq, ...prev]);
+    addToast(`Mentorship request successfully sent to ${requestData.alumni_name}!`, "success");
   }
+
+  const myRequestsCount = mentorships.filter((m) => m.student_id === (profile?.id || "stu-1")).length;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 font-sans">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       
       {/* Student Welcome Banner */}
       <div className="bg-gradient-to-r from-[#592106] via-[#472510] to-[#2f1508] border-b-4 border-[#ffcc4e] rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
@@ -108,184 +110,345 @@ export default function StudentDashboard() {
               <GraduationCap className="w-3.5 h-3.5 text-[#ffcc4e]" />
               <span>Student Portal | Roll No: {profile?.roll_number || "230192010055"}</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-              Good Morning, {profile?.full_name?.split(" ")[0] || "Scholar"}!
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white !text-white">
+              {greeting}, {profile?.full_name?.split(" ")[0] || "Scholar"}!
             </h1>
             <p className="text-[#faf6eb] text-xs sm:text-sm max-w-xl leading-relaxed">
-              Agent-driven career acceleration: find verified alumni mentors, simulate outreach with human-in-the-loop safety, and host tech seminars.
+              Connect with alumni from Google, Microsoft, Amazon and 500+ top firms. Get 1-on-1 career guidance, mock interviews, and placement referrals.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={() => setShowSeminarWorkflow(!showSeminarWorkflow)}
-              className="bg-[#ffcc4e]/20 hover:bg-[#ffcc4e]/30 text-[#ffcc4e] border border-[#ffcc4e]/50 font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition flex items-center space-x-2"
-            >
-              <Sparkles className="w-4 h-4" />
-              <span>{showSeminarWorkflow ? "View Mentors" : "Host a Seminar"}</span>
-            </button>
             <Link
               to="/student/alumni"
-              className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-lg transition"
+              className="bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition shadow-lg flex items-center space-x-1.5"
             >
-              Browse Directory (30+ Alumni)
+              <Users className="w-4 h-4" />
+              <span>Find Alumni Mentors</span>
+            </Link>
+            <Link
+              to="/student/mentorship"
+              className="bg-white/10 hover:bg-white/20 text-white font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition border border-white/20 flex items-center space-x-1.5"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>My Requests ({myRequestsCount})</span>
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Flagship Flow: Seminar Planner Toggle or Main Mentor Match */}
-      {showSeminarWorkflow ? (
-        <SeminarPlannerWorkflow />
-      ) : (
-        <>
-          {/* Main Agent Step 1: Student Goal & Profiler Input Box */}
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#592106] bg-amber-100/60 px-2.5 py-1 rounded-md">
-                  P0: Candidate Profiler &amp; Goal Orchestration
+      {/* Mandatory Student CV Quick Upload & Verification Banner */}
+      <div className="bg-[#faf6eb] border-2 border-dashed border-[#ffcc4e] rounded-2xl p-5 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="flex items-start space-x-3.5">
+          <div className="w-10 h-10 rounded-xl bg-[#592106] text-[#ffcc4e] flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+            <FileText className="w-5 h-5 text-[#ffcc4e]" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-extrabold text-[#592106] uppercase tracking-wide">
+                Student Curriculum Vitae (CV / Resume)
+              </h3>
+              <span className="bg-red-500/10 text-red-600 border border-red-200 text-[10px] font-black px-2 py-0.5 rounded-full">
+                * Mandatory for Mentorship &amp; Referrals
+              </span>
+            </div>
+            <p className="text-xs text-slate-600 mt-0.5">
+              Alumni mentors screen resumes before accepting 1-on-1 mentorship requests. Upload your latest PDF or DOCX file (max 5MB).
+            </p>
+            <div className="mt-2 text-xs font-mono text-slate-700 flex items-center gap-2">
+              <span className="font-semibold text-slate-900">Current Attached CV:</span>
+              <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-800 font-bold truncate max-w-xs">
+                {studentCv || "No CV attached yet"}
+              </span>
+              {studentCv && (
+                <span className="inline-flex items-center gap-1 text-emerald-700 text-[11px] font-bold">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Verified</span>
                 </span>
-                <h2 className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
-                  Specify Your Target Career Goal
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 w-full md:w-auto shrink-0">
+          <label className="cursor-pointer bg-[#592106] hover:bg-[#472510] text-[#ffcc4e] font-bold text-xs px-4 py-2.5 rounded-xl transition shadow flex items-center justify-center gap-1.5 w-full md:w-auto">
+            <Upload className="w-4 h-4 text-[#ffcc4e]" />
+            <span>{studentCv ? "Update / Replace CV" : "Upload Mandatory CV"}</span>
+            <input
+              type="file"
+              accept=".pdf,.docx,.doc"
+              onChange={handleQuickCvUpload}
+              className="hidden"
+            />
+          </label>
+          <Link
+            to="/student/profile"
+            className="bg-white hover:bg-slate-50 text-[#592106] border border-slate-300 font-bold text-xs px-3.5 py-2.5 rounded-xl transition flex items-center justify-center shrink-0"
+          >
+            Manage in Profile
+          </Link>
+        </div>
+      </div>
+
+      {/* Metrics Row: 4 Clickable Action Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <Link
+          to="/student/alumni"
+          className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4 hover:border-[#ffcc4e] hover:shadow-md hover:-translate-y-0.5 transition duration-200 cursor-pointer group"
+          title="Browse Available Mentors"
+        >
+          <div className="w-12 h-12 rounded-xl bg-[#faf6eb] text-[#592106] border border-[#ffcc4e]/40 flex items-center justify-center group-hover:scale-105 transition shrink-0">
+            <Users className="w-6 h-6 text-[#592106]" />
+          </div>
+          <div>
+            <div className="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-[#592106] transition">{alumniList.length}</div>
+            <div className="text-xs text-slate-500 font-semibold group-hover:text-[#592106] transition">Available Mentors &rarr;</div>
+          </div>
+        </Link>
+
+        <Link
+          to="/student/mentorship"
+          className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4 hover:border-[#ffcc4e] hover:shadow-md hover:-translate-y-0.5 transition duration-200 cursor-pointer group"
+          title="View Mentorship Requests"
+        >
+          <div className="w-12 h-12 rounded-xl bg-[#faf6eb] text-[#592106] border border-[#ffcc4e]/40 flex items-center justify-center group-hover:scale-105 transition shrink-0">
+            <MessageSquare className="w-6 h-6 text-[#592106]" />
+          </div>
+          <div>
+            <div className="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-[#592106] transition">{myRequestsCount}</div>
+            <div className="text-xs text-slate-500 font-semibold group-hover:text-[#592106] transition">Mentorship Requests &rarr;</div>
+          </div>
+        </Link>
+
+        <Link
+          to="/student/notices"
+          className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4 hover:border-[#ffcc4e] hover:shadow-md hover:-translate-y-0.5 transition duration-200 cursor-pointer group"
+          title="Read College Notices"
+        >
+          <div className="w-12 h-12 rounded-xl bg-[#faf6eb] text-[#c87e35] border border-[#ffcc4e]/40 flex items-center justify-center group-hover:scale-105 transition shrink-0">
+            <Bell className="w-6 h-6 text-[#c87e35]" />
+          </div>
+          <div>
+            <div className="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-[#592106] transition">{notices.length}</div>
+            <div className="text-xs text-slate-500 font-semibold group-hover:text-[#592106] transition">College Notices &rarr;</div>
+          </div>
+        </Link>
+
+        <Link
+          to="/student/events"
+          className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4 hover:border-[#ffcc4e] hover:shadow-md hover:-translate-y-0.5 transition duration-200 cursor-pointer group"
+          title="View Upcoming Events"
+        >
+          <div className="w-12 h-12 rounded-xl bg-[#faf6eb] text-[#472510] border border-[#ffcc4e]/40 flex items-center justify-center group-hover:scale-105 transition shrink-0">
+            <Calendar className="w-6 h-6 text-[#472510]" />
+          </div>
+          <div>
+            <div className="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-[#592106] transition">{events.length}</div>
+            <div className="text-xs text-slate-500 font-semibold group-hover:text-[#592106] transition">Upcoming Events &rarr;</div>
+          </div>
+        </Link>
+      </div>
+
+      {/* Main Content Grid: Featured Alumni & Sidebar */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* Featured Mentors & Accolades (2 Cols) */}
+        <div className="lg:col-span-2 space-y-8">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-[#ffcc4e]" />
+                  <span>Recommended Mentors for You</span>
                 </h2>
-                <p className="text-xs text-slate-500">
-                  Enter your aspired job role, edit extracted skills, or upload your CV for automated parsing.
-                </p>
+                <p className="text-xs text-slate-500">Verified seniors aligned with your branch and career goals</p>
               </div>
-
-              <button
-                onClick={handleTriggerMatch}
-                disabled={isMatching}
-                className="px-5 py-2.5 rounded-xl bg-[#592106] hover:bg-[#472510] text-[#ffcc4e] font-extrabold text-xs shadow-md transition flex items-center space-x-2 self-start sm:self-auto"
+              <Link
+                to="/student/alumni"
+                className="text-xs font-bold text-[#592106] hover:text-[#472510] flex items-center gap-1"
               >
-                <RefreshCw className={`w-4 h-4 text-[#ffcc4e] ${isMatching ? "animate-spin" : ""}`} />
-                <span>{isMatching ? "Orchestrating..." : "Run AI Mentor Match"}</span>
-              </button>
+                <span>Explore All</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Target Role Selector */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Target Aspirational Role
-                </label>
-                <select
-                  value={targetRole}
-                  onChange={(e) => setTargetRole(e.target.value)}
-                  className="w-full p-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#ffcc4e]"
-                >
-                  <option value="Machine Learning Engineer">Machine Learning Engineer</option>
-                  <option value="Backend Engineer">Backend Engineer (Java/Go)</option>
-                  <option value="Frontend Engineer">Frontend Engineer (React/TypeScript)</option>
-                  <option value="DevOps / SRE">DevOps / SRE Engineer</option>
-                  <option value="Data Engineer">Data Engineer (Big Data / Spark)</option>
-                </select>
+            {alumniList.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {alumniList.slice(0, 4).map((alumni) => (
+                  <AlumniCard
+                    key={alumni.id}
+                    alumni={alumni}
+                    onOpenProfile={setSelectedAlumni}
+                    onRequestMentorship={setRequestTargetAlumni}
+                  />
+                ))}
               </div>
-
-              {/* Editable Skills */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Technical Skills (Manual entry or parsed)
-                </label>
-                <input
-                  type="text"
-                  value={skillsInput}
-                  onChange={(e) => setSkillsInput(e.target.value)}
-                  className="w-full p-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#ffcc4e]"
-                  placeholder="e.g. Python, PyTorch, SQL"
-                />
-              </div>
-
-              {/* Resume Upload Simulator */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Resume Attachment (Optional)
-                </label>
-                <div className="flex items-center space-x-2">
-                  <label className="cursor-pointer flex-1 p-2.5 rounded-xl border border-dashed border-slate-300 bg-slate-50 hover:bg-slate-100 text-xs text-slate-600 flex items-center justify-center gap-1.5 transition">
-                    <Upload className="w-3.5 h-3.5 text-[#592106]" />
-                    <span className="truncate">{resumeFilename}</span>
-                    <input
-                      type="file"
-                      accept=".pdf,.docx"
-                      onChange={handleResumeUpload}
-                      className="hidden"
-                    />
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            {/* Profiler Extracted Gaps Pill */}
-            {workflowState?.inferred_gaps && workflowState.inferred_gaps.length > 0 && (
-              <div className="p-3.5 rounded-2xl bg-amber-50/60 border border-amber-200/80 flex flex-wrap items-center justify-between gap-2 text-xs">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-amber-900">Inferred Preparation Gaps:</span>
-                  <div className="flex flex-wrap gap-1">
-                    {workflowState.inferred_gaps.map((g, idx) => (
-                      <span key={idx} className="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-medium">
-                        {g}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <span className="text-[11px] text-amber-800 italic">
-                  Suggested for discussion during mentorship
-                </span>
+            ) : (
+              <div className="bg-slate-50 border border-slate-200 rounded-2xl p-8 text-center text-xs text-slate-500">
+                No alumni mentors registered yet. Once alumni join and activate mentorship, they will appear here.
               </div>
             )}
           </div>
 
-          {/* AI Activity Console (Visibly Agentic Backend Log Stream) */}
-          <AgentActivityConsole
-            workflowState={workflowState}
-            events={events}
-          />
-
-          {/* Ranked Explainable Matches Section */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-black text-slate-900">
-                  Top Recommended Alumni Mentors ({workflowState?.ranked_matches?.length || 0})
+          {/* Alumni Achievements Highlight */}
+          {achievements.length > 0 && (
+            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                  <Award className="w-4 h-4 text-[#ffcc4e]" />
+                  <span>Alumni Accolades & Milestones</span>
                 </h3>
-                <p className="text-xs text-slate-500">
-                  Scored using formula: <code>40% Skill + 30% Relevance + 20% Availability - 15% Workload</code>.
-                </p>
+                <span className="text-[11px] text-slate-400 font-medium">Verified by College Admin</span>
               </div>
 
-              {workflowState?.status === "AWAITING_HUMAN_APPROVAL" && (
-                <button
-                  onClick={() => setApprovalModalOpen(true)}
-                  className="px-4 py-2 rounded-xl bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] font-extrabold text-xs shadow-md transition flex items-center space-x-1.5 animate-bounce"
-                >
-                  <ShieldCheck className="w-4 h-4 text-[#472510]" />
-                  <span>Review Synthesized Outreach Draft</span>
-                </button>
-              )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {achievements.map((ach) => (
+                  <div key={ach.id} className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
+                    <div className="flex items-center justify-between text-xs font-bold text-[#592106]">
+                      <span>{ach.alumni_name}</span>
+                      <span className="text-[10px] text-slate-400 font-normal">{ach.alumni_batch}</span>
+                    </div>
+                    <h4 className="text-xs font-bold text-slate-900 leading-snug">{ach.title}</h4>
+                    <p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">{ach.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Sidebar: Moments, Notices & Events */}
+        <div className="space-y-6">
+          
+          {/* GLB Family Moments Feed Widget */}
+          {studentFamilyMoments.length > 0 && (
+            <div className="bg-gradient-to-br from-amber-50/60 to-teal-50/60 rounded-2xl p-5 border border-amber-200/60 shadow-sm space-y-3">
+              <div className="flex items-center justify-between border-b border-amber-200/40 pb-2">
+                <h3 className="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                  <Heart className="w-3.5 h-3.5 fill-glgold text-[#ffcc4e]" />
+                  <span>GLB Family Moments</span>
+                </h3>
+                <span className="text-[10px] text-[#ffcc4e] font-bold">Community</span>
+              </div>
+              <div className="space-y-2.5">
+                {studentFamilyMoments.map(m => (
+                  <div key={m.id} className="bg-white/90 p-3 rounded-xl border border-amber-100 text-xs space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-slate-900">{m.author} ({m.batch})</span>
+                      <span className="text-[10px] text-slate-400">{m.time}</span>
+                    </div>
+                    <p className="text-slate-600 text-[11px] leading-relaxed">{m.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* College Notices Card */}
+          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <Bell className="w-4 h-4 text-[#ffcc4e]" />
+                <span>College Notices</span>
+              </h3>
+              <Link to="/student/notices" className="text-xs font-semibold text-[#592106] hover:underline">
+                View All
+              </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {workflowState?.ranked_matches?.map((match, idx) => (
-                <ExplainableMatchCard
-                  key={idx}
-                  match={match}
-                  onSelectForOutreach={() => setApprovalModalOpen(true)}
-                />
-              ))}
-            </div>
+            {notices.length > 0 ? (
+              <div className="space-y-3">
+                {notices.map((notice) => (
+                  <div key={notice.id} className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1 hover:bg-[#faf6eb]/50 transition">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#592106] bg-teal-100/60 px-2 py-0.5 rounded">
+                        {notice.category}
+                      </span>
+                      <span className="text-[10px] text-slate-400">
+                        {new Date(notice.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <h4 className="font-bold text-xs text-slate-900 leading-snug">{notice.title}</h4>
+                    <p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">{notice.content}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-slate-400 text-center py-2">No official notices posted yet.</p>
+            )}
           </div>
-        </>
-      )}
 
-      {/* Human Approval & Outreach Modal */}
-      <OutreachApprovalModal
-        isOpen={approvalModalOpen}
-        onClose={() => setApprovalModalOpen(false)}
-        workflowState={workflowState}
-        onApprove={handleApproveOutreach}
-        onReject={handleRejectOutreach}
+          {/* Upcoming Events Card */}
+          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-[#ffcc4e]" />
+                <span>Upcoming Events</span>
+              </h3>
+              <Link to="/student/events" className="text-xs font-semibold text-[#592106] hover:underline">
+                View All
+              </Link>
+            </div>
+
+            {events.length > 0 ? (
+              <div className="space-y-3">
+                {events.map((ev) => {
+                  const isRsvp = ev.rsvps?.includes(user?.id || "user-stu-1");
+                  return (
+                    <div key={ev.id} className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase">{ev.category}</span>
+                        <span className="text-[11px] text-[#ffcc4e] font-bold">{ev.date}</span>
+                      </div>
+                      <h4 className="font-bold text-xs text-slate-900">{ev.title}</h4>
+                      <p className="text-[11px] text-slate-500">{ev.venue} • {ev.time}</p>
+                      <button
+                        onClick={() => handleRsvp(ev.id)}
+                        className={`w-full py-1.5 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1 ${
+                          isRsvp
+                            ? "bg-emerald-600 text-white"
+                            : "bg-slate-100 text-slate-700 hover:bg-[#592106] hover:text-white"
+                        }`}
+                      >
+                        {isRsvp ? (
+                          <>
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            <span>RSVP Confirmed</span>
+                          </>
+                        ) : (
+                          <span>RSVP to Attend</span>
+                        )}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-xs text-slate-400 text-center py-2">No upcoming events scheduled yet.</p>
+            )}
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* Alumni Detail Modal */}
+      <AlumniProfileModal
+        isOpen={Boolean(selectedAlumni)}
+        onClose={() => setSelectedAlumni(null)}
+        alumni={selectedAlumni}
+        onRequestMentorship={(alumni) => {
+          setSelectedAlumni(null);
+          setRequestTargetAlumni(alumni);
+        }}
+      />
+
+      {/* Mentorship Request Modal */}
+      <MentorshipRequestModal
+        isOpen={Boolean(requestTargetAlumni)}
+        onClose={() => setRequestTargetAlumni(null)}
+        alumni={requestTargetAlumni}
+        onSubmit={handleSubmitMentorship}
       />
 
     </div>
