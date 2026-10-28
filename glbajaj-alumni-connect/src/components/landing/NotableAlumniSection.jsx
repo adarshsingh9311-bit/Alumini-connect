@@ -135,7 +135,7 @@ export default function NotableAlumniSection({ onSelectAlumnus }) {
   function handleViewAllAlumni(e) {
     e.preventDefault();
     if (!user) {
-      navigate("/login?role=student");
+      navigate("/login");
     } else {
       navigate("/student/alumni");
     }

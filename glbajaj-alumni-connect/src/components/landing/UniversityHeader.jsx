@@ -21,8 +21,8 @@ export default function UniversityHeader({ onOpenAuthModal }) {
         navigate(studentFallback || "/student/dashboard");
       }
     } else {
-      // User is not logged in: navigate directly to login page with portal parameter
-      navigate(`/login?role=${targetSection === "alumni" ? "alumni" : "student"}`);
+      // User is not logged in: ALWAYS redirect to login page
+      navigate("/login");
     }
   }
 
@@ -43,8 +43,8 @@ export default function UniversityHeader({ onOpenAuthModal }) {
         if (el) el.scrollIntoView({ behavior: "smooth" });
       }
     } else {
-      // Navigate directly to login page
-      navigate(`/login?role=student`);
+      // User is not logged in: ALWAYS redirect to login page
+      navigate("/login");
     }
   }
 

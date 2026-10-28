@@ -57,14 +57,17 @@ export const FEATURED_UNIVERSITY_MENTORS = [
 
 export default function UniversityMentorshipSection({ onSelectMentor }) {
   const [activeFilter, setActiveFilter] = useState("All");
-  const { setDemoPortal } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const filters = ["All", "Product & Big Tech", "Cloud & Global", "Defense & Public Service"];
 
   function handleGoToDirectory() {
-    setDemoPortal(USER_ROLES.STUDENT);
-    navigate("/student/alumni");
+    if (!user) {
+      navigate("/login");
+    } else {
+      navigate("/student/alumni");
+    }
   }
 
   return (

@@ -38,8 +38,8 @@ export default function LandingPage() {
 
   function handleSelectAlumnus(alumnus) {
     if (!user) {
-      // If user is not logged in, prompt login first
-      navigate("/login?role=student");
+      // If user is not logged in, ALWAYS redirect to login page
+      navigate("/login");
       return;
     }
     setSelectedAlumnus(alumnus);
@@ -47,7 +47,7 @@ export default function LandingPage() {
 
   function handleDirectPortal(targetRole, path) {
     setAuthModalOpen(false);
-    navigate(`/login?role=${targetRole}`);
+    navigate("/login");
   }
 
   function handleSendConnect(e) {
@@ -267,8 +267,11 @@ export default function LandingPage() {
                   <button
                     type="button"
                     onClick={() => {
-                      setDemoPortal(USER_ROLES.STUDENT);
-                      navigate("/student/messages");
+                      if (!user) {
+                        navigate("/login");
+                      } else {
+                        navigate("/student/messages");
+                      }
                     }}
                     className="bg-[#FFFFFF] hover:bg-white text-[#521321] border border-[#EAE5DC] text-xs font-semibold py-2.5 px-3 rounded-lg transition"
                   >
