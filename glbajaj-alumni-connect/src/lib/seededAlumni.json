@@ -1,0 +1,871 @@
+[
+  {
+    "id": "alm-001",
+    "name": "Aarav Sharma",
+    "email": "aarav.sharma@example.com",
+    "phone": "+91-98765-43210",
+    "batch": "2020",
+    "branch": "CSE",
+    "current_company": "Google",
+    "current_designation": "Senior Machine Learning Engineer",
+    "industry": "Artificial Intelligence",
+    "skills": [
+      "Machine Learning",
+      "PyTorch",
+      "Python",
+      "MLOps",
+      "LLMs",
+      "TensorFlow",
+      "FastAPI"
+    ],
+    "mentorship_topics": [
+      "ML Interview Prep",
+      "Model Deployment",
+      "System Design"
+    ],
+    "availability": "available",
+    "capacity": 3,
+    "current_load": 1,
+    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+    "bio": "GL Bajaj 2020 alumnus working on core LLM systems and recommendation pipelines at Google Cloud."
+  },
+  {
+    "id": "alm-002",
+    "name": "Priya Verma",
+    "email": "priya.verma@example.com",
+    "phone": "+91-98123-45678",
+    "batch": "2021",
+    "branch": "IT",
+    "current_company": "Microsoft",
+    "current_designation": "Software Development Engineer II",
+    "industry": "Cloud Computing",
+    "skills": [
+      "Python",
+      "Azure",
+      "Distributed Systems",
+      "Machine Learning",
+      "Docker",
+      "Kubernetes"
+    ],
+    "mentorship_topics": [
+      "Backend Scaling",
+      "Cloud Architecture",
+      "Azure Certifications"
+    ],
+    "availability": "available",
+    "capacity": 2,
+    "current_load": 0,
+    "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80",
+    "bio": "Passionate about high-throughput microservices and mentoring juniors on cloud patterns."
+  },
+  {
+    "id": "alm-003",
+    "name": "Rohan Gupta",
+    "email": "rohan.gupta@example.com",
+    "phone": "+91-97654-32109",
+    "batch": "2019",
+    "branch": "CSE",
+    "current_company": "Amazon",
+    "current_designation": "Applied Scientist",
+    "industry": "E-Commerce & AI",
+    "skills": [
+      "Machine Learning",
+      "NLP",
+      "Deep Learning",
+      "Python",
+      "AWS SageMaker",
+      "Data Structures"
+    ],
+    "mentorship_topics": [
+      "Research Paper Guidance",
+      "Applied Science Roles",
+      "Algorithms"
+    ],
+    "availability": "limited",
+    "capacity": 2,
+    "current_load": 2,
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
+    "bio": "Working on NLP and semantic search at Amazon. Mentor for algorithmic problem solving."
+  },
+  {
+    "id": "alm-004",
+    "name": "Sneha Patel",
+    "email": "sneha.patel@example.com",
+    "phone": "+91-98450-12345",
+    "batch": "2022",
+    "branch": "ECE",
+    "current_company": "NVIDIA",
+    "current_designation": "GPU Systems Software Engineer",
+    "industry": "Semiconductors & Deep Learning",
+    "skills": [
+      "C++",
+      "CUDA",
+      "Computer Vision",
+      "Python",
+      "Embedded Systems",
+      "Linux"
+    ],
+    "mentorship_topics": [
+      "Hardware Acceleration",
+      "CUDA Programming",
+      "ECE to Tech Transition"
+    ],
+    "availability": "available",
+    "capacity": 3,
+    "current_load": 1,
+    "avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
+    "bio": "Transitioned from ECE to high-performance GPU programming at NVIDIA."
+  },
+  {
+    "id": "alm-005",
+    "name": "Aditya Kapoor",
+    "email": "aditya.k@example.com",
+    "phone": "+91-99887-76655",
+    "batch": "2018",
+    "branch": "CSE",
+    "current_company": "Meta",
+    "current_designation": "Staff Engineer - Infrastructure",
+    "industry": "Social Media & Networks",
+    "skills": [
+      "System Design",
+      "Distributed Systems",
+      "C++",
+      "Python",
+      "Golang",
+      "Microservices"
+    ],
+    "mentorship_topics": [
+      "System Design at Scale",
+      "Career Growth to Staff Eng",
+      "Tech Leadership"
+    ],
+    "availability": "unavailable",
+    "capacity": 1,
+    "current_load": 1,
+    "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
+    "bio": "Infrastructure engineer focused on distributed caching and edge networks."
+  },
+  {
+    "id": "alm-006",
+    "name": "Ananya Mishra",
+    "email": "ananya.mishra@example.com",
+    "phone": "+91-91234-56789",
+    "batch": "2021",
+    "branch": "IT",
+    "current_company": "Adobe",
+    "current_designation": "Frontend Lead",
+    "industry": "SaaS & Creative Tools",
+    "skills": [
+      "React",
+      "TypeScript",
+      "JavaScript",
+      "Next.js",
+      "Web Performance",
+      "UI/UX Architecture"
+    ],
+    "mentorship_topics": [
+      "Modern React Ecosystem",
+      "Design Systems",
+      "Web Vitals"
+    ],
+    "availability": "available",
+    "capacity": 4,
+    "current_load": 2,
+    "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80",
+    "bio": "Building rich interactive web editors at Adobe Creative Cloud."
+  },
+  {
+    "id": "alm-007",
+    "name": "Vikram Singh",
+    "email": "vikram.singh@example.com",
+    "phone": "+91-98711-22334",
+    "batch": "2020",
+    "branch": "CSE",
+    "current_company": "Flipkart",
+    "current_designation": "Senior Data Engineer",
+    "industry": "E-Commerce",
+    "skills": [
+      "Apache Spark",
+      "Python",
+      "BigQuery",
+      "Kafka",
+      "Data Warehousing",
+      "SQL",
+      "Airflow"
+    ],
+    "mentorship_topics": [
+      "Big Data Pipelines",
+      "Kafka Streaming",
+      "Data Engineering Interviews"
+    ],
+    "availability": "available",
+    "capacity": 3,
+    "current_load": 0,
+    "avatar": "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=400&q=80",
+    "bio": "Data architect scaling real-time analytics for Flipkart Big Billion Days."
+  },
+  {
+    "id": "alm-008",
+    "name": "Kavita Rao",
+    "email": "kavita.rao@example.com",
+    "phone": "+91-98333-44556",
+    "batch": "2022",
+    "branch": "CSE",
+    "current_company": "Zomato",
+    "current_designation": "Product Manager",
+    "industry": "Food Delivery & Logistics",
+    "skills": [
+      "Product Strategy",
+      "User Research",
+      "SQL",
+      "A/B Testing",
+      "Agile",
+      "Roadmapping"
+    ],
+    "mentorship_topics": [
+      "APM Transition",
+      "Product Sense Interviews",
+      "Feature Prioritization"
+    ],
+    "availability": "available",
+    "capacity": 2,
+    "current_load": 1,
+    "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80",
+    "bio": "APM at Zomato guiding engineering students into product roles."
+  },
+  {
+    "id": "alm-009",
+    "name": "Harsh Vardhan",
+    "email": "harsh.v@example.com",
+    "phone": "+91-94567-89012",
+    "batch": "2019",
+    "branch": "IT",
+    "current_company": "Paytm",
+    "current_designation": "Cybersecurity Architect",
+    "industry": "FinTech",
+    "skills": [
+      "Cybersecurity",
+      "Penetration Testing",
+      "OAuth",
+      "Network Security",
+      "Cryptography",
+      "Python"
+    ],
+    "mentorship_topics": [
+      "Bug Bounty Guidance",
+      "Security Certifications (OSCP)",
+      "API Security"
+    ],
+    "availability": "available",
+    "capacity": 2,
+    "current_load": 0,
+    "avatar": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80",
+    "bio": "Fintech security specialist passionate about threat modeling and ethical hacking."
+  },
+  {
+    "id": "alm-010",
+    "name": "Divya Nair",
+    "email": "divya.nair@example.com",
+    "phone": "+91-97451-23678",
+    "batch": "2021",
+    "branch": "CSE",
+    "current_company": "Uber",
+    "current_designation": "DevOps / SRE Engineer",
+    "industry": "Mobility",
+    "skills": [
+      "DevOps",
+      "Kubernetes",
+      "Terraform",
+      "Prometheus",
+      "CI/CD",
+      "AWS",
+      "Golang"
+    ],
+    "mentorship_topics": [
+      "Cloud Native Infra",
+      "SRE Best Practices",
+      "Container Orchestration"
+    ],
+    "availability": "limited",
+    "capacity": 2,
+    "current_load": 1,
+    "avatar": "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80",
+    "bio": "Site reliability engineer keeping global dispatch systems available 99.99%."
+  },
+  {
+    "id": "alm-011",
+    "name": "Siddharth Jain",
+    "email": "siddharth.jain@example.com",
+    "phone": "+91-96541-23098",
+    "batch": "2020",
+    "branch": "CSE",
+    "current_company": "Oracle",
+    "current_designation": "Database Kernel Developer",
+    "industry": "Database Systems",
+    "skills": [
+      "C",
+      "C++",
+      "Database Internals",
+      "Operating Systems",
+      "SQL",
+      "Linux"
+    ],
+    "mentorship_topics": [
+      "Low-level Systems Programming",
+      "OS Internals",
+      "Storage Engines"
+    ],
+    "availability": "available",
+    "capacity": 3,
+    "current_load": 0,
+    "avatar": "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80",
+    "bio": "Building high-performance database storage engines and transactional locks."
+  },
+  {
+    "id": "alm-012",
+    "name": "Meera Joshi",
+    "email": "meera.joshi@example.com",
+    "phone": "+91-91288-77441",
+    "batch": "2022",
+    "branch": "IT",
+    "current_company": "Swiggy",
+    "current_designation": "Backend Engineer",
+    "industry": "Quick Commerce",
+    "skills": [
+      "Java",
+      "Spring Boot",
+      "Microservices",
+      "Redis",
+      "PostgreSQL",
+      "Kafka"
+    ],
+    "mentorship_topics": [
+      "Enterprise Java",
+      "Clean Architecture",
+      "Campus Placement Prep"
+    ],
+    "availability": "available",
+    "capacity": 3,
+    "current_load": 1,
+    "avatar": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80",
+    "bio": "Recent graduate turned core backend engineer at Swiggy Instamart."
+  },
+  {
+    "id": "alm-013",
+    "name": "Karan Malhotra",
+    "email": "karan.m@example.com",
+    "phone": "+91-98777-66554",
+    "batch": "2017",
+    "branch": "CSE",
+    "current_company": "Salesforce",
+    "current_designation": "Principal Architect",
+    "industry": "Enterprise Cloud",
+    "skills": [
+      "System Design",
+      "Cloud Architecture",
+      "Java",
+      "Multi-tenant Systems",
+      "Microservices"
+    ],
+    "mentorship_topics": [
+      "Long-term Tech Roadmaps",
+      "Architecture Reviews",
+      "Startup Scaling"
+    ],
+    "availability": "limited",
+    "capacity": 2,
+    "current_load": 2,
+    "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80",
+    "bio": "10+ years architecting enterprise multi-tenant cloud platforms."
+  },
+  {
+    "id": "alm-014",
+    "name": "Pooja Reddy",
+    "email": "pooja.reddy@example.com",
+    "phone": "+91-97123-88990",
+    "batch": "2021",
+    "branch": "ECE",
+    "current_company": "Qualcomm",
+    "current_designation": "5G Firmware Engineer",
+    "industry": "Telecommunications",
+    "skills": [
+      "Embedded C",
+      "RTOS",
+      "5G Protocols",
+      "Microcontrollers",
+      "Verilog",
+      "Python"
+    ],
+    "mentorship_topics": [
+      "Firmware Engineering",
+      "Protocol Stacks",
+      "ECE Core Placements"
+    ],
+    "availability": "available",
+    "capacity": 2,
+    "current_load": 0,
+    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+    "bio": "Firmware engineer specializing in 5G modem physical layer controls."
+  },
+  {
+    "id": "alm-015",
+    "name": "Nitin Saxena",
+    "email": "nitin.saxena@example.com",
+    "phone": "+91-95432-10987",
+    "batch": "2020",
+    "branch": "CSE",
+    "current_company": "Razorpay",
+    "current_designation": "Senior Fullstack Engineer",
+    "industry": "Payments",
+    "skills": [
+      "Node.js",
+      "React",
+      "TypeScript",
+      "PostgreSQL",
+      "Redis",
+      "Payment Gateways"
+    ],
+    "mentorship_topics": [
+      "Fintech Rails",
+      "Fullstack Javascript Mastery",
+      "Webhook Architecture"
+    ],
+    "availability": "available",
+    "capacity": 4,
+    "current_load": 1,
+    "avatar": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80",
+    "bio": "Building merchant checkout experiences handling thousands of TPS."
+  },
+  {
+    "id": "alm-016",
+    "name": "Ritu Singhal",
+    "email": "ritu.singhal@example.com",
+    "phone": "+91-94111-22334",
+    "batch": "2022",
+    "branch": "CSE",
+    "current_company": "Cisco",
+    "current_designation": "Network Software Engineer",
+    "industry": "Enterprise Networking",
+    "skills": [
+      "Python",
+      "Computer Networks",
+      "SDN",
+      "Docker",
+      "Linux",
+      "REST APIs"
+    ],
+    "mentorship_topics": [
+      "Networking Fundamentals",
+      "Software-Defined Networking",
+      "Cisco Placement"
+    ],
+    "availability": "available",
+    "capacity": 3,
+    "current_load": 0,
+    "avatar": "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?auto=format&fit=crop&w=400&q=80",
+    "bio": "Passionate about network automation, routing protocols, and cloud networks."
+  },
+  {
+    "id": "alm-017",
+    "name": "Amitabh Roy",
+    "email": "amitabh.roy@example.com",
+    "phone": "+91-99881-12233",
+    "batch": "2019",
+    "branch": "ME",
+    "current_company": "Tesla",
+    "current_designation": "Thermal Simulation Engineer",
+    "industry": "Automotive & Clean Energy",
+    "skills": [
+      "ANSYS",
+      "Python",
+      "CAD",
+      "Thermodynamics",
+      "MATLAB",
+      "Finite Element Analysis"
+    ],
+    "mentorship_topics": [
+      "EV Powertrain Simulation",
+      "Mechanical CAD Career",
+      "Overseas MS Prep"
+    ],
+    "availability": "available",
+    "capacity": 2,
+    "current_load": 1,
+    "avatar": "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?auto=format&fit=crop&w=400&q=80",
+    "bio": "Thermal engineer working on EV battery pack thermal management."
+  },
+  {
+    "id": "alm-018",
+    "name": "Shweta Kulkarni",
+    "email": "shweta.k@example.com",
+    "phone": "+91-98220-44556",
+    "batch": "2021",
+    "branch": "CSE",
+    "current_company": "JPMorgan Chase",
+    "current_designation": "Quantitative Tech Associate",
+    "industry": "Investment Banking",
+    "skills": [
+      "Python",
+      "C++",
+      "Time Series Analysis",
+      "SQL",
+      "Statistics",
+      "Algorithmic Trading"
+    ],
+    "mentorship_topics": [
+      "Fintech Quant Roles",
+      "Math for Computer Science",
+      "Wall Street Tech"
+    ],
+    "availability": "available",
+    "capacity": 3,
+    "current_load": 1,
+    "avatar": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=400&q=80",
+    "bio": "Quant developer building low-latency risk and pricing models."
+  },
+  {
+    "id": "alm-019",
+    "name": "Gaurav Agarwal",
+    "email": "gaurav.a@example.com",
+    "phone": "+91-93112-33445",
+    "batch": "2018",
+    "branch": "IT",
+    "current_company": "Intuit",
+    "current_designation": "Staff AI Engineer",
+    "industry": "FinTech & AI",
+    "skills": [
+      "Machine Learning",
+      "Generative AI",
+      "LangChain",
+      "Vector DBs",
+      "Python",
+      "AWS"
+    ],
+    "mentorship_topics": [
+      "Agentic AI Systems",
+      "RAG Implementations",
+      "Fintech GenAI Use Cases"
+    ],
+    "availability": "available",
+    "capacity": 3,
+    "current_load": 2,
+    "avatar": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80",
+    "bio": "Building autonomous AI agents and financial copilot engines at Intuit."
+  },
+  {
+    "id": "alm-020",
+    "name": "Neha Chawla",
+    "email": "neha.chawla@example.com",
+    "phone": "+91-98109-87654",
+    "batch": "2020",
+    "branch": "CSE",
+    "current_company": "Atlassian",
+    "current_designation": "Reliability & Cloud Engineer",
+    "industry": "Developer Tools",
+    "skills": [
+      "AWS",
+      "Terraform",
+      "Python",
+      "Observability",
+      "Datadog",
+      "Kubernetes"
+    ],
+    "mentorship_topics": [
+      "Cloud Infrastructure",
+      "DevOps Career Track",
+      "Atlassian Culture"
+    ],
+    "availability": "available",
+    "capacity": 3,
+    "current_load": 1,
+    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+    "bio": "Focused on cross-region resilience and automated rollbacks for Jira & Confluence."
+  },
+  {
+    "id": "alm-021",
+    "name": "Deepak Bhatt",
+    "email": "deepak.bhatt@example.com",
+    "phone": "+91-97114-55667",
+    "batch": "2023",
+    "branch": "CSE",
+    "current_company": "BrowserStack",
+    "current_designation": "Software Engineer",
+    "industry": "Developer Testing Platforms",
+    "skills": [
+      "Node.js",
+      "WebSockets",
+      "Selenium",
+      "Docker",
+      "JavaScript",
+      "Linux"
+    ],
+    "mentorship_topics": [
+      "First Year in Tech",
+      "Automated Testing Infrastructure",
+      "Fast-track Onboarding"
+    ],
+    "availability": "available",
+    "capacity": 4,
+    "current_load": 0,
+    "avatar": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80",
+    "bio": "Recent batch gold medalist happy to help current 3rd/4th years crack off-campus tests."
+  },
+  {
+    "id": "alm-022",
+    "name": "Tanvi Rastogi",
+    "email": "tanvi.r@example.com",
+    "phone": "+91-98710-12399",
+    "batch": "2021",
+    "branch": "CSE",
+    "current_company": "Stripe",
+    "current_designation": "Security Software Engineer",
+    "industry": "Global Payments",
+    "skills": [
+      "Cryptography",
+      "Ruby",
+      "Golang",
+      "API Security",
+      "PCI-DSS",
+      "Threat Modeling"
+    ],
+    "mentorship_topics": [
+      "Financial Security",
+      "Remote Engineering Culture",
+      "Application Security"
+    ],
+    "availability": "limited",
+    "capacity": 2,
+    "current_load": 1,
+    "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80",
+    "bio": "Protecting billions in daily transaction flows through zero-trust architectures."
+  },
+  {
+    "id": "alm-023",
+    "name": "Manish Tiwari",
+    "email": "manish.t@example.com",
+    "phone": "+91-98122-33441",
+    "batch": "2019",
+    "branch": "IT",
+    "current_company": "InMobi",
+    "current_designation": "Big Data Architect",
+    "industry": "AdTech & Mobile",
+    "skills": [
+      "Hadoop",
+      "Spark",
+      "Scala",
+      "Presto",
+      "ClickHouse",
+      "Data Pipelines"
+    ],
+    "mentorship_topics": [
+      "Sub-second Ad Analytics",
+      "Scala in Production",
+      "High-scale Storage"
+    ],
+    "availability": "available",
+    "capacity": 3,
+    "current_load": 1,
+    "avatar": "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80",
+    "bio": "Handling petabyte-scale mobile marketing datasets with ultra-low query latency."
+  },
+  {
+    "id": "alm-024",
+    "name": "Bhavna Bansal",
+    "email": "bhavna.b@example.com",
+    "phone": "+91-99990-11223",
+    "batch": "2020",
+    "branch": "CSE",
+    "current_company": "Dell Technologies",
+    "current_designation": "Cloud Storage Engineer",
+    "industry": "Enterprise Hardware & Storage",
+    "skills": [
+      "Python",
+      "SAN/NAS",
+      "C++",
+      "Linux Kernel",
+      "Object Storage",
+      "Distributed Systems"
+    ],
+    "mentorship_topics": [
+      "Storage Protocol Stacks",
+      "Enterprise Tech Careers",
+      "Women in Tech Mentorship"
+    ],
+    "availability": "available",
+    "capacity": 3,
+    "current_load": 0,
+    "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80",
+    "bio": "Active mentor supporting women engineers in systems and storage careers."
+  },
+  {
+    "id": "alm-025",
+    "name": "Akash Pandey",
+    "email": "akash.pandey@example.com",
+    "phone": "+91-94551-66778",
+    "batch": "2022",
+    "branch": "CSE",
+    "current_company": "Postman",
+    "current_designation": "Developer Relations & SDK Lead",
+    "industry": "Developer Productivity",
+    "skills": [
+      "API Design",
+      "TypeScript",
+      "OpenAPI",
+      "Node.js",
+      "Technical Writing",
+      "Public Speaking"
+    ],
+    "mentorship_topics": [
+      "DevRel Career Path",
+      "Open Source Contributions",
+      "Building Public Portfolios"
+    ],
+    "availability": "available",
+    "capacity": 4,
+    "current_load": 1,
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
+    "bio": "Bridging engineering and developer communities through modern API tooling."
+  },
+  {
+    "id": "alm-026",
+    "name": "Sunita Menon",
+    "email": "sunita.menon@example.com",
+    "phone": "+91-98234-99887",
+    "batch": "2017",
+    "branch": "CSE",
+    "current_company": "LinkedIn",
+    "current_designation": "Staff Machine Learning Engineer",
+    "industry": "Social Networks & Search",
+    "skills": [
+      "Machine Learning",
+      "Graph Neural Networks",
+      "Recommender Systems",
+      "PyTorch",
+      "Scala"
+    ],
+    "mentorship_topics": [
+      "Graph Learning",
+      "Feed Ranking Algorithms",
+      "Engineering Management"
+    ],
+    "availability": "limited",
+    "capacity": 2,
+    "current_load": 1,
+    "avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
+    "bio": "Leader in knowledge graph extraction and feed personalization at LinkedIn."
+  },
+  {
+    "id": "alm-027",
+    "name": "Rahul Dixit",
+    "email": "rahul.dixit@example.com",
+    "phone": "+91-97128-44556",
+    "batch": "2021",
+    "branch": "ECE",
+    "current_company": "Texas Instruments",
+    "current_designation": "Analog Circuit Design Engineer",
+    "industry": "Semiconductors",
+    "skills": [
+      "Cadence Virtuoso",
+      "SPICE",
+      "Analog Layout",
+      "Mixed Signal",
+      "Circuit Analysis"
+    ],
+    "mentorship_topics": [
+      "VLSI Placements",
+      "Semiconductor Industry Realities",
+      "Analog vs Digital"
+    ],
+    "availability": "available",
+    "capacity": 3,
+    "current_load": 1,
+    "avatar": "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=400&q=80",
+    "bio": "Designing low-noise analog power conversion circuits for automotive microcontrollers."
+  },
+  {
+    "id": "alm-028",
+    "name": "Isha Kashyap",
+    "email": "isha.kashyap@example.com",
+    "phone": "+91-98991-23450",
+    "batch": "2020",
+    "branch": "IT",
+    "current_company": "PhonePe",
+    "current_designation": "Frontend Architect",
+    "industry": "FinTech",
+    "skills": [
+      "React Native",
+      "Mobile Architecture",
+      "TypeScript",
+      "GraphQL",
+      "Performance Profiling"
+    ],
+    "mentorship_topics": [
+      "Cross-platform Mobile",
+      "Fintech Mobile Security",
+      "App Startup Optimization"
+    ],
+    "availability": "available",
+    "capacity": 3,
+    "current_load": 2,
+    "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80",
+    "bio": "Architecting ultra-responsive mobile checkout experiences across 400M+ installs."
+  },
+  {
+    "id": "alm-029",
+    "name": "Varun Saxena",
+    "email": "varun.saxena@example.com",
+    "phone": "+91-97660-88771",
+    "batch": "2019",
+    "branch": "CSE",
+    "current_company": "IBM Research",
+    "current_designation": "Quantum Computing Researcher",
+    "industry": "Deep Tech & Quantum",
+    "skills": [
+      "Qiskit",
+      "Python",
+      "Quantum Algorithms",
+      "Linear Algebra",
+      "Physics",
+      "C++"
+    ],
+    "mentorship_topics": [
+      "Quantum Information Science",
+      "Higher Studies & PhD Prep",
+      "Research Careers"
+    ],
+    "availability": "available",
+    "capacity": 2,
+    "current_load": 0,
+    "avatar": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80",
+    "bio": "Exploring error mitigation techniques for NISQ-era quantum computing processors."
+  },
+  {
+    "id": "alm-030",
+    "name": "Simran Bhatia",
+    "email": "simran.bhatia@example.com",
+    "phone": "+91-98118-99001",
+    "batch": "2022",
+    "branch": "CSE",
+    "current_company": "CRED",
+    "current_designation": "Full Stack Engineer",
+    "industry": "FinTech & Rewards",
+    "skills": [
+      "Go",
+      "React",
+      "Kafka",
+      "PostgreSQL",
+      "AWS",
+      "Design Systems"
+    ],
+    "mentorship_topics": [
+      "High-craft Frontend & Backend",
+      "Cracking Top Startup Interviews",
+      "Golang at Scale"
+    ],
+    "availability": "available",
+    "capacity": 3,
+    "current_load": 1,
+    "avatar": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80",
+    "bio": "Engineering delightful financial consumer interfaces and resilient Go microservices."
+  }
+]
