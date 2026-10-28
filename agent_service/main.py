@@ -1,27 +1,24 @@
 """
-FastAPI Server providing the Agentic Endpoints defined in the AGENTX 2026 Blueprint:
-- POST /api/workflows/mentor-match
-- GET  /api/workflows/{id}
-- GET  /api/workflows/{id}/events (Server-Sent Events)
-- POST /api/workflows/{id}/approval
-- POST /api/workflows/seminar-plan
-- GET  /api/health
-- GET  /api/alumni (seeded profiles)
+FastAPI Microservice for Alumni Connect Multi-Agent System (AGENTX 2026).
+Runs on port 8000 with CORS and Server-Sent Events (SSE) support.
 """
 
 import asyncio
 import json
+import time
+import uuid
+from typing import Optional, List, Dict, Any
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from typing import Optional, List, Dict, Any
-from workflow_engine import AgentWorkflowEngine
+
+from state import AlumniPlatformState
+from graph import compiled_graph
 from fixtures import SEEDED_ALUMNI
 
-app = FastAPI(title="Alumni Connect Agent Service", version="1.0.0")
+app = FastAPI(title="GL Bajaj Alumni Connect Multi-Agent Engine", version="1.0.0")
 
-# Enable CORS for React frontend (Vite runs on localhost:5173 / localhost:3000)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -30,113 +27,142 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-engine = AgentWorkflowEngine()
+# In-memory execution store for active workflows
+WORKFLOW_RUNS: Dict[str, AlumniPlatformState] = {}
 
-class MentorMatchRequest(BaseModel):
-    target_role: str
-    skills: str
+class WorkflowRequest(BaseModel):
+    workflow_type: Optional[str] = "mentor_match"  # 'mentor_match' or 'seminar_curation'
+    target_role: Optional[str] = "Machine Learning Engineer"
+    skills: Optional[str] = "Python, PyTorch, Machine Learning, SQL"
     goals: Optional[List[str]] = None
     resume_text: Optional[str] = None
     student_name: Optional[str] = "Tanmay Singhal"
     student_id: Optional[str] = "stu-glb-01"
+    seminar_topic: Optional[str] = "Agentic AI in Enterprise Production"
 
 class ApprovalRequest(BaseModel):
-    decision: str  # APPROVE, REJECT, SIMULATE_SEND
+    decision: str  # 'APPROVE', 'REJECT', 'SIMULATE_SEND'
     edited_message: Optional[str] = None
 
-class SeminarPlanRequest(BaseModel):
-    topic: str
-    duration: Optional[str] = "90 minutes"
-    target_batch: Optional[str] = "3rd & 4th Year B.Tech"
-    capacity: Optional[int] = 100
-
-class ToggleAlumniAvailabilityRequest(BaseModel):
-    alumni_id: str
-    availability: str  # available, limited, unavailable
-    current_load: Optional[int] = None
-
 @app.get("/api/health")
-def health_check():
+def health():
     return {
         "status": "healthy",
-        "service": "agent_service",
-        "active_workflows_count": len(engine.active_workflows),
-        "seeded_alumni_count": len(engine.alumni_db),
-        "mode": "MOCK / SIMULATED"
+        "service": "alumni_connect_agent_service",
+        "engine": "LangGraph StateGraph",
+        "seeded_alumni_count": len(SEEDED_ALUMNI),
+        "active_workflows": len(WORKFLOW_RUNS)
     }
 
 @app.get("/api/alumni")
 def get_alumni():
-    return {"alumni": engine.alumni_db}
+    return {"alumni": SEEDED_ALUMNI}
 
-@app.post("/api/alumni/update-status")
-def update_alumni_status(req: ToggleAlumniAvailabilityRequest):
-    """Admin / Demo test endpoint to toggle capacity or mark top candidate unavailable to test rerouting."""
-    for alm in engine.alumni_db:
-        if alm["id"] == req.alumni_id:
-            alm["availability"] = req.availability
-            if req.current_load is not None:
-                alm["current_load"] = req.current_load
-            return {"success": True, "alumnus": alm}
-    raise HTTPException(status_code=404, detail="Alumnus not found")
+@app.post("/api/run-workflow")
+def run_workflow(req: WorkflowRequest):
+    """Executes the LangGraph multi-agent graph synchronously and stores state."""
+    wf_id = "wf-" + uuid.uuid4().hex[:8]
 
+    initial_state: AlumniPlatformState = {
+        "workflow_id": wf_id,
+        "workflow_type": req.workflow_type or "mentor_match",
+        "student_id": req.student_id or "stu-glb-01",
+        "student_name": req.student_name or "Tanmay Singhal",
+        "target_role": req.target_role or "Machine Learning Engineer",
+        "goals": req.goals or ["Off-campus referral", "Resume review", "Mock interview"],
+        "raw_input_skills": req.skills or "Python, Machine Learning",
+        "resume_text": req.resume_text or "",
+        "extracted_skills": [],
+        "inferred_gaps": [],
+        "profiler_evidence": [],
+        "candidate_pool": [],
+        "ranked_matches": [],
+        "selected_mentor": None,
+        "rerouted_reason": None,
+        "draft_outreach": None,
+        "sanitized_outreach": None,
+        "pii_flags": [],
+        "requires_approval": False,
+        "seminar_topic": req.seminar_topic or "Agentic AI",
+        "seminar_plan": None,
+        "status": "RUNNING",
+        "events": [],
+        "created_at": time.time(),
+        "updated_at": time.time()
+    }
+
+    # Execute LangGraph
+    final_state = compiled_graph.invoke(initial_state)
+    WORKFLOW_RUNS[wf_id] = final_state
+    return final_state
+
+# Maintain backward compatibility with blueprint route
 @app.post("/api/workflows/mentor-match")
-def start_mentor_match(req: MentorMatchRequest):
-    state = engine.start_mentor_match(req.dict())
-    return state
+def mentor_match_alias(req: WorkflowRequest):
+    req.workflow_type = "mentor_match"
+    return run_workflow(req)
 
 @app.get("/api/workflows/{workflow_id}")
-def get_workflow_state(workflow_id: str):
-    if workflow_id not in engine.active_workflows:
-        raise HTTPException(status_code=404, detail="Workflow not found")
-    return engine.active_workflows[workflow_id]
+def get_workflow(workflow_id: str):
+    if workflow_id not in WORKFLOW_RUNS:
+        raise HTTPException(status_code=404, detail="Workflow run not found")
+    return WORKFLOW_RUNS[workflow_id]
 
 @app.get("/api/workflows/{workflow_id}/events")
 async def stream_workflow_events(workflow_id: str):
-    """Server-Sent Events (SSE) streaming real workflow step progress."""
-    if workflow_id not in engine.active_workflows:
+    """Server-Sent Events (SSE) endpoint streaming real-time agent execution events."""
+    if workflow_id not in WORKFLOW_RUNS:
         raise HTTPException(status_code=404, detail="Workflow not found")
 
-    async def event_generator():
-        last_index = 0
+    async def sse_generator():
+        last_idx = 0
         while True:
-            state = engine.active_workflows.get(workflow_id)
+            state = WORKFLOW_RUNS.get(workflow_id)
             if not state:
                 break
-                
             events = state.get("events", [])
-            while last_index < len(events):
-                event_data = events[last_index]
-                last_index += 1
-                yield f"data: {json.dumps(event_data)}\n\n"
-                
-            # If reached terminal or waiting status and sent all events, stop stream
-            if state["status"] in ("AWAITING_HUMAN_APPROVAL", "COMPLETED", "REJECTED", "SIMULATED", "FAILED"):
-                if last_index >= len(events):
+            while last_idx < len(events):
+                event = events[last_idx]
+                last_idx += 1
+                yield f"data: {json.dumps(event)}\n\n"
+
+            if state.get("status") in ("AWAITING_HUMAN_APPROVAL", "COMPLETED", "REJECTED", "SIMULATED"):
+                if last_idx >= len(events):
                     yield f"data: {json.dumps({'status': state['status'], 'complete': True})}\n\n"
                     break
-                    
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.4)
 
-    return StreamingResponse(event_generator(), media_type="text/event-stream")
+    return StreamingResponse(sse_generator(), media_type="text/event-stream")
 
 @app.post("/api/workflows/{workflow_id}/approval")
-def submit_approval(workflow_id: str, req: ApprovalRequest):
-    try:
-        updated = engine.handle_approval(workflow_id, req.decision, req.edited_message)
-        return updated
-    except ValueError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+def handle_approval(workflow_id: str, req: ApprovalRequest):
+    if workflow_id not in WORKFLOW_RUNS:
+        raise HTTPException(status_code=404, detail="Workflow not found")
 
-@app.post("/api/workflows/seminar-plan")
-def create_seminar_plan(req: SeminarPlanRequest):
-    plan = engine.generate_seminar_plan(
-        topic=req.topic,
-        duration=req.duration or "90 minutes",
-        target_batch=req.target_batch or "3rd & 4th Year B.Tech",
-        capacity=req.capacity or 100
-    )
-    return plan
+    state = WORKFLOW_RUNS[workflow_id]
+    if req.decision == "REJECT":
+        state["status"] = "REJECTED"
+        state["events"].append({
+            "timestamp": time.time(),
+            "time_str": time.strftime("%H:%M:%S"),
+            "agent": "Supervisor / Safety Gate",
+            "step": "Outreach Rejected",
+            "result_summary": "Human rejected draft. Pipeline halted. Message not sent.",
+            "status": "REJECTED"
+        })
+    else:
+        state["status"] = "SIMULATED"
+        if req.edited_message:
+            state["sanitized_outreach"] = req.edited_message
+        state["events"].append({
+            "timestamp": time.time(),
+            "time_str": time.strftime("%H:%M:%S"),
+            "agent": "Outreach Dispatcher",
+            "step": "Dispatched to Mentor",
+            "result_summary": f"Approved by user. Simulated dispatch to {state.get('selected_mentor', {}).get('name', 'Mentor')}.",
+            "status": "COMPLETED"
+        })
+    return state
 
 if __name__ == "__main__":
     import uvicorn
