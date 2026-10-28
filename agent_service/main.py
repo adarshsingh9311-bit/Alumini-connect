@@ -102,6 +102,41 @@ def mentor_match_alias(req: WorkflowRequest):
     req.workflow_type = "mentor_match"
     return run_workflow(req)
 
+class SeminarPlanRequest(BaseModel):
+    topic: str
+    duration: Optional[str] = "90 minutes"
+    target_batch: Optional[str] = "3rd & 4th Year B.Tech"
+    capacity: Optional[int] = 100
+
+@app.post("/api/workflows/seminar-plan")
+def create_seminar_plan(req: SeminarPlanRequest):
+    wf_req = WorkflowRequest(
+        workflow_type="seminar_curation",
+        seminar_topic=req.topic
+    )
+    final_state = run_workflow(wf_req)
+    plan = final_state.get("seminar_plan") or {}
+    return {
+        "workflow_id": final_state.get("workflow_id"),
+        "topic": req.topic,
+        "duration": req.duration or "90 minutes",
+        "target_batch": req.target_batch or "3rd & 4th Year B.Tech",
+        "capacity": req.capacity or 100,
+        "agenda": [
+            {"time": item.get("time", ""), "item": item.get("topic", "")}
+            for item in plan.get("syllabus", [])
+        ],
+        "prerequisites": plan.get("prerequisites", []),
+        "learning_outcomes": [
+            f"Deep architectural mastery of {req.topic}",
+            "Enterprise code quality and engineering best practices",
+            "Live networking with GL Bajaj alumni"
+        ],
+        "reminders": plan.get("reminders", []),
+        "calendar_ics_status": "Ready for export (.ics simulated)",
+        "status": "APPROVED / READY"
+    }
+
 @app.get("/api/workflows/{workflow_id}")
 def get_workflow(workflow_id: str):
     if workflow_id not in WORKFLOW_RUNS:
