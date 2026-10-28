@@ -10,7 +10,8 @@ import {
   Calendar, 
   Bell, 
   User, 
-  Settings 
+  Settings,
+  Cpu
 } from "lucide-react";
 
 export default function StudentLayout({ onOpenNotifications }) {
