@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "build": "cd glbajaj-alumni-connect && npm install && npm run build"
+    "build": "cd glbajaj-alumni-connect && npm install && npm run build",
+    "start": "cd glbajaj-alumni-connect && npx vite preview --host 0.0.0.0 --port $PORT"
   }
 }
