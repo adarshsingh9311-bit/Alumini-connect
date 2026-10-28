@@ -3,7 +3,7 @@ import { INITIAL_ALUMNI } from "../../lib/mockData";
 import { BRANCH_CODES, BATCH_YEARS } from "../../lib/constants";
 import AlumniCard from "../../components/student/AlumniCard";
 import AlumniProfileModal from "../../components/student/AlumniProfileModal";
-import MentorshipRequestModal from "../../components/student/MentorshipRequestModal";
+import OfficeHoursBookingModal from "../../components/mentorship/OfficeHoursBookingModal";
 import EmptyState from "../../components/common/EmptyState";
 import { useToast } from "../../context/ToastContext";
 import { Search, Filter, X, Users } from "lucide-react";
@@ -195,7 +195,7 @@ export default function StudentAlumniDirectory() {
         onRequestMentorship={setRequestTargetAlumni}
       />
 
-      <MentorshipRequestModal
+      <OfficeHoursBookingModal
         isOpen={Boolean(requestTargetAlumni)}
         onClose={() => setRequestTargetAlumni(null)}
         alumni={requestTargetAlumni}

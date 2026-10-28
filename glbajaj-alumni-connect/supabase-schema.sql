@@ -163,3 +163,62 @@ CREATE POLICY "Achievements viewable by authenticated" ON public.achievements FO
 CREATE POLICY "Opportunities viewable by authenticated" ON public.opportunities FOR SELECT USING (auth.role() = 'authenticated');
 CREATE POLICY "Mentorship requests viewable by participants" ON public.mentorship_requests FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Messages viewable by participants" ON public.messages FOR ALL USING (auth.role() = 'authenticated');
+
+
+-- ============================================================
+-- 13. Office Hour Slots (Topmate / ADPList Model)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS public.office_hour_slots (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    alumni_id UUID REFERENCES public.alumni(id) ON DELETE CASCADE,
+    slot_start TIMESTAMP WITH TIME ZONE NOT NULL,
+    slot_end TIMESTAMP WITH TIME ZONE NOT NULL,
+    session_category VARCHAR(50) NOT NULL CHECK (session_category IN ('resume_roast', 'mock_interview', 'career_strategy', 'general')),
+    is_booked BOOLEAN DEFAULT FALSE,
+    booked_by UUID REFERENCES public.students(id) ON DELETE SET NULL,
+    student_note TEXT,
+    meeting_link TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- ============================================================
+-- 14. Structured Referral Applications (Transparent ATS Model)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS public.referral_applications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    opportunity_id UUID REFERENCES public.opportunities(id) ON DELETE CASCADE,
+    student_id UUID REFERENCES public.students(id) ON DELETE CASCADE,
+    alumni_id UUID REFERENCES public.alumni(id) ON DELETE CASCADE,
+    resume_url TEXT NOT NULL,
+    quick_pitch TEXT NOT NULL,
+    current_status VARCHAR(30) DEFAULT 'submitted' CHECK (current_status IN ('submitted', 'reviewed', 'referred', 'interview_scheduled', 'closed')),
+    feedback_notes TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- ============================================================
+-- 15. Asynchronous Micro-Q&A (Loom / Voice Notes Model)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS public.async_queries (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id UUID REFERENCES public.students(id) ON DELETE CASCADE,
+    alumni_id UUID REFERENCES public.alumni(id) ON DELETE CASCADE,
+    question_title VARCHAR(150) NOT NULL,
+    question_details TEXT NOT NULL,
+    resource_link TEXT,
+    text_response TEXT,
+    voice_response_url TEXT,
+    is_resolved BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Enable RLS on new practical tables
+ALTER TABLE public.office_hour_slots ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.referral_applications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.async_queries ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Office hour slots viewable by authenticated" ON public.office_hour_slots FOR SELECT USING (auth.role() = 'authenticated');
+CREATE POLICY "Alumni can manage own slots" ON public.office_hour_slots FOR ALL USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Referral applications viewable by participants" ON public.referral_applications FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Async queries viewable by participants" ON public.async_queries FOR ALL USING (auth.role() = 'authenticated');

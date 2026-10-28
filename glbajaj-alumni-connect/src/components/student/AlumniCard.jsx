@@ -1,5 +1,5 @@
 import React from "react";
-import { Briefcase, MapPin, GraduationCap, Award, CheckCircle2, MessageSquare, ArrowRight } from "lucide-react";
+import { Briefcase, MapPin, GraduationCap, Award, CheckCircle2, Clock, ArrowRight } from "lucide-react";
 
 export default function AlumniCard({ alumni, onOpenProfile, onRequestMentorship }) {
   return (
@@ -85,8 +85,8 @@ export default function AlumniCard({ alumni, onOpenProfile, onRequestMentorship 
             onClick={() => onRequestMentorship(alumni)}
             className="flex-1 bg-[#ffcc4e] hover:bg-[#e0b23d] text-[#472510] text-xs font-bold py-2 rounded-xl transition shadow-sm text-center flex items-center justify-center space-x-1"
           >
-            <MessageSquare className="w-3.5 h-3.5" />
-            <span>Request Mentor</span>
+            <Clock className="w-3.5 h-3.5" />
+            <span>Book 15m Slot</span>
           </button>
         ) : (
           <span className="text-[10px] font-medium text-slate-400 py-2 px-2 italic">
