@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  # 1. AI Agent Microservice (Python FastAPI + LangGraph)
+  agent-service:
+    build:
+      context: ./agent_service
+      dockerfile: Dockerfile
+    container_name: glbajaj-agent-service
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+    restart: unless-stopped
+
+  # 2. Web Portal (React Vite + Nginx)
+  frontend:
+    build:
+      context: ./glbajaj-alumni-connect
+      dockerfile: Dockerfile
+    container_name: glbajaj-frontend
+    ports:
+      - "5173:80"
+    environment:
+      - VITE_AGENT_API_URL=http://localhost:8000/api
+    depends_on:
+      - agent-service
+    restart: unless-stopped
