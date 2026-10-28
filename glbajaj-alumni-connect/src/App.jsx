@@ -26,6 +26,7 @@ import StudentOpportunitiesPage from "./pages/student/StudentOpportunitiesPage";
 import StudentEventsPage from "./pages/student/StudentEventsPage";
 import StudentNoticesPage from "./pages/student/StudentNoticesPage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
+import StudentAgentStudioPage from "./pages/student/StudentAgentStudioPage";
 import StudentSettingsPage from "./pages/student/StudentSettingsPage";
 
 // Alumni Portal Pages
@@ -97,6 +98,7 @@ function AppContent() {
         >
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<StudentDashboard />} />
+          <Route path="agent-studio" element={<StudentAgentStudioPage />} />
           <Route path="alumni" element={<StudentAlumniDirectory />} />
           <Route path="mentorship" element={<StudentMentorshipPage />} />
           <Route path="messages" element={<StudentMessagesPage />} />

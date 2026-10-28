@@ -16,6 +16,7 @@ import {
 export default function StudentLayout({ onOpenNotifications }) {
   const navItems = [
     { label: "Dashboard", to: "/student/dashboard", icon: LayoutDashboard },
+    { label: "AI Agent Studio", to: "/student/agent-studio", icon: Cpu, badge: "AGENTX" },
     { label: "Find Alumni", to: "/student/alumni", icon: Users },
     { label: "Mentorship", to: "/student/mentorship", icon: MessageSquare },
     { label: "Messages", to: "/student/messages", icon: MessagesSquare, badge: "Live" },
