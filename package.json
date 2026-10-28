@@ -1,0 +1,8 @@
+{
+  "name": "alumini-connect-root",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cd glbajaj-alumni-connect && npm install && npm run build"
+  }
+}

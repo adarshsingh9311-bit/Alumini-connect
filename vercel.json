@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd glbajaj-alumni-connect && npm install && npm run build",
+  "outputDirectory": "glbajaj-alumni-connect/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
